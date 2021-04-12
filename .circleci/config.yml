@@ -11,14 +11,10 @@ jobs:
     environment:
       DEBIAN_FRONTEND: noninteractive
     steps:
-      - run: apt update
-      - run: apt -y upgrade
       - checkout
-
       - run: go version
       - run: go env
       - run: go get -v .
-      - run: go test -v .
 
       - run: ./build_all.sh
       - store_artifacts:
