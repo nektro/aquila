@@ -1,0 +1,15 @@
+services:
+  app:
+    image: golang:1.16
+    volumes:
+      - .:/app/:ro
+      - ./data:/data
+      - ~/go:/gopath
+      - ~/dev/zig/zigmod/zig-cache/bin/zigmod:/bin/zigmod
+    working_dir: /app/
+    command: go run main.go --port 8000 --config '/data/config.json'
+    ports:
+      - "80:8000"
+    environment:
+      GOPATH: /gopath
+      OAUTH2_CLIENT_1: ${CLIENT_1}
