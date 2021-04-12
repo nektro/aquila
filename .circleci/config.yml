@@ -27,6 +27,7 @@ jobs:
       - run: ./make_release.sh
 
       - setup_remote_docker
+      - run: docker version
       - docker/check
       - docker/build:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
