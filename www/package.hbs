@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dashboard - Aquila</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="data:,">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" integrity="sha384-wvN1Gjw/z/K/J9g4nsJGXEzA2AOKBTCnlsdubmWbXUzezZKPPObPGbZ2cMvjvEH5" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/components/icon.min.css" integrity="sha512-I7/aUklkRw/Q5C9/7X2EH1jsng7oBb2P29tXv15+83/hu8qE0BZJyXmCX2u230RZlcf0oylQqmStJGCPxQpUQw==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="../../theme.css">
+        <!-- -->
+        <noscript><img src="https://analytics.apps.aremy.world/ingress/b3f9b155-0007-446e-a7da-0fe3e1ce27f2/pixel.gif"></noscript>
+        <script src="https://analytics.apps.aremy.world/ingress/b3f9b155-0007-446e-a7da-0fe3e1ce27f2/script.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="terminal-nav">
+                <div class="terminal-logo">
+                    <div class="logo"><a href="../../" class="no-style">Aquila</a></div>
+                </div>
+                <nav class="terminal-menu">
+                    <ul>
+                        <li><a class="menu-item" href="../../dashboard">Dashboard</a></li>
+                        {{#if user}}
+                        <li><a class="menu-item" href="../../import">Import</a></li>
+                        <li><a class="menu-item" href="../../notifications">Notifications</a></li>
+                        <li><a class="menu-item" href="../../settings">Settings</a></li>
+                        <li><a class="menu-item" href="../../logout">Logout</a></li>
+                        {{else}}
+                        <li><a class="menu-item" href="../../about">About</a></li>
+                        <li><a class="menu-item" href="../../contact">Contact</a></li>
+                        <li><a class="menu-item" href="https://github.com/nektro/aquila">Source Code</a></li>
+                        {{/if}}
+                        <li><code>{{aquila_version}}</code></li>
+                    </ul>
+                </nav>
+            </div>
+            <h2>Package <code>{{pkg.Name}}</code> Details</h2>
+            <table>
+                <tbody>
+                    <tr><td>ULID</td><td>{{pkg.UUID}}</td></tr>
+                    <tr><td>Owner</td><td><a href="../../{{owner.Provider}}/{{owner.Name}}">{{owner.Provider}}/{{owner.Name}}</a></td></tr>
+                    <tr><td>Created On</td><td>{{fix_date pkg.CreatedOn}}</td></tr>
+                    <tr><td>Host</td><td><a href="https://{{repo.Domain}}">{{repo.Domain}}</a></td></tr>
+                    <tr><td>Host API ID</td><td>{{pkg.RemoteID}}</td></tr>
+                    <tr><td>Host Name</td><td><a href="https://{{repo.Domain}}/{{pkg.RemoteName}}">{{pkg.RemoteName}}</a></td></tr>
+                    <tr><td>License</td><td>{{pkg.License}}</td></tr>
+                    <tr><td>Description</td><td>{{pkg.Description}}</td></tr>
+                </tbody>
+            </table>
+            <h3>Versions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Created On</th>
+                        <th>Commit</th>
+                        <th>Unpacked Size</th>
+                        <th>Total Size</th>
+                        <th>Tar Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each versions}}
+                    <tr>
+                        <td><a href="./{{pkg.Name}}/v{{this.RealMajor}}.{{this.RealMinor}}">v{{this.RealMajor}}.{{this.RealMinor}}</a></td>
+                        <td>{{fix_date this.CreatedOn}}</td>
+                        <td>{{trim_str this.CommitTo 14}}</td>
+                        <td>{{fix_bytes this.UnpackedSize}}</td>
+                        <td>{{fix_bytes this.TotalSize}}</td>
+                        <td>{{fix_bytes this.TarSize}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{#equal user.ID owner.ID}}
+            <h3>Unconfirmed Versions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Created On</th>
+                        <th>Commit</th>
+                        <th>Unpacked Size</th>
+                        <th>Total Size</th>
+                        <th>Tar Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each new_versions}}
+                    <tr>
+                        <td>v{{this.RealMajor}}.{{this.RealMinor}}</td>
+                        <td>{{fix_date this.CreatedOn}}</td>
+                        <td>{{trim_str this.CommitTo 14}}</td>
+                        <td>{{fix_bytes this.UnpackedSize}}</td>
+                        <td>{{fix_bytes this.TotalSize}}</td>
+                        <td>{{fix_bytes this.TarSize}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{/equal}}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dashboard - Aquila</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="data:,">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" integrity="sha384-wvN1Gjw/z/K/J9g4nsJGXEzA2AOKBTCnlsdubmWbXUzezZKPPObPGbZ2cMvjvEH5" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/components/icon.min.css" integrity="sha512-I7/aUklkRw/Q5C9/7X2EH1jsng7oBb2P29tXv15+83/hu8qE0BZJyXmCX2u230RZlcf0oylQqmStJGCPxQpUQw==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="../../../theme.css">
+        <!-- -->
+        <noscript><img src="https://analytics.apps.aremy.world/ingress/b3f9b155-0007-446e-a7da-0fe3e1ce27f2/pixel.gif"></noscript>
+        <script src="https://analytics.apps.aremy.world/ingress/b3f9b155-0007-446e-a7da-0fe3e1ce27f2/script.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="terminal-nav">
+                <div class="terminal-logo">
+                    <div class="logo"><a href="../../../" class="no-style">Aquila</a></div>
+                </div>
+                <nav class="terminal-menu">
+                    <ul>
+                        <li><a class="menu-item" href="../../../dashboard">Dashboard</a></li>
+                        {{#if user}}
+                        <li><a class="menu-item" href="../../../import">Import</a></li>
+                        <li><a class="menu-item" href="../../../notifications">Notifications</a></li>
+                        <li><a class="menu-item" href="../../../settings">Settings</a></li>
+                        <li><a class="menu-item" href="../../../logout">Logout</a></li>
+                        {{else}}
+                        <li><a class="menu-item" href="../../../about">About</a></li>
+                        <li><a class="menu-item" href="../../../contact">Contact</a></li>
+                        <li><a class="menu-item" href="https://github.com/nektro/aquila">Source Code</a></li>
+                        {{/if}}
+                        <li><code>{{aquila_version}}</code></li>
+                    </ul>
+                </nav>
+            </div>
+            <h2>Package <code>{{pkg.Name}}</code>@<code>{{version_str vers}}</code> Details</h2>
+            <table>
+                <tbody>
+                    <tr><td>ULID</td><td>{{vers.UUID}}</td></tr>
+                    <tr><td>For</td><td><a href="../../../{{repo.ID}}/{{owner.Name}}/{{pkg.Name}}">{{repo.ID}}/{{owner.Name}}/{{pkg.Name}}</a></td></tr>
+                    <tr><td>Created On</td><td>{{fix_date vers.CreatedOn}}</td></tr>
+                    <tr><td>Approved By</td><td><a href="../../../{{approver.Provider}}/{{approver.Name}}">{{approver.Provider}}/{{approver.Name}}</a></td></tr>
+                    <tr><td>Commit</td><td><code>{{vers.CommitTo}}</code></td></tr>
+                    <tr><td>Unpacked Size</td><td>{{fix_bytes vers.UnpackedSize}}</td></tr>
+                    <tr><td>Total Size</td><td>{{fix_bytes vers.TotalSize}}</td></tr>
+                    <tr><td>Tar Size</td><td>{{fix_bytes vers.TarSize}}</td></tr>
+                    <tr><td>Tar Hash</td><td><code>{{vers.TarHash}}</code></td></tr>
+                    <tr><td>Tar Download</td><td><a href="./{{version}}.tar.gz">Download</a></td></tr>
+                </tbody>
+            </table>
+            <h3>File List</h3>
+            <ul>
+                {{#each vers.Files}}
+                <li><code>{{this}}</code></li>
+                {{/each}}
+            </ul>
+            <h3>Dependencies</h3>
+            <ul>
+                {{#each vers.Deps}}
+                <li><code>{{this}}</code></li>
+                {{/each}}
+            </ul>
+            <h3>Dev Dependencies</h3>
+            <ul>
+                {{#each vers.DevDeps}}
+                <li><code>{{this}}</code></li>
+                {{/each}}
+            </ul>
+        </div>
+    </body>
+</html>
