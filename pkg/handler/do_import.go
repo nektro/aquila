@@ -73,7 +73,7 @@ func DoImport(w http.ResponseWriter, r *http.Request) {
 			case 1:
 				dpath = item
 			case 2:
-				dpath = item
+				dvers = item
 			}
 		}
 		deps = append(deps, dtype+" "+dpath+" "+dvers)
@@ -90,7 +90,7 @@ func DoImport(w http.ResponseWriter, r *http.Request) {
 			case 1:
 				dpath = item
 			case 2:
-				dpath = item
+				dvers = item
 			}
 		}
 		devdeps = append(devdeps, dtype+" "+dpath+" "+dvers)
