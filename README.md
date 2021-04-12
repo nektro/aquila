@@ -1,6 +1,5 @@
 # aquila
 ![loc](https://sloc.xyz/github/nektro/aquila)
-[![license](https://img.shields.io/github/license/nektro/aquila.svg)](https://github.com/nektro/aquila/blob/master/LICENSE)
 [![circleci](https://circleci.com/gh/nektro/aquila.svg?style=svg)](https://circleci.com/gh/nektro/aquila)
 [![release](https://img.shields.io/github/v/release/nektro/aquila)](https://github.com/nektro/aquila/releases/latest)
 [![goreportcard](https://goreportcard.com/badge/github.com/nektro/aquila)](https://goreportcard.com/report/github.com/nektro/aquila)
