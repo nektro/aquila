@@ -105,9 +105,10 @@ func (v *Remote) apiRoot() string {
 }
 
 func (v *Remote) apiRequest(user *User, endpoint string) *fastjson.Value {
-	at := store.This.Get(user.UUID.String() + "_access_token")
 	req, _ := http.NewRequest(http.MethodGet, v.apiRoot()+endpoint, nil)
-	req.Header.Set("Authorization", "Bearer "+at)
+	if at := store.This.Get(user.UUID.String() + "_access_token"); len(at) > 0 {
+		req.Header.Set("Authorization", "Bearer "+at)
+	}
 	res, _ := http.DefaultClient.Do(req)
 	if res.StatusCode >= 400 {
 		bys, _ := ioutil.ReadAll(res.Body)
@@ -120,9 +121,10 @@ func (v *Remote) apiRequest(user *User, endpoint string) *fastjson.Value {
 }
 
 func (v *Remote) apiPost(user *User, endpoint string, data string) *fastjson.Value {
-	at := store.This.Get(user.UUID.String() + "_access_token")
 	req, _ := http.NewRequest(http.MethodPost, v.apiRoot()+endpoint, strings.NewReader(data))
-	req.Header.Set("Authorization", "Bearer "+at)
+	if at := store.This.Get(user.UUID.String() + "_access_token"); len(at) > 0 {
+		req.Header.Set("Authorization", "Bearer "+at)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	res, _ := http.DefaultClient.Do(req)
