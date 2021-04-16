@@ -102,6 +102,9 @@ func main() {
 	raymond.RegisterHelper("version_str", func(p db.Version) string {
 		return "v" + strconv.Itoa(p.RealMajor) + "." + strconv.Itoa(p.RealMinor)
 	})
+	raymond.RegisterHelper("tree_url", func(rem int64, name string, commit string) string {
+		return "https://github.com/" + name + "/tree/" + commit
+	})
 	raymond.RegisterHelper("diff_url", func(r int64, n string, x int, to string, newv []*db.Version, appv []*db.Version) string {
 		from := ""
 		if x == 0 {
