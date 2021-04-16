@@ -43,9 +43,8 @@
                     <tr><td>ULID</td><td>{{pkg.UUID}}</td></tr>
                     <tr><td>Owner</td><td><a href="../../{{owner.Provider}}/{{owner.Name}}">{{owner.Provider}}/{{owner.Name}}</a></td></tr>
                     <tr><td>Created On</td><td>{{fix_date pkg.CreatedOn}}</td></tr>
-                    <tr><td>Host</td><td><a href="https://{{repo.Domain}}">{{repo.Domain}}</a></td></tr>
                     <tr><td>Host API ID</td><td>{{pkg.RemoteID}}</td></tr>
-                    <tr><td>Host Name</td><td><a href="https://{{repo.Domain}}/{{pkg.RemoteName}}">{{pkg.RemoteName}}</a></td></tr>
+                    <tr><td>Host Name</td><td><a href="https://{{repo.Domain}}/{{pkg.RemoteName}}">{{repo.Domain}} / {{pkg.RemoteName}}</a></td></tr>
                     <tr><td>License</td><td>{{pkg.License}}</td></tr>
                     <tr><td>Description</td><td>{{pkg.Description}}</td></tr>
                 </tbody>
