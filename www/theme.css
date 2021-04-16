@@ -19,3 +19,9 @@
 a.link-as-text::after {
     content: attr(href);
 }
+table tr td {
+    text-align: center;
+}
+table.left tr td {
+    text-align: left;
+}
