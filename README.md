@@ -1,4 +1,4 @@
-# aquila
+# Aquila
 ![loc](https://sloc.xyz/github/nektro/aquila)
 [![circleci](https://circleci.com/gh/nektro/aquila.svg?style=svg)](https://circleci.com/gh/nektro/aquila)
 [![release](https://img.shields.io/github/v/release/nektro/aquila)](https://github.com/nektro/aquila/releases/latest)
