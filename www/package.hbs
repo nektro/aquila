@@ -83,8 +83,8 @@
                         <th></th>
                         <th>Created On</th>
                         <th>Commit</th>
+                        <th>Compare Diff</th>
                         <th>Unpacked Size</th>
-                        <th>Total Size</th>
                         <th>Tar Size</th>
                     </tr>
                 </thead>
@@ -94,8 +94,8 @@
                         <td>v{{this.RealMajor}}.{{this.RealMinor}}</td>
                         <td>{{fix_date this.CreatedOn}}</td>
                         <td>{{trim_str this.CommitTo 14}}</td>
+                        <td><a href="{{diff_url pkg.Remote pkg.RemoteName @index this.CommitTo new_versions versions}}"><code>{{prev_commit @index new_versions versions}}...{{trim_str this.CommitTo 8}}</code></a></td>
                         <td>{{fix_bytes this.UnpackedSize}}</td>
-                        <td>{{fix_bytes this.TotalSize}}</td>
                         <td>{{fix_bytes this.TarSize}}</td>
                     </tr>
                     {{/each}}

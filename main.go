@@ -102,6 +102,21 @@ func main() {
 	raymond.RegisterHelper("version_str", func(p db.Version) string {
 		return "v" + strconv.Itoa(p.RealMajor) + "." + strconv.Itoa(p.RealMinor)
 	})
+	raymond.RegisterHelper("diff_url", func(r int64, n string, x int, to string, newv []*db.Version, appv []*db.Version) string {
+		from := ""
+		if x == 0 {
+			from = appv[len(appv)-1].CommitTo
+		} else {
+			from = newv[x-1].CommitTo
+		}
+		return "https://github.com/" + n + "/compare/" + from[:10] + "..." + to[:10]
+	})
+	raymond.RegisterHelper("prev_commit", func(x int, newv []*db.Version, appv []*db.Version) string {
+		if x == 0 {
+			return appv[len(appv)-1].CommitTo[:8]
+		}
+		return newv[x-1].CommitTo[:8]
+	})
 
 	handler.Init()
 
