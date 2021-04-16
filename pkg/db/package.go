@@ -3,7 +3,9 @@ package db
 import (
 	"database/sql"
 	"strconv"
+	"strings"
 
+	"github.com/nektro/go-util/util"
 	dbstorage "github.com/nektro/go.dbstorage"
 
 	. "github.com/nektro/go.etc/dbt"
@@ -21,6 +23,7 @@ type Package struct {
 	Description   string `json:"description" dbsorm:"1"`
 	License       string `json:"license" dbsorm:"1"`
 	LatestVersion string `json:"latest_version" dbsorm:"1"`
+	HookSecret    string `json:"hook_secret" dbsorm:"1"`
 }
 
 // CreatePackage creates a new Package
@@ -31,7 +34,8 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 	id := db.QueryNextID(cTablePackages)
 	uid := NewUUID()
 	co := now()
-	n := &Package{id, uid, owner.UUID, name, co, remote, remoteID, remoteName, description, license, ""}
+	hooksecret := strings.ToLower(util.RandomString(16))
+	n := &Package{id, uid, owner.UUID, name, co, remote, remoteID, remoteName, description, license, "", hooksecret}
 	db.Build().InsI(cTablePackages, n).Exe()
 	return n
 }
@@ -41,7 +45,7 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 
 // Scan implements dbstorage.Scannable
 func (v Package) Scan(rows *sql.Rows) dbstorage.Scannable {
-	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion)
+	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion, &v.HookSecret)
 	return &v
 }
 
@@ -56,7 +60,7 @@ func (v Package) All() []*Package {
 }
 
 func (v Package) ByUser(user *User) []*Package {
-	arr := dbstorage.ScanAll(v.b().Wh("owner", string(user.UUID)), Package{})
+	arr := dbstorage.ScanAll(v.b().Wh("owner", user.UUID.String()), Package{})
 	res := []*Package{}
 	for _, item := range arr {
 		res = append(res, item.(*Package))

@@ -34,6 +34,9 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 	branch := string(val.GetStringBytes("repository", "default_branch"))
 	c.Assert(ref == "refs/heads/"+branch, "we're only packing new versions for commits to the default branch")
 
+	secret := r.URL.Query().Get("secret")
+	c.Assert(secret == pkg.HookSecret, "403: valid webhook secret required to push package updates")
+
 	rnd := strconv.FormatInt(rand.Int63(), 10)[:6]
 	os.Mkdir("/tmp/"+rnd, os.ModePerm)
 	details := remo.GetRepoDetails(user, pkg.RemoteName)
