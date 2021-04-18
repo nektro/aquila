@@ -17,5 +17,21 @@ A federated package repository and CI system for the Zig programming language.
 ## Download
 - https://github.com/nektro/aquila/releases
 
+## Building from Source
+```
+$ go build
+```
+
+## Built With
+- Go 1.16
+- https://github.com/aymerick/raymond
+- https://github.com/nektro/go-util/util
+- https://github.com/nektro/go-util/vflag
+- https://github.com/nektro/go.etc
+- https://github.com/nektro/go.etc/dbt
+- https://github.com/nektro/go.etc/store
+- https://github.com/nektro/go.oauth2
+- https://github.com/rakyll/statik
+
 ## License
 GNU Affero General Public License v3.0
