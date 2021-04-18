@@ -7,23 +7,22 @@ import (
 
 	"github.com/nektro/go-util/util"
 	dbstorage "github.com/nektro/go.dbstorage"
-
-	. "github.com/nektro/go.etc/dbt"
+	"github.com/nektro/go.etc/dbt"
 )
 
 type Package struct {
-	ID            int64  `json:"id"`
-	UUID          UUID   `json:"uuid" dbsorm:"1"`
-	Owner         UUID   `json:"owner" dbsorm:"1"`
-	Name          string `json:"name" dbsorm:"1"`
-	CreatedOn     Time   `json:"created_on" dbsorm:"1"`
-	Remote        int64  `json:"remote" dbsorm:"1"`
-	RemoteID      string `json:"remote_id" dbsorm:"1"`
-	RemoteName    string `json:"remote_name" dbsorm:"1"`
-	Description   string `json:"description" dbsorm:"1"`
-	License       string `json:"license" dbsorm:"1"`
-	LatestVersion string `json:"latest_version" dbsorm:"1"`
-	HookSecret    string `json:"hook_secret" dbsorm:"1"`
+	ID            int64    `json:"id"`
+	UUID          dbt.UUID `json:"uuid" dbsorm:"1"`
+	Owner         dbt.UUID `json:"owner" dbsorm:"1"`
+	Name          string   `json:"name" dbsorm:"1"`
+	CreatedOn     dbt.Time `json:"created_on" dbsorm:"1"`
+	Remote        int64    `json:"remote" dbsorm:"1"`
+	RemoteID      string   `json:"remote_id" dbsorm:"1"`
+	RemoteName    string   `json:"remote_name" dbsorm:"1"`
+	Description   string   `json:"description" dbsorm:"1"`
+	License       string   `json:"license" dbsorm:"1"`
+	LatestVersion string   `json:"latest_version" dbsorm:"1"`
+	HookSecret    string   `json:"hook_secret" dbsorm:"1"`
 }
 
 // CreatePackage creates a new Package
@@ -32,7 +31,7 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 	defer dbstorage.InsertsLock.Unlock()
 	//
 	id := db.QueryNextID(cTablePackages)
-	uid := NewUUID()
+	uid := dbt.NewUUID()
 	co := now()
 	hooksecret := strings.ToLower(util.RandomString(16))
 	n := &Package{id, uid, owner.UUID, name, co, remote, remoteID, remoteName, description, license, "", hooksecret}

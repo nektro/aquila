@@ -6,8 +6,7 @@ import (
 
 	dbstorage "github.com/nektro/go.dbstorage"
 	etc "github.com/nektro/go.etc"
-
-	. "github.com/nektro/go.etc/dbt"
+	"github.com/nektro/go.etc/dbt"
 )
 
 var (
@@ -34,10 +33,10 @@ func Close() {
 	db.Close()
 }
 
-func now() Time {
+func now() dbt.Time {
 	s := time.Now().UTC().String()[0:19]
-	t, _ := time.Parse(TimeFormat, s)
-	return Time(t)
+	t, _ := time.Parse(dbt.TimeFormat, s)
+	return dbt.Time(t)
 }
 
 func format(i int64) string {

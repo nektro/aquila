@@ -4,17 +4,16 @@ import (
 	"database/sql"
 
 	dbstorage "github.com/nektro/go.dbstorage"
-
-	. "github.com/nektro/go.etc/dbt"
+	"github.com/nektro/go.etc/dbt"
 )
 
 type User struct {
-	ID        int64  `json:"id"`
-	UUID      UUID   `json:"uuid" dbsorm:"1"`
-	Provider  int64  `json:"provider" dbsorm:"1"`
-	Snowflake string `json:"snowflake" dbsorm:"1"`
-	Name      string `json:"name" dbsorm:"1"`
-	JoindedOn Time   `json:"joined_on" dbsorm:"1"`
+	ID        int64    `json:"id"`
+	UUID      dbt.UUID `json:"uuid" dbsorm:"1"`
+	Provider  int64    `json:"provider" dbsorm:"1"`
+	Snowflake string   `json:"snowflake" dbsorm:"1"`
+	Name      string   `json:"name" dbsorm:"1"`
+	JoindedOn dbt.Time `json:"joined_on" dbsorm:"1"`
 }
 
 //
@@ -45,14 +44,14 @@ func (v User) BySnowflake(provider int64, snowflake string, name string) *User {
 	defer dbstorage.InsertsLock.Unlock()
 	//
 	id := db.QueryNextID(cTableUsers)
-	uid := NewUUID()
+	uid := dbt.NewUUID()
 	co := now()
 	n := &User{id, uid, provider, snowflake, name, co}
 	db.Build().InsI(cTableUsers, n).Exe()
 	return n
 }
 
-func (v User) ByUID(ulid UUID) *User {
+func (v User) ByUID(ulid dbt.UUID) *User {
 	us, ok := dbstorage.ScanFirst(v.b().Wh("uuid", string(ulid)), User{}).(*User)
 	if !ok {
 		return nil

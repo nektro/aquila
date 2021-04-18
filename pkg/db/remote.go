@@ -10,17 +10,16 @@ import (
 	"strings"
 
 	dbstorage "github.com/nektro/go.dbstorage"
+	"github.com/nektro/go.etc/dbt"
 	"github.com/nektro/go.etc/store"
 	"github.com/valyala/fastjson"
-
-	. "github.com/nektro/go.etc/dbt"
 )
 
 type Remote struct {
-	ID     int64  `json:"id"`
-	UUID   UUID   `json:"uuid" dbsorm:"1"`
-	Type   string `json:"type" dbsorm:"1"`
-	Domain string `json:"domain" dbsorm:"1"`
+	ID     int64    `json:"id"`
+	UUID   dbt.UUID `json:"uuid" dbsorm:"1"`
+	Type   string   `json:"type" dbsorm:"1"`
+	Domain string   `json:"domain" dbsorm:"1"`
 }
 
 // CreateRemote creates a new Remote
@@ -29,7 +28,7 @@ func CreateRemote(rtype string, domain string) *Remote {
 	defer dbstorage.InsertsLock.Unlock()
 	//
 	id := db.QueryNextID(cTableRemotes)
-	uid := NewUUID()
+	uid := dbt.NewUUID()
 	n := &Remote{id, uid, rtype, domain}
 	db.Build().InsI(cTableRemotes, n).Exe()
 	return n
