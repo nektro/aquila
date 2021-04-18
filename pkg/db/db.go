@@ -27,6 +27,7 @@ func Init() {
 	db.CreateTableStruct("users", User{})
 	db.CreateTableStruct("packages", Package{})
 	db.CreateTableStruct("versions", Version{})
+	db.CreateTableStruct("versions_rejected", Version{})
 }
 
 func Close() {

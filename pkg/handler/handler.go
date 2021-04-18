@@ -48,6 +48,10 @@ func Init() {
 	htp.Register("/{repo:[0-9]+}/{user}/{package}/v{major:[0-9]+}.{minor:[0-9]+}", http.MethodGet, Version)
 	htp.Register("/{repo:[0-9]+}/{user}/{package}/v{major:[0-9]+}.{minor:[0-9]+}.tar.gz", http.MethodGet, VersionDL)
 	htp.Register("/{repo:[0-9]+}/{user}/{package}/hook", http.MethodPost, Hook)
+	htp.Register("/{repo:[0-9]+}/{user}/{package}/approve", http.MethodGet, Approve)
+	htp.Register("/{repo:[0-9]+}/{user}/{package}/approve", http.MethodPost, ApprovePost)
+	htp.Register("/{repo:[0-9]+}/{user}/{package}/reject", http.MethodGet, Reject)
+	htp.Register("/{repo:[0-9]+}/{user}/{package}/reject", http.MethodPost, RejectPost)
 
 	htp.Register("/.well-known/aquila", http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "https://github.com/nektro/aquila")

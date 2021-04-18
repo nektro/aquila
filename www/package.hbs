@@ -78,6 +78,10 @@
             <h3>Unconfirmed Versions</h3>
             <table>
                 <thead>
+                    <th colspan="6"></th>
+                    <th colspan="3">Approve / Reject</th>
+                </thead>
+                <thead>
                     <tr>
                         <th></th>
                         <th>Created On</th>
@@ -85,6 +89,9 @@
                         <th>Compare Diff</th>
                         <th>Unpacked Size</th>
                         <th>Tar Size</th>
+                        <th>Up Major</th>
+                        <th>Up Minor</th>
+                        <th>Reject</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,6 +103,9 @@
                         <td><a href="{{diff_url pkg.Remote pkg.RemoteName @index this.CommitTo new_versions versions}}"><code>{{prev_commit @index new_versions versions}}...{{trim_str this.CommitTo 8}}</code></a></td>
                         <td>{{fix_bytes this.UnpackedSize}}</td>
                         <td>{{fix_bytes this.TarSize}}</td>
+                        <td>{{#equal @index 0}}<a href="./{{pkg.Name}}/approve?up=major"><i class="arrow up icon"></i></a>{{/equal}}</td>
+                        <td>{{#equal @index 0}}<a href="./{{pkg.Name}}/approve?up=minor"><i class="arrow up icon"></i></a>{{/equal}}</td>
+                        <td>{{#equal @index 0}}<a href="./{{pkg.Name}}/reject"><i class="trash alternate outline icon"></i></a>{{/equal}}</td>
                     </tr>
                     {{/each}}
                 </tbody>

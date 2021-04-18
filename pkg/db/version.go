@@ -108,6 +108,28 @@ func (v Version) ByCommit(p *Package, c string) *Version {
 	return x
 }
 
+func (v Version) GetLatestVersionOff(p *Package) *Version {
+	var ret *Version
+	dbstorage.ScanStream(v.b().Wh("p_for", p.UUID.String()).Or("id", "desc"), Version{}, func(s dbstorage.Scannable) {
+		if ret != nil {
+			return
+		}
+		w := s.(*Version)
+		if w.RealMajor > 0 || w.RealMinor > 0 {
+			ret = w
+		}
+	})
+	return ret
+}
+
+func (v Version) GetLatestVersionNew(p *Package) *Version {
+	x, ok := dbstorage.ScanFirst(v.b().Wh("p_for", p.UUID.String()).Wh("real_major", "0").Wh("real_minor", "0"), Version{}).(*Version)
+	if !ok {
+		return nil
+	}
+	return x
+}
+
 //
 //
 
@@ -133,4 +155,15 @@ func (v *Version) SetRealVer(approver *User, major int, minor int) {
 	doUp(v, "real_major", strconv.Itoa(major))
 	v.RealMinor = minor
 	doUp(v, "real_minor", strconv.Itoa(minor))
+}
+
+func (v *Version) ResetCreatedOn() {
+	v.CreatedOn = now()
+	val, _ := v.CreatedOn.Value()
+	doUp(v, "created_on", val.(string))
+}
+
+func (v *Version) Delete() {
+	doDel(v)
+	db.Build().InsI(v.t()+"_rejected", v).Exe()
 }
