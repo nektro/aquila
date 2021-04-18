@@ -56,8 +56,8 @@
                         <th></th>
                         <th>Published On</th>
                         <th>Tree @ Commit</th>
+                        <th>Compare Diff</th>
                         <th>Unpacked Size</th>
-                        <th>Total Size</th>
                         <th>Tar Size</th>
                     </tr>
                 </thead>
@@ -67,8 +67,8 @@
                         <td><a href="./{{pkg.Name}}/v{{this.RealMajor}}.{{this.RealMinor}}">v{{this.RealMajor}}.{{this.RealMinor}}</a></td>
                         <td>{{fix_date this.CreatedOn}}</td>
                         <td><a href="{{tree_url pkg.Remote pkg.RemoteName this.CommitTo}}"><code>{{trim_str this.CommitTo 14}}</code></a></td>
+                        <td>{{#notequal @index 0}}<a href="{{diff_url_off pkg.Remote pkg.RemoteName @index this.CommitTo versions}}"><code>{{prev_commit_off @index versions}}...{{trim_str this.CommitTo 8}}</code></a>{{/notequal}}</td>
                         <td>{{fix_bytes this.UnpackedSize}}</td>
-                        <td>{{fix_bytes this.TotalSize}}</td>
                         <td>{{fix_bytes this.TarSize}}</td>
                     </tr>
                     {{/each}}

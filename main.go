@@ -120,6 +120,18 @@ func main() {
 		}
 		return newv[x-1].CommitTo[:8]
 	})
+	raymond.RegisterHelper("notequal", func(a interface{}, b interface{}, options *raymond.Options) interface{} {
+		if raymond.Str(a) == raymond.Str(b) {
+			return options.Inverse()
+		}
+		return options.Fn()
+	})
+	raymond.RegisterHelper("diff_url_off", func(r int64, n string, x int, to string, appv []*db.Version) string {
+		return "https://github.com/" + n + "/compare/" + appv[x-1].CommitTo[:10] + "..." + to[:10]
+	})
+	raymond.RegisterHelper("prev_commit_off", func(x int, appv []*db.Version) string {
+		return appv[x-1].CommitTo[:8]
+	})
 
 	handler.Init()
 
