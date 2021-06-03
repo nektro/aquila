@@ -2,3 +2,4 @@
 /aquila*
 /bin
 /.env
+/run.sh
