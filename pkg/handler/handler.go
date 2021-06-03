@@ -96,6 +96,7 @@ func writePageResponse(w http.ResponseWriter, r *http.Request, page string, data
 		fmt.Fprintln(w, string(bys))
 		return
 	}
+	etc.WriteHandlebarsFile(r, w, "/_header.hbs", data)
 	etc.WriteHandlebarsFile(r, w, page, data)
 }
 
