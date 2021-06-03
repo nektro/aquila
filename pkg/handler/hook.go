@@ -3,7 +3,6 @@ package handler
 import (
 	"archive/tar"
 	"compress/gzip"
-	"io/fs"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -112,7 +111,7 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 	tarf, _ := os.Create(fil)
 	gzw := gzip.NewWriter(tarf)
 	tarw := tar.NewWriter(gzw)
-	filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}

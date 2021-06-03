@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -102,7 +101,7 @@ func writePageResponse(w http.ResponseWriter, r *http.Request, page string, data
 
 func dirSize(dirpath string) int64 {
 	ret := int64(0)
-	filepath.Walk(dirpath, func(path string, info fs.FileInfo, err error) error {
+	filepath.Walk(dirpath, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
