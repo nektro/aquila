@@ -16,6 +16,9 @@
     --input-style: solid;
     --display-h1-decoration: none;
 }
+.terminal-card {
+    margin: 1em 0;
+}
 a.link-as-text::after {
     content: attr(href);
 }
@@ -24,4 +27,24 @@ table tr td {
 }
 table.left tr td {
     text-align: left;
+}
+.home-cols {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.home-cols > div {
+    margin-right: 2em;
+}
+.home-cols > div:last-child {
+    margin-right: 0;
+}
+.home-cols .terminal-card div:last-child {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+.pkg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
