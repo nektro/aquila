@@ -18,7 +18,7 @@ func User(w http.ResponseWriter, r *http.Request) {
 		"aquila_version": etc.Version,
 		"user":           user,
 		"repo":           repo,
-		"owner":          owner,
+		"powner":         owner,
 		"pkgs":           owner.GetPackages(),
 	})
 }

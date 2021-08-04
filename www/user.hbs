@@ -1,9 +1,9 @@
-            <h2>@{{owner.name}}'s Packages</h2>
+            <h2>@{{powner.name}}'s Packages</h2>
             <div class="pkg-grid">
                 {{#each pkgs}}
                 <div class="terminal-card">
                     <div>
-                        <h3 style="margin-bottom: .5em;"><a href="./{{owner.Provider}}/{{owner.Name}}/{{this.name}}">{{this.name}}</a></h3>
+                        <h3 style="margin-bottom: .5em;"><a href="./{{powner.Name}}/{{this.name}}">{{this.name}}</a></h3>
                         <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
                         <div>{{this.description}}</div>
                     </div>
