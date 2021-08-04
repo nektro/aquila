@@ -2,16 +2,20 @@
             <p>A federated package repository and CI system for the Zig programming language.</p>
             <p><a href="./dashboard" class="btn btn-primary">Login</a></p>
             <hr>
-            <h3>Latest Packages</h3>
-            {{#each latest.packages}}
-            <div class="terminal-card">
+            <div class="flex-row">
                 <div>
-                    <h3 style="margin-bottom: .5em;"><a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a></h3>
-                    <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
-                    <div>{{this.description}}</div>
+                    <h3>Latest Packages</h3>
+                    {{#each latest.packages}}
+                    <div class="terminal-card">
+                        <div>
+                            <h3 style="margin-bottom: .5em;"><a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a></h3>
+                            <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
+                            <div>{{this.description}}</div>
+                        </div>
+                    </div>
+                    {{/each}}
                 </div>
             </div>
-            {{/each}}
         </div>
     </body>
 </html>
