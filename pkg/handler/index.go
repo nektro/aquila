@@ -9,10 +9,8 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	writePageResponse(w, r, "/index.hbs", map[string]interface{}{
-		"aquila_version": etc.Version,
-		"latest": map[string]interface{}{
-			"packages": db.Package{}.GetLatest(25),
-		},
+		"aquila_version":  etc.Version,
+		"latest_packages": db.Package{}.GetLatest(25),
 	})
 }
 
