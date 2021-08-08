@@ -38,7 +38,7 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 
 	rnd := strconv.FormatInt(rand.Int63(), 10)[:6]
 	os.Mkdir("/tmp/"+rnd, os.ModePerm)
-	details := remo.GetRepoDetails(user, pkg.RemoteName)
+	details := remo.GetRepoDetailsRaw(val.Get("repository"))
 	dir := "/tmp/" + rnd + "/" + details.Name
 	fil := dir + ".tar.gz"
 

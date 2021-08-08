@@ -181,7 +181,14 @@ type RepoDetails struct {
 func (v *Remote) GetRepoDetails(user *User, apipath string) *RepoDetails {
 	switch v.Type {
 	case "github":
-		val := v.apiRequest(user, "/repos/"+apipath)
+		return v.GetRepoDetailsRaw(v.apiRequest(user, "/repos/"+apipath))
+	}
+	return nil
+}
+
+func (v *Remote) GetRepoDetailsRaw(val *fastjson.Value) *RepoDetails {
+	switch v.Type {
+	case "github":
 		return &RepoDetails{
 			strconv.FormatInt(val.GetInt64("id"), 10),
 			string(val.GetStringBytes("name")),
