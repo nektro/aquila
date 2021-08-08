@@ -48,3 +48,8 @@ table.left tr td {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+img.badge {
+    width: 80px;
+    height: 15px;
+    image-rendering: pixelated;
+}
