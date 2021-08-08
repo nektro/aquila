@@ -61,7 +61,16 @@ func (v Version) All() []*Version {
 	return res
 }
 
-func (v Version) ActiveByPackage(p *Package) []*Version {
+func (v Version) AllByPackage(p *Package) []*Version {
+	arr := dbstorage.ScanAll(v.b().Wh("p_for", p.UUID.String()), Version{})
+	res := []*Version{}
+	for _, item := range arr {
+		res = append(res, item.(*Version))
+	}
+	return res
+}
+
+func (v Version) ActiveByPackage_(p *Package) []*Version {
 	arr := dbstorage.ScanAll(v.b().Wh("p_for", p.UUID.String()), Version{})
 	res := []*Version{}
 	for _, item := range arr {
