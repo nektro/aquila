@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -53,6 +55,21 @@ func main() {
 
 	util.DieOnError(util.Assert(len(global.Domain) > 0, "--domain must be set to the hostname of this server"))
 
+	dbversionpath := etc.DataRoot() + "/migration_version.txt"
+	if !util.DoesFileExist(dbversionpath) {
+		f, _ := os.Create(dbversionpath)
+		defer f.Close()
+		fmt.Fprint(f, 1)
+		global.DbRev = 1
+	} else {
+		f, _ := os.Open(dbversionpath)
+		defer f.Close()
+		data, _ := ioutil.ReadAll(f)
+		num, _ := strconv.ParseInt(string(data), 10, 32)
+		global.DbRev = num
+	}
+	util.Log("db: schema revision:", global.DbRev)
+
 	store.Init("local", "")
 	db.Init()
 
@@ -71,6 +88,13 @@ func main() {
 			log.Println("registered new remote:", r.ID, rtype, domain)
 		}
 	}
+
+	switch global.DbRev {
+	}
+	util.Log("db: schema revision:", global.DbRev)
+	f, _ := os.Create(dbversionpath)
+	fmt.Fprint(f, global.DbRev)
+	f.Close()
 
 	util.RunOnClose(func() {
 		util.Log("Gracefully shutting down...")
