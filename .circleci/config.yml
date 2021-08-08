@@ -11,8 +11,8 @@ jobs:
     environment:
       DEBIAN_FRONTEND: noninteractive
     steps:
-      - run: apt update
-      - run: apt -y upgrade
+      - run: sudo apt update
+      - run: sudo apt -y upgrade
       - checkout
 
       - run: go version
@@ -23,7 +23,7 @@ jobs:
           path: ./bin/
           destination: /artifacts/
 
-      - run: apt -y install wget tar xz-utils jq
+      - run: sudo apt -y install wget tar xz-utils jq
       - run: ./download_zig.sh 0.9.0-dev.730+011a46838
       - run: zig version
       - run: zig env
