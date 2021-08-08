@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: /home/circleci/aquila
     docker:
-      - image: circleci/golang
+      - image: circleci/golang:1.16
     environment:
       DEBIAN_FRONTEND: noninteractive
     steps:
