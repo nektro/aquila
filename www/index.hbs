@@ -15,6 +15,18 @@
                     </div>
                     {{/each}}
                 </div>
+                <div>
+                    <h3>Latest Updates</h3>
+                    {{#each latest_versions}}
+                    <div class="terminal-card">
+                        <div>
+                            <h3 style="margin-bottom: 0;"><a class="link-as-text" href="{{version_path this}}"></a></h3>
+                            <div><i class="tag icon"></i>{{version_str this}}</div>
+                            <div>{{version_pkg_description this}}</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
         </div>
     </body>

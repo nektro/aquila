@@ -175,6 +175,14 @@ func main() {
 	raymond.RegisterHelper("prev_commit_off", func(x int, appv []*db.Version) string {
 		return appv[x-1].CommitTo[:8]
 	})
+	raymond.RegisterHelper("version_path", func(p *db.Version) string {
+		g := db.Package{}.ByUID(p.For)
+		u := db.User{}.ByUID(g.Owner)
+		return fmt.Sprintf("%d/%s/%s", g.Remote, u.Name, g.Name)
+	})
+	raymond.RegisterHelper("version_pkg_description", func(p *db.Version) string {
+		return (db.Package{}.ByUID(p.For)).Description
+	})
 
 	handler.Init()
 

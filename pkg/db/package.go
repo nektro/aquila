@@ -67,6 +67,14 @@ func (v Package) ByUser(user *User) []*Package {
 	return res
 }
 
+func (v Package) ByUID(ulid dbt.UUID) *Package {
+	us, ok := dbstorage.ScanFirst(v.b().Wh("uuid", string(ulid)), Package{}).(*Package)
+	if !ok {
+		return nil
+	}
+	return us
+}
+
 func (v Package) GetLatest(n int) []*Package {
 	arr := dbstorage.ScanAll(v.b().Or("id", "desc").Lm(int64(n)), Package{})
 	res := []*Package{}
