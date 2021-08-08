@@ -23,7 +23,7 @@ jobs:
           path: ./bin/
           destination: /artifacts/
 
-      - run: apt -y install wget tar xz-utils
+      - run: apt -y install wget tar xz-utils jq
       - run: ./download_zig.sh 0.9.0-dev.689+507dc1f2e
       - run: zig version
       - run: zig env
