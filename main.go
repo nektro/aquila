@@ -90,6 +90,25 @@ func main() {
 	}
 
 	switch global.DbRev {
+	case 1:
+		{
+			// approve all versions
+			for _, item := range (db.Package{}.All()) {
+				verified := db.Version{}.ActiveByPackage_(item)
+				latest := verified[len(verified)-1].RealMinor
+				owner := db.User{}.ByUID(item.Owner)
+				maj := verified[len(verified)-1].RealMajor
+				majs := strconv.Itoa(maj)
+
+				for _, jtem := range (db.Version{}.NewByPackage_(item)) {
+					latest += 1
+					jtem.SetRealVer(owner, maj, latest)
+					latests := strconv.Itoa(latest)
+					util.Log("migrate:", "auto-approved:", string(item.UUID), "-", item.Name, "to", "v"+majs+"."+latests)
+				}
+			}
+			global.DbRev += 1
+		}
 	}
 	util.Log("db: schema revision:", global.DbRev)
 	f, _ := os.Create(dbversionpath)

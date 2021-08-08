@@ -12,4 +12,5 @@ type ConfigT struct {
 var (
 	Config = &ConfigT{}
 	Domain string
+	DbRev  int64
 )

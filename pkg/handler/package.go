@@ -22,7 +22,6 @@ func Package(w http.ResponseWriter, r *http.Request) {
 		"repo":           repo,
 		"owner":          owner,
 		"pkg":            pkg,
-		"versions":       db.Version{}.ActiveByPackage(pkg),
-		"new_versions":   db.Version{}.NewByPackage(pkg),
+		"versions":       db.Version{}.AllByPackage(pkg),
 	})
 }

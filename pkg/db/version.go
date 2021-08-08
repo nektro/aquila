@@ -83,7 +83,7 @@ func (v Version) ActiveByPackage_(p *Package) []*Version {
 	return res
 }
 
-func (v Version) NewByPackage(p *Package) []*Version {
+func (v Version) NewByPackage_(p *Package) []*Version {
 	arr := dbstorage.ScanAll(v.b().Wh("p_for", p.UUID.String()).Wh("real_major", "0").Wh("real_minor", "0"), Version{})
 	res := []*Version{}
 	for _, item := range arr {
@@ -117,7 +117,7 @@ func (v Version) ByCommit(p *Package, c string) *Version {
 	return x
 }
 
-func (v Version) GetLatestVersionOff(p *Package) *Version {
+func (v Version) GetLatestVersionOf(p *Package) *Version {
 	var ret *Version
 	dbstorage.ScanStream(v.b().Wh("p_for", p.UUID.String()).Or("id", "desc"), Version{}, func(s dbstorage.Scannable) {
 		if ret != nil {

@@ -136,7 +136,12 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 	c.AssertNilErr(copyFile(fil, dirr+"/"+commit+".tar.gz"))
 
 	c.Assert(db.Version{}.ByCommit(pkg, commit) == nil, "Version at this commit already created.")
-	db.CreateVersion(pkg, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, devdeps)
+	vnew := db.CreateVersion(pkg, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, devdeps)
 	pkg.SetLicense(license)
 	pkg.SetDescription(desc)
+
+	vold := db.Version{}.GetLatestVersionOf(pkg)
+	owner := db.User{}.ByUID(pkg.Owner)
+	vnew.SetRealVer(owner, vold.RealMajor, vold.RealMinor+1)
+	pkg.SetLatest(vnew)
 }
