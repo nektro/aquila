@@ -1,0 +1,19 @@
+name: Go CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - run: go version
+      - run: go env
+      - run: go get -v .
+      - run: go build
