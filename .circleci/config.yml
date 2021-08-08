@@ -24,7 +24,7 @@ jobs:
           destination: /artifacts/
 
       - run: apt -y install wget tar xz-utils jq
-      - run: ./download_zig.sh 0.9.0-dev.689+507dc1f2e
+      - run: ./download_zig.sh 0.9.0-dev.730+011a46838
       - run: zig version
       - run: zig env
 
