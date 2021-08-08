@@ -9,10 +9,10 @@
 
 A federated package repository and CI system for the Zig programming language.
 
-## Zig
+## About Zig
 - https://ziglang.org/
 - https://github.com/ziglang/zig
-- https://github.com/ziglang/zig/wiki/Community
+- https://github.com/nektro/zigmod
 
 ## Download
 - https://github.com/nektro/aquila/releases
@@ -23,6 +23,8 @@ $ go build
 ```
 
 ## Built With
+
+### Go Implementation
 - Go 1.16
 - https://github.com/aymerick/raymond
 - https://github.com/nektro/go-util/util
@@ -32,6 +34,10 @@ $ go build
 - https://github.com/nektro/go.etc/store
 - https://github.com/nektro/go.oauth2
 - https://github.com/rakyll/statik
+
+### Zig Implementation
+- Zig master (as least `0.9.0-dev.730+011a46838`)
+- See [`zigmod.lock`](./zigmod.lock)
 
 ## License
 GNU Affero General Public License v3.0

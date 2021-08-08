@@ -2,3 +2,6 @@
 /aquila*
 /bin
 /run.sh
+.zigmod
+deps.zig
+zig-*

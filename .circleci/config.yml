@@ -11,15 +11,29 @@ jobs:
     environment:
       DEBIAN_FRONTEND: noninteractive
     steps:
+      - run: apt update
+      - run: apt -y upgrade
       - checkout
+
       - run: go version
       - run: go env
       - run: go get -v .
-
       - run: ./build_all.sh
       - store_artifacts:
           path: ./bin/
           destination: /artifacts/
+
+      - run: apt -y install wget tar xz-utils
+      - run: ./download_zig.sh 0.9.0-dev.689+507dc1f2e
+      - run: zig version
+      - run: zig env
+
+      - run: zigmod ci
+      - run: ./build_all_zig.sh
+      - store_artifacts:
+          path: ./zig-out/bin/
+          destination: /artifacts/
+
       - run: ./make_release.sh
 
       - setup_remote_docker:
