@@ -142,6 +142,9 @@ func main() {
 		u := db.User{}.ByUID(p)
 		return strconv.FormatInt(u.Provider, 10) + "/" + u.Name
 	})
+	raymond.RegisterHelper("versionp_str", func(p *db.Version) string {
+		return "v" + strconv.Itoa(p.RealMajor) + "." + strconv.Itoa(p.RealMinor)
+	})
 	raymond.RegisterHelper("version_str", func(p db.Version) string {
 		return "v" + strconv.Itoa(p.RealMajor) + "." + strconv.Itoa(p.RealMinor)
 	})
