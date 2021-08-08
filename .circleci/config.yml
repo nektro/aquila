@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: /home/circleci/aquila
     docker:
-      - image: golang
+      - image: circleci/golang
     environment:
       DEBIAN_FRONTEND: noninteractive
     steps:
@@ -38,6 +38,7 @@ jobs:
 
       - setup_remote_docker:
           version: 18.09.3
+      - run: docker version
       - docker/check
       - docker/build:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
