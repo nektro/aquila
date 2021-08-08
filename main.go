@@ -109,6 +109,19 @@ func main() {
 			}
 			global.DbRev += 1
 		}
+		fallthrough
+	case 2:
+		{
+			// import star count
+			for _, item := range (db.Package{}.All()) {
+				remo := db.Remote{}.ByID(item.Remote)
+				dets := remo.GetRepoDetails(nil, item.RemoteName)
+				item.SetStarCount(dets.StarCount)
+				util.Log("migrate:", "star-count:", remo.Domain+"/"+item.RemoteName, dets.StarCount)
+				time.Sleep(time.Second)
+			}
+			global.DbRev += 1
+		}
 	}
 	util.Log("db: schema revision:", global.DbRev)
 	f, _ := os.Create(dbversionpath)
@@ -185,6 +198,9 @@ func main() {
 	})
 	raymond.RegisterHelper("version_pkg_description", func(p *db.Version) string {
 		return (db.Package{}.ByUID(p.For)).Description
+	})
+	raymond.RegisterHelper("version_pkg_stars", func(p *db.Version) int {
+		return (db.Package{}.ByUID(p.For)).StarCount
 	})
 
 	handler.Init()

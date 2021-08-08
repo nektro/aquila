@@ -105,8 +105,10 @@ func (v *Remote) apiRoot() string {
 
 func (v *Remote) apiRequest(user *User, endpoint string) *fastjson.Value {
 	req, _ := http.NewRequest(http.MethodGet, v.apiRoot()+endpoint, nil)
-	if at := store.This.Get(user.UUID.String() + "_access_token"); len(at) > 0 {
-		req.Header.Set("Authorization", "Bearer "+at)
+	if user != nil {
+		if at := store.This.Get(user.UUID.String() + "_access_token"); len(at) > 0 {
+			req.Header.Set("Authorization", "Bearer "+at)
+		}
 	}
 	res, _ := http.DefaultClient.Do(req)
 	if res.StatusCode >= 400 {
@@ -176,6 +178,7 @@ type RepoDetails struct {
 	CloneURL    string
 	Description string
 	MainBranch  string
+	StarCount   int
 }
 
 func (v *Remote) GetRepoDetails(user *User, apipath string) *RepoDetails {
@@ -195,6 +198,7 @@ func (v *Remote) GetRepoDetailsRaw(val *fastjson.Value) *RepoDetails {
 			string(val.GetStringBytes("clone_url")),
 			string(val.GetStringBytes("description")),
 			string(val.GetStringBytes("default_branch")),
+			val.GetInt("stargazers_count"),
 		}
 	}
 	return nil

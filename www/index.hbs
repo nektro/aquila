@@ -8,7 +8,10 @@
                     {{#each latest_packages}}
                     <div class="terminal-card">
                         <div>
-                            <h3 style="margin-bottom: 0;"><a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a></h3>
+                            <h3 style="margin-bottom: 0;">
+                                <a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a>
+                                <span><i class="star icon"></i> {{this.StarCount}}</span>
+                            </h3>
                             <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
                             <div>{{this.description}}</div>
                         </div>
@@ -20,7 +23,10 @@
                     {{#each latest_versions}}
                     <div class="terminal-card">
                         <div>
-                            <h3 style="margin-bottom: 0;"><a class="link-as-text" href="{{version_path this}}"></a></h3>
+                            <h3 style="margin-bottom: 0;">
+                                <a class="link-as-text" href="{{version_path this}}"></a>
+                                <span><i class="star icon"></i> {{version_pkg_stars this}}</span>
+                            </h3>
                             <div><i class="tag icon"></i>{{versionp_str this}}</div>
                             <div>{{version_pkg_description this}}</div>
                         </div>

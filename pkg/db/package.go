@@ -23,10 +23,11 @@ type Package struct {
 	License       string   `json:"license" dbsorm:"1"`
 	LatestVersion string   `json:"latest_version" dbsorm:"1"`
 	hookSecret    string   `json:"hook_secret" dbsorm:"1"`
+	StarCount     int      `json:"star_count" dbsorm:"1"`
 }
 
 // CreatePackage creates a new Package
-func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName, description, license string) *Package {
+func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName, description, license string, starcount int) *Package {
 	dbstorage.InsertsLock.Lock()
 	defer dbstorage.InsertsLock.Unlock()
 	//
@@ -34,7 +35,7 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 	uid := dbt.NewUUID()
 	co := now()
 	hooksecret := strings.ToLower(util.RandomString(16))
-	n := &Package{id, uid, owner.UUID, name, co, remote, remoteID, remoteName, description, license, "", hooksecret}
+	n := &Package{id, uid, owner.UUID, name, co, remote, remoteID, remoteName, description, license, "", hooksecret, starcount}
 	db.Build().InsI(cTablePackages, n).Exe()
 	return n
 }
@@ -44,7 +45,7 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 
 // Scan implements dbstorage.Scannable
 func (v Package) Scan(rows *sql.Rows) dbstorage.Scannable {
-	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion, &v.hookSecret)
+	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion, &v.hookSecret, &v.StarCount)
 	return &v
 }
 
@@ -124,4 +125,9 @@ func (v *Package) SetLicense(s string) {
 func (v *Package) SetDescription(s string) {
 	v.Description = s
 	doUp(v, "description", s)
+}
+
+func (v *Package) SetStarCount(n int) {
+	v.StarCount = n
+	doUp(v, "star_count", strconv.Itoa(n))
 }

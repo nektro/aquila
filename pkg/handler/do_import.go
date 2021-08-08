@@ -139,7 +139,7 @@ func DoImport(w http.ResponseWriter, r *http.Request) {
 	c.AssertNilErr(os.MkdirAll(dirr, os.ModePerm))
 	c.AssertNilErr(copyFile(fil, dirr+"/"+commit+".tar.gz"))
 
-	p := db.CreatePackage(user, name, remo.ID, details.ID, repo, desc, license)
+	p := db.CreatePackage(user, name, remo.ID, details.ID, repo, desc, license, details.StarCount)
 	v := db.CreateVersion(p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, devdeps)
 	v.SetRealVer(user, 0, 1)
 	p.SetLatest(v)
