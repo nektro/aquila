@@ -30,7 +30,7 @@ table.left tr td {
 }
 .home-cols {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
 }
 .home-cols > div {
     margin-right: 1em;

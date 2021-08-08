@@ -12,6 +12,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		"aquila_version":  etc.Version,
 		"latest_packages": db.Package{}.GetLatest(25),
 		"latest_versions": db.Version{}.GetLatest(25),
+		"top_starred":     db.Package{}.TopStarred(25),
 	})
 }
 

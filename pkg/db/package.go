@@ -85,6 +85,15 @@ func (v Package) GetLatest(n int) []*Package {
 	return res
 }
 
+func (v Package) TopStarred(n int) []*Package {
+	arr := dbstorage.ScanAll(v.b().Or("star_count", "desc").Lm(int64(n)), Package{})
+	res := []*Package{}
+	for _, item := range arr {
+		res = append(res, item.(*Package))
+	}
+	return res
+}
+
 //
 //
 
