@@ -30,3 +30,5 @@ curl -s 'https://api.github.com/repos/nektro/zigmod/releases' \
     | grep $(uname -m) \
     | grep -i $(uname -s) \
     | wget -i - -O /usr/local/bin/zigmod
+
+chmod +x /usr/local/bin/zigmod
