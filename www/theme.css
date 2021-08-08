@@ -48,6 +48,9 @@ table.left tr td {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+.pkg-grid .terminal-card {
+    margin: 0;
+}
 img.badge {
     width: 80px;
     height: 15px;
