@@ -1,13 +1,15 @@
             <h2>@{{user.name}}'s Dashboard</h2>
-            {{#each pkgs}}
-            <div class="terminal-card">
-                <div>
-                    <h3 style="margin-bottom: .5em;"><a href="./{{user.Provider}}/{{user.Name}}/{{this.name}}">{{this.name}}</a></h3>
-                    <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
-                    <div>{{this.description}}</div>
+            <div class="pkg-grid">
+                {{#each pkgs}}
+                <div class="terminal-card">
+                    <div>
+                        <h3 style="margin-bottom: .5em;"><a href="./{{user.Provider}}/{{user.Name}}/{{this.name}}">{{this.name}}</a></h3>
+                        <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
+                        <div>{{this.description}}</div>
+                    </div>
                 </div>
+                {{/each}}
             </div>
-            {{/each}}
         </div>
     </body>
 </html>

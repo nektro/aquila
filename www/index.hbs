@@ -1,14 +1,14 @@
             <h1>Aquila</h1>
-            <p>A federated package repository and CI system for the Zig programming language.</p>
+            <p>A federated package index and CI system for the Zig programming language built around the <a href="https://github.com/nektro/zigmod">Zigmod</a> package manager.</p>
             <p><a href="./dashboard" class="btn btn-primary">Login</a></p>
             <hr>
             <div class="home-cols">
                 <div>
-                    <h3>Just Added</h3>
+                    <h3>Latest Packages</h3>
                     {{#each latest_packages}}
                     <div class="terminal-card">
                         <div>
-                            <h3 style="margin-bottom: .5em;"><a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a></h3>
+                            <h3 style="margin-bottom: 0;"><a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.name}}"></a></h3>
                             <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
                             <div>{{this.description}}</div>
                         </div>

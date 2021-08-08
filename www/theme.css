@@ -33,7 +33,7 @@ table.left tr td {
     grid-template-columns: 50% 50%;
 }
 .home-cols > div {
-    margin-right: 2em;
+    margin-right: 1em;
 }
 .home-cols > div:last-child {
     margin-right: 0;
