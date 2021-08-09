@@ -18,8 +18,15 @@ A federated package repository and CI system for the Zig programming language.
 - https://github.com/nektro/aquila/releases
 
 ## Building from Source
+Go
 ```
 $ go build
+```
+
+Zig
+```
+$ zigmod fetch
+$ zig build
 ```
 
 ## Built With
