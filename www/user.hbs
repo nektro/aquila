@@ -1,14 +1,14 @@
-            <h2>@{{powner.name}}'s Packages</h2>
+            <h2>@{{powner.Name}}'s Packages</h2>
             <div class="pkg-grid">
                 {{#each pkgs}}
                 <div class="terminal-card">
                     <div>
                         <h3>
-                            <a href="./{{powner.Name}}/{{this.name}}">{{this.name}}</a>
+                            <a href="./{{powner.Name}}/{{this.Name}}">{{this.Name}}</a>
                             <span><i class="star icon"></i> {{this.StarCount}}</span>
                         </h3>
-                        <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
-                        <div>{{this.description}}</div>
+                        <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
+                        <div>{{this.Description}}</div>
                     </div>
                 </div>
                 {{/each}}
