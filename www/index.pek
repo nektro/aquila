@@ -1,0 +1,7 @@
+            h1("Aquila")
+            p("A federated package index and CI system for the Zig programming language built around the "a[href="https://github.com/nektro/zigmod"]("Zigmod")" package manager.")
+            p(a[href="./dashboard" class="btn btn-primary"]("Login"))
+            hr
+        )
+    )
+)

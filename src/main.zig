@@ -7,6 +7,7 @@ const string = []const u8;
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");
+const handler = @import("./handler/_.zig");
 
 pub const name = "Aquila";
 pub var version: string = "";
@@ -33,15 +34,10 @@ pub fn main() !void {
         alloc,
         try std.net.Address.parseIp("127.0.0.1", port),
         {},
-        index,
+        comptime handler.getHandler(),
     );
 }
 
 fn handle_sig() void {
     std.os.exit(0);
-}
-
-fn index(_: void, response: *http.Response, request: http.Request) anyerror!void {
-    _ = request;
-    try response.writer().writeAll("TODO handler!");
 }
