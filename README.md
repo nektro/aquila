@@ -33,14 +33,7 @@ $ zig build
 
 ### Go Implementation
 - Go 1.16
-- https://github.com/aymerick/raymond
-- https://github.com/nektro/go-util/util
-- https://github.com/nektro/go-util/vflag
-- https://github.com/nektro/go.etc
-- https://github.com/nektro/go.etc/dbt
-- https://github.com/nektro/go.etc/store
-- https://github.com/nektro/go.oauth2
-- https://github.com/rakyll/statik
+- See [`go.mod`](./go.mod)
 
 ### Zig Implementation
 - Zig master (at least `0.9.0-dev.749+259f3458a`)
