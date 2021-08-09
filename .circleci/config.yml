@@ -28,6 +28,7 @@ jobs:
       - run: zig version
       - run: zig env
 
+      - run: zigmod version
       - run: zigmod ci
       - run: ./build_all_zig.sh
       - store_artifacts:
