@@ -4,7 +4,7 @@ set -x
 set -e
 
 apk add --no-cache wget
-wget https://github.com/nektro/zigmod/releases/download/v67/zigmod-$(uname -m)-linux -O zigmod
+wget https://github.com/nektro/zigmod/releases/download/v68/zigmod-$(uname -m)-linux -O zigmod
 chmod +x ./zigmod
 
 apk add --no-cache git libc-dev musl-dev build-base gcc ca-certificates
