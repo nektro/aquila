@@ -36,7 +36,7 @@ $ go build
 - https://github.com/rakyll/statik
 
 ### Zig Implementation
-- Zig master (as least `0.9.0-dev.730+011a46838`)
+- Zig master (at least `0.9.0-dev.749+259f3458a`)
 - See [`zigmod.lock`](./zigmod.lock)
 
 ## License
