@@ -18,6 +18,6 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 		"aquila_version": etc.Version,
 		"user":           user,
 		"remote":         remo,
-		"pkgs":           pkgs,
+		"pkgs":           fixPackages(pkgs),
 	})
 }

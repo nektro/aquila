@@ -145,7 +145,7 @@ func DoImport(w http.ResponseWriter, r *http.Request) {
 	p.SetLatest(v)
 	desturl := "/" + strconv.FormatInt(remo.ID, 10) + "/" + user.Name + "/" + name
 
-	remo.InstallWebhook(user, details.ID, repo, "https://"+global.Domain+desturl+"/hook?secret="+p.GetHookSecret())
+	remo.InstallWebhook(user, details.ID, repo, "https://"+global.Domain+desturl+"/hook?secret="+p.HookSecret)
 
 	w.Header().Add("Location", "."+desturl)
 	w.WriteHeader(http.StatusFound)

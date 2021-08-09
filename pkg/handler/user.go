@@ -19,6 +19,6 @@ func User(w http.ResponseWriter, r *http.Request) {
 		"user":           user,
 		"repo":           repo,
 		"powner":         owner,
-		"pkgs":           owner.GetPackages(),
+		"pkgs":           fixPackages(owner.GetPackages()),
 	})
 }

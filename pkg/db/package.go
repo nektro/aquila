@@ -22,7 +22,7 @@ type Package struct {
 	Description   string   `json:"description" dbsorm:"1"`
 	License       string   `json:"license" dbsorm:"1"`
 	LatestVersion string   `json:"latest_version" dbsorm:"1"`
-	hookSecret    string   `json:"hook_secret" dbsorm:"1"`
+	HookSecret    string   `json:"hook_secret" dbsorm:"1"`
 	StarCount     int      `json:"star_count" dbsorm:"1"`
 }
 
@@ -45,7 +45,7 @@ func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName,
 
 // Scan implements dbstorage.Scannable
 func (v Package) Scan(rows *sql.Rows) dbstorage.Scannable {
-	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion, &v.hookSecret, &v.StarCount)
+	rows.Scan(&v.ID, &v.UUID, &v.Owner, &v.Name, &v.CreatedOn, &v.Remote, &v.RemoteID, &v.RemoteName, &v.Description, &v.License, &v.LatestVersion, &v.HookSecret, &v.StarCount)
 	return &v
 }
 
@@ -111,10 +111,6 @@ func (v Package) b() dbstorage.QueryBuilder {
 
 //
 //
-
-func (v *Package) GetHookSecret() string {
-	return v.hookSecret
-}
 
 func (v *Package) SetLatest(vers *Version) {
 	vs := "v" + strconv.Itoa(vers.RealMajor) + "." + strconv.Itoa(vers.RealMinor)

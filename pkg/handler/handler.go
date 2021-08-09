@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/fatih/structs"
 	"github.com/nektro/aquila/pkg/db"
 	etc "github.com/nektro/go.etc"
 	"github.com/nektro/go.etc/htp"
@@ -134,4 +135,18 @@ func copyFile(src string, dest string) error {
 func atoi(s string) int {
 	i, _ := strconv.Atoi(s)
 	return i
+}
+
+func fixPackages(in []*db.Package) []map[string]interface{} {
+	res := []map[string]interface{}{}
+	for _, item := range in {
+		res = append(res, fixPackage(item))
+	}
+	return res
+}
+
+func fixPackage(item *db.Package) map[string]interface{} {
+	m := structs.Map(item)
+	delete(m, "HookSecret")
+	return m
 }

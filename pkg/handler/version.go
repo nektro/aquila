@@ -22,7 +22,7 @@ func Version(w http.ResponseWriter, r *http.Request) {
 		"user":           user,
 		"repo":           repo,
 		"owner":          owner,
-		"pkg":            pkg,
+		"pkg":            fixPackage(pkg),
 		"vers":           vers,
 		"approver":       db.User{}.ByUID(vers.ApprovedBy),
 	})
