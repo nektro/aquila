@@ -10,7 +10,7 @@ build_template() {
     version=${CIRCLE_BUILD_NUM-$date}
     tag=v$version
     echo $tag-$GOOS-$GOARCH
-    go build -ldflags="-s -w -X main.Version=$tag" -o ./bin/aquila-$tag-$GOOS-$GOARCH$ext
+    go build -ldflags="-s -w -X main.Version=$tag" -o ./bin/aquila-$GOOS-$GOARCH$ext
 }
 
 go get -v github.com/rakyll/statik
