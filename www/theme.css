@@ -1,7 +1,7 @@
 :root {
     --global-font-size: 15px;
     --global-line-height: 1.4em;
-    --font-stack: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-stack: sans-serif;
     --background-color: #222225;
     --page-width: 70em;
     --font-color: #e8e9ed;
