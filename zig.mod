@@ -7,5 +7,5 @@ provides: ["aquila"]
 root_files:
   - www
 dev_dependencies:
-  - src: git https://github.com/Luukdegram/apple_pie
+  - src: git https://github.com/nektro/apple_pie
   - src: git https://github.com/nektro/zig-pek
