@@ -1,0 +1,8 @@
+            h2("About")
+            p("Aquila is a federated package index and CI system for the "a[href="https://ziglang.org/"]("Zig programming language")" built about the "a[href="https://github.com/nektro/zigmod"]("Zigmod")" package manager.")
+            p("It should be known that the Zig project plans on building a package manager into the "code("zig")" command itself, so when that is released this registry will be updated to work with that. Until then, importing projects will fail if the git repo does not have a "code("zig.mod")" file in its root defining its properties.")
+            p("You can learn more about the zig.mod format "a[href="https://github.com/nektro/zigmod/blob/master/docs/zig.mod.md"]("here")".")
+            p(a[href="https://indieweb.org/"](img[class="badge" src="https://indieweb.org/img/indieweb-badge.png"]))
+        )
+    )
+)
