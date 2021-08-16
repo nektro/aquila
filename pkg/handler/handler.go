@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 
 	"github.com/fatih/structs"
 	"github.com/nektro/aquila/pkg/db"
@@ -130,11 +129,6 @@ func copyFile(src string, dest string) error {
 		return err
 	}
 	return nil
-}
-
-func atoi(s string) int {
-	i, _ := strconv.Atoi(s)
-	return i
 }
 
 func fixPackages(in []*db.Package) []map[string]interface{} {
