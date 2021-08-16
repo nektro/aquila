@@ -6,7 +6,7 @@ require (
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/bsm/redislock v0.5.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
-	github.com/fatih/structs v1.1.0 // indirect
+	github.com/fatih/structs v1.1.0
 	github.com/go-redis/redis/v7 v7.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
