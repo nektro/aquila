@@ -12,6 +12,7 @@ pub fn getHandler() http.RequestHandler(void) {
         http.router.get("/", _index.get),
         file_route("/theme.css"),
         http.router.get("/about", StaticPek("/about.pek").get),
+        http.router.get("/contact", StaticPek("/contact.pek").get),
     });
 }
 
