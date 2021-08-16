@@ -3,9 +3,9 @@
                 {{#each pkgs}}
                 <div class="terminal-card">
                     <div>
-                        <h3 style="margin-bottom: .5em;"><a href="./{{user.provider}}/{{user.name}}/{{this.name}}">{{this.name}}</a></h3>
-                        <div><i class="balance scale icon"></i> {{#if this.license}}{{this.license}}{{else}}No{{/if}} License</div>
-                        <div>{{this.description}}</div>
+                        <h3 style="margin-bottom: .5em;"><a href="./{{user.provider}}/{{user.name}}/{{this.Name}}">{{this.Name}}</a></h3>
+                        <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
+                        <div>{{this.Description}}</div>
                     </div>
                 </div>
                 {{/each}}
