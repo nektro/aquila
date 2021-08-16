@@ -7,12 +7,11 @@
 [![docker_pulls](https://img.shields.io/docker/pulls/nektro/aquila)](https://hub.docker.com/r/nektro/aquila)
 [![docker_stars](https://img.shields.io/docker/stars/nektro/aquila)](https://hub.docker.com/r/nektro/aquila)
 
-A federated package repository and CI system for the Zig programming language.
+A federated package index and CI system for the Zig programming language built around the [Zigmod](https://github.com/nektro/zigmod) package manager.
 
 ## About Zig
 - https://ziglang.org/
 - https://github.com/ziglang/zig
-- https://github.com/nektro/zigmod
 
 ## Download
 - https://github.com/nektro/aquila/releases
