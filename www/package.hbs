@@ -35,37 +35,6 @@
                     {{/each}}
                 </tbody>
             </table>
-            {{#equal user.ID owner.ID}}
-            <h3>Unconfirmed Versions</h3>
-            <table>
-                <thead>
-                    <th colspan="6"></th>
-                    <th colspan="3">Approve / Reject</th>
-                </thead>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Created On</th>
-                        <th>Tree @ Commit</th>
-                        <th>Compare Diff</th>
-                        <th>Unpacked Size</th>
-                        <th>Tar Size</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each new_versions}}
-                    <tr>
-                        <td>v{{this.RealMajor}}.{{this.RealMinor}}</td>
-                        <td>{{fix_date this.CreatedOn}}</td>
-                        <td><a href="{{tree_url pkg.Remote pkg.RemoteName this.CommitTo}}"><code>{{trim_str this.CommitTo 14}}</code></a></td>
-                        <td><a href="{{diff_url pkg.Remote pkg.RemoteName @index this.CommitTo new_versions versions}}"><code>{{prev_commit @index new_versions versions}}...{{trim_str this.CommitTo 8}}</code></a></td>
-                        <td>{{fix_bytes this.UnpackedSize}}</td>
-                        <td>{{fix_bytes this.TarSize}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-            {{/equal}}
         </div>
     </body>
 </html>
