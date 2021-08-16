@@ -2,7 +2,8 @@ const std = @import("std");
 const deps = @import("./deps.zig");
 
 pub fn build(b: *std.build.Builder) void {
-    const target = b.standardTargetOptions(.{});
+    var target = b.standardTargetOptions(.{});
+    if (target.isGnuLibC()) target.setGnuLibCVersion(2, 28, 0);
 
     b.setPreferredReleaseMode(.ReleaseSafe);
     const mode = b.standardReleaseOptions();

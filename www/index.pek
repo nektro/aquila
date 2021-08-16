@@ -2,6 +2,53 @@
             p("A federated package index and CI system for the Zig programming language built around the "a[href="https://github.com/nektro/zigmod"]("Zigmod")" package manager.")
             p(a[href="./dashboard" class="btn btn-primary"]("Login"))
             hr
+            div[class="home-cols"](
+                div(
+                    h3("Latest Packages")
+                    {#each latest_packages}
+                    div[class="terminal-card"](
+                        div(
+                            h3[style="margin-bottom: 0;"](
+                                a[class="link-as-text" href=({#get_user_path this.owner}"/"{this.name})]
+                                span(i[class="star icon"]" "{this.star_count})
+                            )
+                            div(i[class="balance scale icon"]" "{#if this.license}{this.license}<else>"No"/if/" License")
+                            div({this.description}"&nbsp;")
+                        )
+                    )
+                    /each/
+                )
+                div(
+                    h3("Most Starred")
+                    {#each top_starred}
+                    div[class="terminal-card"](
+                        div(
+                            h3[style="margin-bottom: 0;"](
+                                a[class="link-as-text" href=({#get_user_path this.owner}"/"{this.name})]
+                                span(i[class="star icon"]" "{this.star_count})
+                            )
+                            div(i[class="balance scale icon"]" "{#if this.license}{this.license}<else>"No"/if/" License")
+                            div({this.description}"&nbsp;")
+                        )
+                    )
+                    /each/
+                )
+                div(
+                    h3("Latest Versions")
+                    {#each latest_versions}
+                    div[class="terminal-card"](
+                        div(
+                            h3[style="margin-bottom: 0;"](
+                                a[class="link-as-text" href=({#version_pkg_path this})]
+                                span(i[class="star icon"]" "{#version_pkg_stars this})
+                            )
+                            div(i[class="tag icon"]" "{#version_str this})
+                            div({#version_pkg_description this}"&nbsp;")
+                        )
+                    )
+                    /each/
+                )
+            )
         )
     )
 )

@@ -9,3 +9,4 @@ root_files:
 dev_dependencies:
   - src: git https://github.com/nektro/apple_pie
   - src: git https://github.com/nektro/zig-pek
+  - src: git https://github.com/nektro/zig-zorm
