@@ -5,7 +5,7 @@
                     <div>
                         <h3>
                             <a href="./{{powner.Name}}/{{this.Name}}">{{this.Name}}</a>
-                            <span><i class="star icon"></i> {{this.StarCount}}</span>
+                            {{#pkg_is_github this.UUID}}<span><img src="https://img.shields.io/github/stars/{{this.RemoteName}}?style=flat"></span>{{/pkg_is_github}}
                         </h3>
                         <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
                         <div>{{this.Description}}</div>

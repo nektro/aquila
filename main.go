@@ -202,6 +202,14 @@ func main() {
 	raymond.RegisterHelper("version_pkg_stars", func(p *db.Version) int {
 		return (db.Package{}.ByUID(p.For)).StarCount
 	})
+	raymond.RegisterHelper("pkg_is_github", func(id dbt.UUID, options *raymond.Options) string {
+		p := db.Package{}.ByUID(id)
+		r := db.Remote{}.ByID(p.Remote)
+		if r.Domain == "github.com" {
+			return options.Fn()
+		}
+		return ""
+	})
 
 	handler.Init()
 

@@ -10,7 +10,7 @@
                         <div>
                             <h3 style="margin-bottom: 0;">
                                 <a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.Name}}"></a>
-                                <span><i class="star icon"></i> {{this.StarCount}}</span>
+                                {{#pkg_is_github this.UUID}}<span><img src="https://img.shields.io/github/stars/{{this.RemoteName}}?style=flat"></span>{{/pkg_is_github}}
                             </h3>
                             <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
                             <div>{{this.Description}}&nbsp;</div>
@@ -25,7 +25,7 @@
                         <div>
                             <h3 style="margin-bottom: 0;">
                                 <a class="link-as-text" href="{{get_user_path this.Owner}}/{{this.Name}}"></a>
-                                <span><i class="star icon"></i> {{this.StarCount}}</span>
+                                {{#pkg_is_github this.UUID}}<span><img src="https://img.shields.io/github/stars/{{this.RemoteName}}?style=flat"></span>{{/pkg_is_github}}
                             </h3>
                             <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
                             <div>{{this.Description}}&nbsp;</div>
@@ -40,7 +40,6 @@
                         <div>
                             <h3 style="margin-bottom: 0;">
                                 <a class="link-as-text" href="{{version_path this}}"></a>
-                                <span><i class="star icon"></i> {{version_pkg_stars this}}</span>
                             </h3>
                             <div><i class="tag icon"></i>{{versionp_str this}}</div>
                             <div>{{version_pkg_description this}}&nbsp;</div>
