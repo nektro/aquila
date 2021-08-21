@@ -4,4 +4,4 @@ git https://github.com/nektro/zig-pek commit-499071c2903ee2b67460c0c3e8f0446cd23
 git https://github.com/nektro/zig-range commit-890ca308fe09b3d5c866d5cfb3b3d7a95dbf939f
 git https://github.com/kivikakk/htmlentities.zig commit-c3cbe4cb3a9a9bd60e7c9fedcf9b97e087b98d6c
 git https://github.com/nektro/zig-zorm commit-2fbbe3c3d7925f3696face6ac349f14b1f44d5c0
-git https://github.com/vrischmann/zig-sqlite commit-4954c419d379ffbb637904b41d25ef910c6bb02b
+git https://github.com/vrischmann/zig-sqlite commit-f5dfcfe2f7a0f40ab5c9b008862e3b6ef20a2f13
