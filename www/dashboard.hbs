@@ -3,7 +3,10 @@
                 {{#each pkgs}}
                 <div class="terminal-card">
                     <div>
-                        <h3 style="margin-bottom: .5em;"><a href="./{{user.provider}}/{{user.name}}/{{this.Name}}">{{this.Name}}</a></h3>
+                        <h3 style="margin-bottom: .5em;">
+                            <a href="./{{user.provider}}/{{user.name}}/{{this.Name}}">{{this.Name}}</a>
+                            {{#pkg_is_github this.UUID}}<span><img src="https://img.shields.io/github/stars/{{this.RemoteName}}?style=flat"></span>{{/pkg_is_github}}
+                        </h3>
                         <div><i class="balance scale icon"></i> {{#if this.License}}{{this.License}}{{else}}No{{/if}} License</div>
                         <div>{{this.Description}}</div>
                     </div>
