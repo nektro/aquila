@@ -38,7 +38,8 @@ table.left tr td {
 .home-cols > div:last-child {
     margin-right: 0;
 }
-.home-cols .terminal-card div:last-child {
+.home-cols .terminal-card div:last-child,
+.pkg-grid .terminal-card div:last-child {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
