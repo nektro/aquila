@@ -57,11 +57,11 @@ pub const Package = struct {
     star_count: u64,
 
     pub fn latest(alloc: *std.mem.Allocator) ![]const Package {
-        return try db.collect(alloc, Package, "select * from packages order by id desc limit 15");
+        return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
     }
 
     pub fn topStarred(alloc: *std.mem.Allocator) ![]const Package {
-        return try db.collect(alloc, Package, "select * from packages order by star_count desc limit 15");
+        return try db.collect(alloc, Package, "select * from packages order by star_count desc limit 15", .{});
     }
 
     pub fn byUID(alloc: *std.mem.Allocator, ulid: ULID) !?Package {
@@ -89,6 +89,6 @@ pub const Version = struct {
     dev_deps: string,
 
     pub fn latest(alloc: *std.mem.Allocator) ![]const Version {
-        return try db.collect(alloc, Version, "select * from versions order by id desc limit 15");
+        return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
     }
 };
