@@ -3,8 +3,12 @@
 set -x
 set -e
 
-apk add --no-cache wget
-wget https://github.com/nektro/zigmod/releases/download/v68/zigmod-$(uname -m)-linux -O zigmod
+apk add --no-cache wget curl jq
+curl -s 'https://api.github.com/repos/nektro/zigmod/releases' \
+    | jq -r '.[0].assets[].browser_download_url' \
+    | grep $(uname -m) \
+    | grep -i $(uname -s) \
+    | wget -i - -O zigmod
 chmod +x ./zigmod
 
 apk add --no-cache git libc-dev musl-dev build-base gcc ca-certificates
