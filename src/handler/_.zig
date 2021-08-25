@@ -6,6 +6,7 @@ const mime = @import("../mime.zig");
 
 const __ = @import("./_internal.zig");
 const _index = @import("./index.zig");
+const _user = @import("./user.zig");
 
 pub fn getHandler() http.RequestHandler(void) {
     return http.router.Router(void, &.{
@@ -13,6 +14,7 @@ pub fn getHandler() http.RequestHandler(void) {
         file_route("/theme.css"),
         http.router.get("/about", StaticPek("/about.pek").get),
         http.router.get("/contact", StaticPek("/contact.pek").get),
+        http.router.get("/:remote/:user", _user.get),
     });
 }
 
