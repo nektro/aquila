@@ -12,7 +12,6 @@ jobs:
       DEBIAN_FRONTEND: noninteractive
     steps:
       - run: sudo apt update
-      - run: sudo apt -y upgrade
       - checkout
 
       - run: go version
