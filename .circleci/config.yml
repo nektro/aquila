@@ -29,6 +29,7 @@ jobs:
       # - run: zigmod version
 
       # - run: zigmod ci
+      # - run: zig build
       # - run: ./build_all_zig.sh
       # - store_artifacts:
       #     path: ./zig-out/bin/
