@@ -13,6 +13,7 @@ jobs:
     steps:
       - run: sudo apt update
       - checkout
+      - run: top -b -n 1 | head -n5
 
       - run: go version
       - run: go env
