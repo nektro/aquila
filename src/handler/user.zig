@@ -3,10 +3,10 @@ const string = []const u8;
 const http = @import("apple_pie");
 
 const db = @import("./../db/_.zig");
+
 const _internal = @import("./_internal.zig");
 
 pub fn get(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string }) !void {
-    _ = args;
     const alloc = request.arena;
     const r = try db.Remote.byID(alloc, args.remote);
     const o = try r.?.findUserByName(alloc, args.user);
