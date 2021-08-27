@@ -49,12 +49,12 @@ fn handle_sig() void {
     std.os.exit(0);
 }
 
-pub fn pek_get_user_path(alloc: *std.mem.Allocator, ulid: []const u8) ![]const u8 {
+pub fn pek_get_user_path(alloc: *std.mem.Allocator, ulid: string) !string {
     const user = try db.User.byUID(alloc, ulid);
     return try std.fmt.allocPrint(alloc, "{d}/{s}", .{ user.?.provider, user.?.name });
 }
 
-pub fn pek_version_pkg_path(alloc: *std.mem.Allocator, vers: db.Version) ![]const u8 {
+pub fn pek_version_pkg_path(alloc: *std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byUID(alloc, vers.p_for);
     const user = try db.User.byUID(alloc, pkg.?.owner);
     return try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ user.?.provider, user.?.name, pkg.?.name });
@@ -65,11 +65,11 @@ pub fn pek_version_pkg_stars(alloc: *std.mem.Allocator, vers: db.Version) !u64 {
     return pkg.?.star_count;
 }
 
-pub fn pek_version_str(alloc: *std.mem.Allocator, vers: db.Version) ![]const u8 {
+pub fn pek_version_str(alloc: *std.mem.Allocator, vers: db.Version) !string {
     return try std.fmt.allocPrint(alloc, "v{d}.{d}", .{ vers.real_major, vers.real_minor });
 }
 
-pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) ![]const u8 {
+pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byUID(alloc, vers.p_for);
     return pkg.?.description;
 }
