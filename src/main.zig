@@ -2,6 +2,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 const options = @import("build_options");
 const http = @import("apple_pie");
+const extras = @import("extras");
 
 const string = []const u8;
 const git = @import("./git.zig");
@@ -72,4 +73,20 @@ pub fn pek_version_str(alloc: *std.mem.Allocator, vers: db.Version) !string {
 pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byUID(alloc, vers.p_for);
     return pkg.?.description;
+}
+
+/// TODO RFC3339 -> RFC1123
+pub fn pek_fix_date(alloc: *std.mem.Allocator, in: string) !string {
+    _ = alloc;
+    return in;
+}
+
+pub fn pek_tree_url(alloc: *std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
+    return switch (remo.@"type") {
+        .github => try std.fmt.allocPrint(alloc, "https://github.com/{s}/tree/{s}", .{ repo, commit }),
+    };
+}
+
+pub fn pek_fix_bytes(alloc: *std.mem.Allocator, size: u64) !string {
+    return try extras.fmtByteCountIEC(alloc, size);
 }

@@ -10,3 +10,4 @@ dev_dependencies:
   - src: git https://github.com/Luukdegram/apple_pie
   - src: git https://github.com/nektro/zig-pek
   - src: git https://github.com/nektro/zig-zorm
+  - src: git https://github.com/nektro/zig-extras

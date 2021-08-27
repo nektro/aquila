@@ -1,6 +1,7 @@
 const std = @import("std");
 
 const _db = @import("./_.zig");
+const Version = _db.Version;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
@@ -35,6 +36,12 @@ pub const Package = struct {
     pub fn byUID(alloc: *std.mem.Allocator, ulid: ULID) !?Package {
         return try db.first(alloc, Package, "select * from packages where uuid = ?", .{
             .uuid = ulid,
+        });
+    }
+
+    pub fn versions(self: Package, alloc: *std.mem.Allocator) ![]const Version {
+        return try db.collect(alloc, Version, "select * from versions where p_for = ?", .{
+            .p_for = self.uuid,
         });
     }
 };

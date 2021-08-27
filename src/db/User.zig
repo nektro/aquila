@@ -29,4 +29,11 @@ pub const User = struct {
             .owner = self.uuid,
         });
     }
+
+    pub fn findPackageByName(self: User, alloc: *std.mem.Allocator, name: string) !?Package {
+        return try db.first(alloc, Package, "select * from packages where owner = ? and name = ?", .{
+            .owner = self.uuid,
+            .name = name,
+        });
+    }
 };
