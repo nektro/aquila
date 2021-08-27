@@ -35,7 +35,7 @@ $ zig build
 - See [`go.mod`](./go.mod)
 
 ### Zig Implementation
-- Zig master (at least `0.9.0-dev.831+5806c386e`)
+- Zig master (at least `0.9.0-dev.861+311797f68`)
 - See [`zigmod.lock`](./zigmod.lock)
 
 ## License
