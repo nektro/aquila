@@ -5,4 +5,4 @@ git https://github.com/nektro/zig-range commit-890ca308fe09b3d5c866d5cfb3b3d7a95
 git https://github.com/kivikakk/htmlentities.zig commit-c3cbe4cb3a9a9bd60e7c9fedcf9b97e087b98d6c
 git https://github.com/nektro/zig-zorm commit-38a255e5698796eb13a171a6ce6f33b98d65cfe2
 git https://github.com/vrischmann/zig-sqlite commit-e9966b721515864ce6397aa8f35038ed318c97e7
-git https://github.com/nektro/zig-extras commit-8691b110468d7b6d170e6fec0e0ecfe7ede6372c
+git https://github.com/nektro/zig-extras commit-4d2b9a70c8347fd5ce877eb087e1b3cad54e3cae
