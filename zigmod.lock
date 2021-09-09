@@ -6,3 +6,4 @@ git https://github.com/kivikakk/htmlentities.zig commit-c3cbe4cb3a9a9bd60e7c9fed
 git https://github.com/nektro/zig-zorm commit-38a255e5698796eb13a171a6ce6f33b98d65cfe2
 git https://github.com/vrischmann/zig-sqlite commit-658f9fab1f61ee207d1951f93c5ab3e242828e08
 git https://github.com/nektro/zig-extras commit-0657e287853475843c27660242e9bbb117374c6b
+git https://github.com/leroycep/zig-jwt commit-054d96bdd93d0f2ff93510f544990c0308126460

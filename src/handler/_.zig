@@ -1,6 +1,7 @@
 const std = @import("std");
 const http = @import("apple_pie");
 const files = @import("self/files");
+const extras = @import("extras");
 
 const mime = @import("../mime.zig");
 
@@ -8,6 +9,14 @@ const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
 const _user = @import("./user.zig");
 const _package = @import("./package.zig");
+
+pub fn init(alloc: *std.mem.Allocator) !void {
+    var secret_seed: [std.rand.DefaultCsprng.secret_seed_length]u8 = undefined;
+    std.crypto.random.bytes(&secret_seed);
+    var csprng = std.rand.DefaultCsprng.init(secret_seed);
+
+    _internal.jwt_secret = try extras.randomSlice(alloc, &csprng.random, u8, 64);
+}
 
 pub fn getHandler() http.RequestHandler(void) {
     return http.router.Router(void, &.{

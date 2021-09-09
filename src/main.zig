@@ -35,6 +35,8 @@ pub fn main() !void {
 
     //
 
+    try handler.init(alloc);
+
     const port = 8000;
     std.log.info("starting server on port {d}", .{port});
     try http.listenAndServe(
