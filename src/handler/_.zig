@@ -4,7 +4,7 @@ const files = @import("self/files");
 
 const mime = @import("../mime.zig");
 
-const __ = @import("./_internal.zig");
+const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
 const _user = @import("./user.zig");
 const _package = @import("./package.zig");
@@ -38,7 +38,7 @@ fn file_route(comptime path: []const u8) http.router.Route {
 fn StaticPek(comptime path: []const u8) type {
     return struct {
         pub fn get(_: void, response: *http.Response, request: http.Request) !void {
-            try __.writePageResponse(request.arena, response, request, path, .{
+            try _internal.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
                 .logged_in = false,
             });
