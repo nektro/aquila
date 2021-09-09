@@ -36,7 +36,7 @@ $ zig build
 
 ### Zig Implementation
 - Zig master (at least `0.9.0-dev.861+311797f68`)
-- See [`zigmod.lock`](./zigmod.lock)
+- See [`zig.mod`](./zig.mod) and [`zigmod.lock`](./zigmod.lock)
 
 ## License
 GNU Affero General Public License v3.0
