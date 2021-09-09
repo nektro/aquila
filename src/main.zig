@@ -30,8 +30,8 @@ pub fn main() !void {
 
     //
 
-    signal.listenFor(std.c.SIGINT, handle_sig);
-    signal.listenFor(std.c.SIGTERM, handle_sig);
+    signal.listenFor(std.os.linux.SIG.INT, handle_sig);
+    signal.listenFor(std.os.linux.SIG.TERM, handle_sig);
 
     //
 
