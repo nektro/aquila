@@ -24,8 +24,8 @@ pub fn getHandler() http.RequestHandler(void) {
         file_route("/theme.css"),
         http.router.get("/about", StaticPek("/about.pek").get),
         http.router.get("/contact", StaticPek("/contact.pek").get),
-        http.router.get("/:remote/:user", Middleware(_user.get).next),
-        http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
+        http.router.get("/:remote/:user", (_user.get)),
+        http.router.get("/:remote/:user/:package", (_package.get)),
     });
 }
 
