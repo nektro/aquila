@@ -3,6 +3,7 @@ const builtin = @import("builtin");
 const options = @import("build_options");
 const http = @import("apple_pie");
 const extras = @import("extras");
+const oauth2 = @import("oauth2");
 
 const string = []const u8;
 const git = @import("./git.zig");
@@ -23,6 +24,9 @@ pub fn main() !void {
     version = try std.fmt.allocPrint(alloc, "v{s}{s}{s}{s}.zig{}", .{ options.version, rev[0], rev[1], con, builtin.zig_version });
     version = version[0..std.mem.indexOfScalar(u8, version, '+').?];
     std.log.info("Starting {s} {s}", .{ name, version });
+
+    oauth2.providers.github.id = "github.com";
+    oauth2.providers.github.scope = try std.mem.join(alloc, " ", &.{ oauth2.providers.github.scope, "write:repo_hook" });
 
     //
 

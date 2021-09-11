@@ -12,3 +12,4 @@ dev_dependencies:
   - src: git https://github.com/nektro/zig-zorm
   - src: git https://github.com/nektro/zig-extras
   - src: git https://github.com/leroycep/zig-jwt
+  - src: git https://github.com/nektro/zig-oauth2
