@@ -4,6 +4,7 @@ const options = @import("build_options");
 const http = @import("apple_pie");
 const extras = @import("extras");
 const oauth2 = @import("oauth2");
+const flag = @import("flag");
 
 const string = []const u8;
 const git = @import("./git.zig");
@@ -30,7 +31,18 @@ pub fn main() !void {
 
     //
 
-    try db.connect(alloc, "data/access.db");
+    flag.init(alloc);
+
+    try flag.addSingle("domain");
+    try flag.addSingle("db");
+    try flag.addSingle("port");
+    try flag.addMulti("oauth2-client");
+
+    _ = try flag.parse(.double);
+
+    //
+
+    try db.connect(alloc, flag.getSingle("db") orelse "data/access.db");
 
     //
 
