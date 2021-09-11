@@ -24,8 +24,8 @@ pub fn getHandler() http.RequestHandler(void) {
         file_route("/theme.css"),
         http.router.get("/about", StaticPek("/about.pek").get),
         http.router.get("/contact", StaticPek("/contact.pek").get),
-        http.router.get("/:remote/:user", (_user.get)),
-        http.router.get("/:remote/:user/:package", (_package.get)),
+        http.router.get("/:remote/:user", Middleware(_user.get).next),
+        http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
     });
 }
 
@@ -33,9 +33,9 @@ fn Middleware(comptime f: anytype) type {
     const Args = @typeInfo(@TypeOf(f)).Fn.args[3].arg_type.?;
     return struct {
         pub fn next(_: void, response: *http.Response, request: http.Request, args: Args) !void {
-            f({}, response, request, args) catch |err| switch (err) {
-                error.HttpNoOp => {},
-                else => return err,
+            f({}, response, request, args) catch |err| {
+                if (@as(anyerror, err) == error.HttpNoOp) return;
+                return err;
             };
         }
     };
