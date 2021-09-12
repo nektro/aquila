@@ -54,10 +54,8 @@ pub const JWT = struct {
         return yum.get("jwt");
     }
 
-    // TODO
     fn tokenFromQuery(request: http.Request) !?string {
-        _ = request;
-        // return r.URL.Query().Get("jwt")
-        return null;
+        const q = try request.context.url.queryParameters(request.arena);
+        return q.get("jwt");
     }
 };
