@@ -1,4 +1,5 @@
 const std = @import("std");
+const string = []const u8;
 const http = @import("apple_pie");
 const files = @import("self/files");
 const extras = @import("extras");
@@ -41,7 +42,7 @@ fn Middleware(comptime f: anytype) type {
     };
 }
 
-fn file_route(comptime path: []const u8) http.router.Route {
+fn file_route(comptime path: string) http.router.Route {
     const T = struct {
         fn f(_: void, response: *http.Response, request: http.Request) !void {
             _ = request;
@@ -56,7 +57,7 @@ fn file_route(comptime path: []const u8) http.router.Route {
     return http.router.get(path, T.f);
 }
 
-fn StaticPek(comptime path: []const u8) type {
+fn StaticPek(comptime path: string) type {
     return struct {
         pub fn get(_: void, response: *http.Response, request: http.Request) !void {
             try _internal.writePageResponse(request.arena, response, request, path, .{
