@@ -53,13 +53,32 @@ pub fn main() !void {
 
     try handler.init(alloc);
 
+    var clients = std.ArrayList(oauth2.Client).init(alloc);
+    for (flag.getMulti("oauth2-client").?) |item| {
+        var iter = std.mem.split(u8, item, "|");
+        try clients.append(.{
+            .provider = oauth2.providerById(iter.next().?).?,
+            .id = iter.next().?,
+            .secret = iter.next().?,
+        });
+    }
+
+    const oa2 = oauth2.Handlers(struct {
+        pub const Ctx = void;
+        pub const isLoggedIn = handler.isLoggedIn;
+        pub const doneUrl = "/dashboard";
+        pub const saveInfo = handler.saveInfo;
+    });
+    oa2.clients = clients.toOwnedSlice();
+    oa2.callbackPath = "/callback";
+
     const port = 8000;
     std.log.info("starting server on port {d}", .{port});
     try http.listenAndServe(
         alloc,
         try std.net.Address.parseIp("127.0.0.1", port),
         {},
-        comptime handler.getHandler(),
+        comptime handler.getHandler(oa2),
     );
 }
 

@@ -3,6 +3,8 @@ const string = []const u8;
 const http = @import("apple_pie");
 const files = @import("self/files");
 const extras = @import("extras");
+const oauth2 = @import("oauth2");
+const json = @import("json");
 
 const mime = @import("../mime.zig");
 
@@ -19,12 +21,14 @@ pub fn init(alloc: *std.mem.Allocator) !void {
     _internal.jwt_secret = try extras.randomSlice(alloc, &csprng.random, u8, 64);
 }
 
-pub fn getHandler() http.RequestHandler(void) {
+pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
     return http.router.Router(void, &.{
         http.router.get("/", _index.get),
         file_route("/theme.css"),
         http.router.get("/about", StaticPek("/about.pek").get),
         http.router.get("/contact", StaticPek("/contact.pek").get),
+        http.router.get("/login", Middleware(oa2.login).next),
+        http.router.get("/callback", Middleware(oa2.callback).next),
         http.router.get("/:remote/:user", Middleware(_user.get).next),
         http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
     });
@@ -66,4 +70,19 @@ fn StaticPek(comptime path: string) type {
             });
         }
     };
+}
+
+pub fn isLoggedIn(request: http.Request) !bool {
+    _ = request;
+    return false;
+}
+
+pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value) !void {
+    _ = response;
+    _ = request;
+    _ = idp;
+    _ = id;
+    _ = name;
+    _ = val;
+
 }
