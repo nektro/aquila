@@ -2,6 +2,9 @@
 
 set -e
 
+PROJECT_USERNAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+PROJECT_REPONAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+
 read-log() {
     git log --format=format:"%h%n%H%n%an%n%s%n%d%n"
 }
@@ -34,7 +37,7 @@ while IFS= read -r lineVAR; do
         if [[ "$t" == '2' ]]; then
             break
         fi
-        echo "<li><a href='https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$hash'><code>$hash_abrev</code></a> $title ($author)</li>"
+        echo "<li><a href='https://github.com/$PROJECT_USERNAME/$PROJECT_REPONAME/commit/$hash'><code>$hash_abrev</code></a> $title ($author)</li>"
     fi
     c=$(($c+1))
     #

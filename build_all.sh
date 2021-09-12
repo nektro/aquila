@@ -6,9 +6,7 @@ build_template() {
     export GOARCH=$2
     export GOARM=7
     ext=$3
-    date=$(date +'%Y%m%d')
-    version=${CIRCLE_BUILD_NUM-$date}
-    tag=v$version
+    tag="r$(./release_num.sh)"
     echo $tag-$GOOS-$GOARCH
     go build -ldflags="-s -w -X main.Version=$tag" -o ./bin/aquila-$GOOS-$GOARCH$ext
 }

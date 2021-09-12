@@ -35,3 +35,8 @@ jobs:
       - run: zigmod ci
       - run: zig build
       - run: ./build_all_zig.sh
+
+      # Github Release
+      - run: ./changelog.sh
+      - run: zigmod aq install 1/nektro/ghr
+      - run: ./make_release.sh ${{ secrets.GITHUB_TOKEN }}

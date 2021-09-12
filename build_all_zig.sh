@@ -2,8 +2,7 @@
 
 set -e
 
-date=$(date +'%Y%m%d')
-version=v${CIRCLE_BUILD_NUM-$date}
+version="r$(./release_num.sh)"
 rev=$(git log --format=%h -1)
 
 targets="

@@ -2,17 +2,16 @@
 
 set -e
 
-date=$(date +'%Y.%m.%d')
-version=${CIRCLE_BUILD_NUM-$date}
-tag=v$version
+tag=r$(./release_num.sh)
 
-zigmod aq install 1/nektro/ghr
-echo
+GITHUB_TOKEN="$1"
+PROJECT_USERNAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+PROJECT_REPONAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
 
 ~/.zigmod/bin/ghr \
     -t ${GITHUB_TOKEN} \
-    -u ${CIRCLE_PROJECT_USERNAME} \
-    -r ${CIRCLE_PROJECT_REPONAME} \
+    -u ${PROJECT_USERNAME} \
+    -r ${PROJECT_REPONAME} \
     -b "$(./changelog.sh)" \
     "$tag" \
     "./bin/"
