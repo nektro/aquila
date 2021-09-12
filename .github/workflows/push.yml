@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Get the code
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch --all --tags
+      - run: top -b -n 1 | head -n5
+
+      # Go
+      - uses: actions/setup-go@v2
+      - run: go version
+      - run: go env
+      - run: go get -v .
+      - run: go build
+      - run: ./build_all.sh
+
+      # Zig
+      - uses: goto-bus-stop/setup-zig@v1
+        with:
+          version: master
+      - run: zig version
+      - run: zig env
+      - uses: nektro/actions-setup-zigmod@v1
+      - run: zigmod version
+      - run: zigmod ci
+      - run: zig build
+      - run: ./build_all_zig.sh
