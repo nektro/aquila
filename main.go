@@ -30,7 +30,6 @@ var Version = "vMASTER"
 var Name = "Aquila"
 
 func main() {
-	//
 	rand.Seed(time.Now().UnixNano())
 
 	etc.AppID = strings.ToLower(Name)

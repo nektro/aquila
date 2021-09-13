@@ -42,7 +42,7 @@ func (v User) BySnowflake(provider int64, snowflake string, name string) *User {
 	}
 	dbstorage.InsertsLock.Lock()
 	defer dbstorage.InsertsLock.Unlock()
-	//
+
 	id := db.QueryNextID(cTableUsers)
 	uid := dbt.NewUUID()
 	co := now()

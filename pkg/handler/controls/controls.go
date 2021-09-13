@@ -18,7 +18,7 @@ var formMethods = []string{http.MethodPost, http.MethodPut, http.MethodPatch, ht
 // GetUser asserts a user is logged in
 func GetUser(c *htp.Controller, r *http.Request, w http.ResponseWriter) *db.User {
 	l := etc.JWTGetClaims(c, r)
-	//
+
 	userID := l["sub"].(string)
 	user := db.User{}.ByUID(dbt.UUID(userID))
 	c.Assert(user != nil, "500: unable to find user: "+userID)

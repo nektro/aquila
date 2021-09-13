@@ -30,7 +30,7 @@ type Package struct {
 func CreatePackage(owner *User, name string, remote int64, remoteID, remoteName, description, license string, starcount int) *Package {
 	dbstorage.InsertsLock.Lock()
 	defer dbstorage.InsertsLock.Unlock()
-	//
+
 	id := db.QueryNextID(cTablePackages)
 	uid := dbt.NewUUID()
 	co := now()

@@ -1,5 +1,4 @@
 const std = @import("std");
-
 const string = []const u8;
 
 pub fn splitAlloc(alloc: *std.mem.Allocator, input: string, delim: string) ![]const string {
@@ -13,8 +12,6 @@ pub fn splitAlloc(alloc: *std.mem.Allocator, input: string, delim: string) ![]co
 }
 
 pub const list = struct {
-    //
-
     pub fn contains(haystack: []const string, needle: string) bool {
         for (haystack) |item| {
             if (std.mem.eql(u8, item, needle)) {

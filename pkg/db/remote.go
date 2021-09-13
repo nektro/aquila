@@ -26,7 +26,7 @@ type Remote struct {
 func CreateRemote(rtype string, domain string) *Remote {
 	dbstorage.InsertsLock.Lock()
 	defer dbstorage.InsertsLock.Unlock()
-	//
+
 	id := db.QueryNextID(cTableRemotes)
 	uid := dbt.NewUUID()
 	n := &Remote{id, uid, rtype, domain}

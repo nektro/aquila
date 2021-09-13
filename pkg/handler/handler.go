@@ -35,7 +35,6 @@ func Init() {
 		writeAPIResponse(r, w, r.Header.Get("accept") != "application/json", good, code, data)
 	}
 
-	//
 	htp.Register("/", http.MethodGet, Index)
 	htp.Register("/about", http.MethodGet, Static("about"))
 	htp.Register("/contact", http.MethodGet, Static("contact"))

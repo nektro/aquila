@@ -33,7 +33,7 @@ type Version struct {
 func CreateVersion(p *Package, cto string, ups int64, tts int64, files []string, trs int64, trh string, deps []string, devdeps []string) *Version {
 	dbstorage.InsertsLock.Lock()
 	defer dbstorage.InsertsLock.Unlock()
-	//
+
 	id := db.QueryNextID(cTableVersions)
 	uid := dbt.NewUUID()
 	co := now()

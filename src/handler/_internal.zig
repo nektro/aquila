@@ -23,8 +23,6 @@ pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, re
 }
 
 pub const JWT = struct {
-    //
-
     pub fn veryifyRequest(request: http.Request) !string {
         return try jwt.validateMessage(request.arena, .HS256, (try tokenFromRequest(request)) orelse return error.NoTokenFound, .{ .key = jwt_secret });
     }
