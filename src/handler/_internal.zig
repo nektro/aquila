@@ -9,9 +9,9 @@ const extras = @import("extras");
 const cookies = @import("../cookies.zig");
 const db = @import("../db/_.zig");
 
-pub var jwt_secret: []const u8 = "";
+pub var jwt_secret: string = "";
 
-pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: []const u8, data: anytype) !void {
+pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: string, data: anytype) !void {
     _ = request;
     try response.headers.put("Content-Type", "text/html");
 

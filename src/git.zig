@@ -1,7 +1,8 @@
 const std = @import("std");
+const string = []const u8;
 
 /// Returns the result of running `git rev-parse HEAD`
-pub fn rev_HEAD(alloc: *std.mem.Allocator) ![]const u8 {
+pub fn rev_HEAD(alloc: *std.mem.Allocator) !string {
     const max = std.math.maxInt(usize);
     const dirg = try std.fs.cwd().openDir(".git", .{});
     const h = std.mem.trim(u8, try dirg.readFileAlloc(alloc, "HEAD", max), "\n");

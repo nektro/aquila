@@ -1,4 +1,5 @@
 const std = @import("std");
+const string = []const u8;
 const builtin = @import("builtin");
 const options = @import("build_options");
 const http = @import("apple_pie");
@@ -6,7 +7,6 @@ const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const flag = @import("flag");
 
-const string = []const u8;
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");

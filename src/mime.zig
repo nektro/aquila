@@ -1,6 +1,7 @@
 const std = @import("std");
+const string = []const u8;
 
-const types = std.ComptimeStringMap([]const u8, .{
+const types = std.ComptimeStringMap(string, .{
     .{ ".aac", "audio/aac" },
     .{ ".abw", "application/x-abiword" },
     .{ ".arc", "application/x-freearc" },
@@ -77,6 +78,6 @@ const types = std.ComptimeStringMap([]const u8, .{
     .{ ".7z", "application/x-7z-compressed" },
 });
 
-pub fn typeByExtension(comptime ext: []const u8) ?[]const u8 {
+pub fn typeByExtension(comptime ext: string) ?string {
     return types.get(ext);
 }

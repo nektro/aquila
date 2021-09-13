@@ -1,4 +1,5 @@
 const std = @import("std");
+const string = []const u8;
 
 const _db = @import("./_.zig");
 const Version = _db.Version;
@@ -6,7 +7,6 @@ const Version = _db.Version;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const string = []const u8;
 const ULID = string;
 const Time = string;
 
