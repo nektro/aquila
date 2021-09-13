@@ -18,12 +18,10 @@ pub const User = struct {
     name: string,
     joined_on: Time,
 
-    pub const byKey = _internal.ByKeyGen(User, "users").byKey;
+    usingnamespace _internal.ByKeyGen(User, "users");
 
     pub fn packages(self: User, alloc: *std.mem.Allocator) ![]const Package {
-        return try db.collect(alloc, Package, "select * from packages where owner = ?", .{
-            .owner = self.uuid,
-        });
+        return try Package.byKeyAll(alloc, .owner, self.uuid);
     }
 
     pub fn findPackageByName(self: User, alloc: *std.mem.Allocator, name: string) !?Package {

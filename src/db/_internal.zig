@@ -15,6 +15,15 @@ pub fn ByKeyGen(comptime T: type, comptime table_name: string) type {
                 foo(@tagName(key), value),
             );
         }
+
+        pub fn byKeyAll(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: FieldType(T, @tagName(key))) ![]const T {
+            return try db.collect(
+                alloc,
+                T,
+                "select * from " ++ table_name ++ " where " ++ @tagName(key) ++ " = ?",
+                foo(@tagName(key), value),
+            );
+        }
     };
 }
 

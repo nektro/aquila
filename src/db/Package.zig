@@ -25,7 +25,7 @@ pub const Package = struct {
     hook_secret: string,
     star_count: u64,
 
-    pub const byKey = _internal.ByKeyGen(Package, "packages").byKey;
+    usingnamespace _internal.ByKeyGen(Package, "packages");
 
     pub fn latest(alloc: *std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
@@ -36,8 +36,6 @@ pub const Package = struct {
     }
 
     pub fn versions(self: Package, alloc: *std.mem.Allocator) ![]const Version {
-        return try db.collect(alloc, Version, "select * from versions where p_for = ?", .{
-            .p_for = self.uuid,
-        });
+        return try Version.byKeyAll(alloc, .p_for, self.uuid);
     }
 };
