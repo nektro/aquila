@@ -22,11 +22,7 @@ pub const Remote = struct {
         pub const BaseType = string;
     };
 
-    pub fn byID(alloc: *std.mem.Allocator, id: u64) !?Remote {
-        return try db.first(alloc, Remote, "select * from remotes where id = ?", .{
-            .id = id,
-        });
-    }
+    pub const byKey = _internal.ByKeyGen(Remote, "remotes").byKey;
 
     pub fn findUserByName(self: Remote, alloc: *std.mem.Allocator, name: string) !?User {
         return try db.first(alloc, User, "select * from users where provider = ? and name = ?", .{

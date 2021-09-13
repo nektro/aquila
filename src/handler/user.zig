@@ -8,7 +8,7 @@ const _internal = @import("./_internal.zig");
 
 pub fn get(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string }) !void {
     const alloc = request.arena;
-    const r = try db.Remote.byID(alloc, args.remote);
+    const r = try db.Remote.byKey(alloc, .id, args.remote);
     const o = try r.?.findUserByName(alloc, args.user);
     const p = try o.?.packages(alloc);
 
