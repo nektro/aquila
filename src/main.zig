@@ -22,7 +22,7 @@ pub fn main() !void {
 
     const rev: []const string = if (git.rev_HEAD(alloc) catch null) |h| &.{ ".", h[0..9] } else &.{ "", "" };
     const con: string = if (docker.amInside(alloc) catch false) ".docker" else "";
-    version = try std.fmt.allocPrint(alloc, "v{s}{s}{s}{s}.zig{}", .{ options.version, rev[0], rev[1], con, builtin.zig_version });
+    version = try std.fmt.allocPrint(alloc, "{s}{s}{s}{s}.zig{}", .{ options.version, rev[0], rev[1], con, builtin.zig_version });
     version = version[0..std.mem.indexOfScalar(u8, version, '+').?];
     std.log.info("Starting {s} {s}", .{ name, version });
 
