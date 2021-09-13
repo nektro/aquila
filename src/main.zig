@@ -77,7 +77,7 @@ pub fn main() !void {
     std.log.info("starting server on port {d}", .{port});
     try http.listenAndServe(
         alloc,
-        try std.net.Address.parseIp("127.0.0.1", port),
+        try std.net.Address.parseIp("0.0.0.0", port),
         {},
         comptime handler.getHandler(oa2),
     );
