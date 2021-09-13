@@ -73,7 +73,7 @@ pub fn main() !void {
     oa2.clients = clients.toOwnedSlice();
     oa2.callbackPath = "/callback";
 
-    const port = 8000;
+    const port = try std.fmt.parseUnsigned(u16, flag.getSingle("port") orelse "8000", 10);
     std.log.info("starting server on port {d}", .{port});
     try http.listenAndServe(
         alloc,
