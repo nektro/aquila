@@ -39,6 +39,7 @@ pub fn main() !void {
     try flag.addMulti("oauth2-client");
 
     _ = try flag.parse(.double);
+    try flag.parseEnv();
 
     //
 
