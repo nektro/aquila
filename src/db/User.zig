@@ -18,11 +18,7 @@ pub const User = struct {
     name: string,
     joined_on: Time,
 
-    pub fn byUID(alloc: *std.mem.Allocator, ulid: ULID) !?User {
-        return try db.first(alloc, User, "select * from users where uuid = ?", .{
-            .uuid = ulid,
-        });
-    }
+    pub const byKey = _internal.ByKeyGen(User, "users").byKey;
 
     pub fn packages(self: User, alloc: *std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages where owner = ?", .{

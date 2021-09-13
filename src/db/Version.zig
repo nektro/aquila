@@ -26,6 +26,8 @@ pub const Version = struct {
     deps: string,
     dev_deps: string,
 
+    pub const byKey = _internal.ByKeyGen(Version, "versions").byKey;
+
     pub fn latest(alloc: *std.mem.Allocator) ![]const Version {
         return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
     }

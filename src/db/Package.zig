@@ -25,18 +25,14 @@ pub const Package = struct {
     hook_secret: string,
     star_count: u64,
 
+    pub const byKey = _internal.ByKeyGen(Package, "packages").byKey;
+
     pub fn latest(alloc: *std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
     }
 
     pub fn topStarred(alloc: *std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by star_count desc limit 15", .{});
-    }
-
-    pub fn byUID(alloc: *std.mem.Allocator, ulid: ULID) !?Package {
-        return try db.first(alloc, Package, "select * from packages where uuid = ?", .{
-            .uuid = ulid,
-        });
     }
 
     pub fn versions(self: Package, alloc: *std.mem.Allocator) ![]const Version {
