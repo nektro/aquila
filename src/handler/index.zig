@@ -1,7 +1,7 @@
 const std = @import("std");
 const http = @import("apple_pie");
 
-const db = @import("./../db/_.zig");
+const db = @import("./../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
 

@@ -11,7 +11,7 @@ const git = @import("./git.zig");
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");
 const handler = @import("./handler/_.zig");
-const db = @import("./db/_.zig");
+const db = @import("./db/_db.zig");
 
 pub const name = "Aquila";
 pub var version: string = "";

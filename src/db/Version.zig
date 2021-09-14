@@ -1,7 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 
-const _db = @import("./_.zig");
+const _db = @import("./_db.zig");
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;

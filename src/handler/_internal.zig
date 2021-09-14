@@ -7,7 +7,7 @@ const jwt = @import("jwt");
 const extras = @import("extras");
 
 const cookies = @import("../cookies.zig");
-const db = @import("../db/_.zig");
+const db = @import("../db/_db.zig");
 
 pub var jwt_secret: string = "";
 
