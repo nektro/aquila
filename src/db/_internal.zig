@@ -5,13 +5,13 @@ const zorm = @import("zorm");
 pub const Engine = zorm.engine(.sqlite3);
 pub var db: Engine = undefined;
 
-pub fn ByKeyGen(comptime T: type, comptime table_name: string) type {
+pub fn ByKeyGen(comptime T: type) type {
     return struct {
         pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: FieldType(T, @tagName(key))) !?T {
             return try db.first(
                 alloc,
                 T,
-                "select * from " ++ table_name ++ " where " ++ @tagName(key) ++ " = ?",
+                "select * from " ++ T.table_name ++ " where " ++ @tagName(key) ++ " = ?",
                 foo(@tagName(key), value),
             );
         }
@@ -20,7 +20,7 @@ pub fn ByKeyGen(comptime T: type, comptime table_name: string) type {
             return try db.collect(
                 alloc,
                 T,
-                "select * from " ++ table_name ++ " where " ++ @tagName(key) ++ " = ?",
+                "select * from " ++ T.table_name ++ " where " ++ @tagName(key) ++ " = ?",
                 foo(@tagName(key), value),
             );
         }

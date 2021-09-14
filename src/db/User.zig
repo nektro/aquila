@@ -18,7 +18,9 @@ pub const User = struct {
     name: string,
     joined_on: Time,
 
-    usingnamespace _internal.ByKeyGen(User, "users");
+    pub const table_name = "users";
+
+    usingnamespace _internal.ByKeyGen(User);
 
     pub fn packages(self: User, alloc: *std.mem.Allocator) ![]const Package {
         return try Package.byKeyAll(alloc, .owner, self.uuid);

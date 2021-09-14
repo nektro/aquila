@@ -25,7 +25,9 @@ pub const Package = struct {
     hook_secret: string,
     star_count: u64,
 
-    usingnamespace _internal.ByKeyGen(Package, "packages");
+    pub const table_name = "packages";
+
+    usingnamespace _internal.ByKeyGen(Package);
 
     pub fn latest(alloc: *std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
