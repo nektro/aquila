@@ -26,10 +26,5 @@ pub const Remote = struct {
 
     usingnamespace _internal.ByKeyGen(Remote);
 
-    pub fn findUserByName(self: Remote, alloc: *std.mem.Allocator, name: string) !?User {
-        return try db.first(alloc, User, "select * from users where provider = ? and name = ?", .{
-            .provider = self.id,
-            .name = name,
-        });
-    }
+    pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
 };

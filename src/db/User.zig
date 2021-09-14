@@ -22,14 +22,9 @@ pub const User = struct {
 
     usingnamespace _internal.ByKeyGen(User);
 
+    pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
+
     pub fn packages(self: User, alloc: *std.mem.Allocator) ![]const Package {
         return try Package.byKeyAll(alloc, .owner, self.uuid);
-    }
-
-    pub fn findPackageByName(self: User, alloc: *std.mem.Allocator, name: string) !?Package {
-        return try db.first(alloc, Package, "select * from packages where owner = ? and name = ?", .{
-            .owner = self.uuid,
-            .name = name,
-        });
     }
 };

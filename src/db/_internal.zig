@@ -27,6 +27,24 @@ pub fn ByKeyGen(comptime T: type) type {
     };
 }
 
+pub fn FindByGen(comptime S: type, comptime H: type, searchCol: std.meta.FieldEnum(H), selfCol: std.meta.FieldEnum(S)) type {
+    const querystub = "select * from " ++ H.table_name ++ " where " ++ @tagName(searchCol) ++ " = ?";
+    return struct {
+        pub fn first(self: S, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(H), value: FieldType(H, @tagName(key))) !?H {
+            const query = querystub ++ " and " ++ @tagName(key) ++ " = ?";
+            return try db.first(
+                alloc,
+                H,
+                query,
+                merge(.{
+                    foo(@tagName(searchCol), @field(self, @tagName(selfCol))),
+                    foo(@tagName(key), value),
+                }),
+            );
+        }
+    };
+}
+
 fn FieldType(comptime T: type, comptime name: string) type {
     inline for (std.meta.fields(T)) |item| {
         if (std.mem.eql(u8, item.name, name)) {
@@ -36,17 +54,41 @@ fn FieldType(comptime T: type, comptime name: string) type {
     @compileError(@typeName(T) ++ " does not have a field named " ++ name);
 }
 
-pub fn foo(comptime name: string, value: anytype) Struct(name, @TypeOf(value)) {
+fn foo(comptime name: string, value: anytype) Foo(name, @TypeOf(value)) {
     const T = @TypeOf(value);
-    var x: Struct(name, T) = undefined;
+    var x: Foo(name, T) = undefined;
     @field(x, name) = value;
     return x;
 }
 
-pub fn Struct(comptime name: string, comptime T: type) type {
-    return @Type(.{ .Struct = .{ .layout = .Auto, .fields = &.{structField(name, T)}, .decls = &.{}, .is_tuple = false } });
+fn Foo(comptime name: string, comptime T: type) type {
+    return Struct(&[_]std.builtin.TypeInfo.StructField{structField(name, T)});
 }
 
-pub fn structField(comptime name: string, comptime T: type) std.builtin.TypeInfo.StructField {
+fn Struct(comptime fields: []const std.builtin.TypeInfo.StructField) type {
+    return @Type(.{ .Struct = .{ .layout = .Auto, .fields = fields, .decls = &.{}, .is_tuple = false } });
+}
+
+fn structField(comptime name: string, comptime T: type) std.builtin.TypeInfo.StructField {
     return .{ .name = name, .field_type = T, .default_value = null, .is_comptime = false, .alignment = @alignOf(T) };
+}
+
+fn merge(input: anytype) Merge(@TypeOf(input)) {
+    const T = @TypeOf(input);
+    var x: Merge(T) = undefined;
+    inline for (std.meta.fields(T)) |item| {
+        const a = @field(input, item.name);
+        const b = std.meta.fields(item.field_type)[0].name;
+        @field(x, b) = @field(a, b);
+    }
+    return x;
+}
+
+fn Merge(comptime T: type) type {
+    var fields: []const std.builtin.TypeInfo.StructField = &.{};
+    inline for (std.meta.fields(T)) |item| {
+        const f = std.meta.fields(item.field_type)[0];
+        fields = fields ++ &[_]std.builtin.TypeInfo.StructField{structField(f.name, f.field_type)};
+    }
+    return Struct(fields);
 }
