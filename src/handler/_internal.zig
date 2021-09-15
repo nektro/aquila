@@ -56,4 +56,8 @@ pub const JWT = struct {
         const q = try request.context.url.queryParameters(request.arena);
         return q.get("jwt");
     }
+
+    pub fn encodeMessage(alloc: *std.mem.Allocator, msg: string) !string {
+        return try jwt.encodeMessage(alloc, .HS256, msg, .{ .key = jwt_secret });
+    }
 };

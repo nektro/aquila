@@ -7,6 +7,7 @@ const oauth2 = @import("oauth2");
 const json = @import("json");
 
 const mime = @import("../mime.zig");
+const db = @import("../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
@@ -73,16 +74,30 @@ fn StaticPek(comptime path: string) type {
 }
 
 pub fn isLoggedIn(request: http.Request) !bool {
-    _ = request;
-    return false;
+    const x = _internal.JWT.veryifyRequest(request) catch |err| switch (err) {
+        error.NoTokenFound, error.InvalidSignature => return false,
+        else => return err,
+    };
+    // don't need to waste hops to the db to check if its a value user ID because
+    // if the signature is valid we know it came from us
+    _ = x;
+    return true;
 }
 
 pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value) !void {
-    _ = response;
-    _ = request;
-    _ = idp;
-    _ = id;
     _ = name;
     _ = val;
 
+    const alloc = request.arena;
+    const r = try db.Remote.byKey(alloc, .domain, idp.domain());
+    var u = try r.?.findUserBy(alloc, .snowflake, id);
+
+    if (u == null) {
+        // TODO insert new users
+        return error.TODO;
+    }
+
+    try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
+        try _internal.JWT.encodeMessage(alloc, u.?.uuid),
+    }));
 }
