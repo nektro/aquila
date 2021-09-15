@@ -25,10 +25,10 @@ pub fn init(alloc: *std.mem.Allocator) !void {
 
 pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
     return http.router.Router(void, &.{
-        http.router.get("/", _index.get),
+        http.router.get("/", Middleware(_index.get).next),
         file_route("/theme.css"),
-        http.router.get("/about", StaticPek("/about.pek").get),
-        http.router.get("/contact", StaticPek("/contact.pek").get),
+        http.router.get("/about", Middleware(StaticPek("/about.pek").get).next),
+        http.router.get("/contact", Middleware(StaticPek("/contact.pek").get).next),
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),
         http.router.get("/dashboard", Middleware(_dashboard.get).next),
@@ -66,7 +66,9 @@ fn file_route(comptime path: string) http.router.Route {
 
 fn StaticPek(comptime path: string) type {
     return struct {
-        pub fn get(_: void, response: *http.Response, request: http.Request) !void {
+        pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
+            _ = args;
+
             try _internal.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
                 .logged_in = false,

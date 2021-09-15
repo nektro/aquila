@@ -5,7 +5,9 @@ const db = @import("./../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
 
-pub fn get(_: void, response: *http.Response, request: http.Request) !void {
+pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
+    _ = args;
+
     try _internal.writePageResponse(request.arena, response, request, "/index.pek", .{
         .aquila_version = @import("root").version,
         .logged_in = false,
