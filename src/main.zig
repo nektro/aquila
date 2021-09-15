@@ -10,7 +10,7 @@ const flag = @import("flag");
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");
-const handler = @import("./handler/_.zig");
+const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 
 pub const name = "Aquila";
