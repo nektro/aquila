@@ -75,3 +75,15 @@ pub fn getUser(response: *http.Response, request: http.Request) !db.User {
     const y = try db.User.byKey(alloc, .uuid, x);
     return y.?;
 }
+
+pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
+    _ = response;
+
+    const x = JWT.veryifyRequest(request) catch |err| switch (err) {
+        error.NoTokenFound, error.InvalidSignature => return null,
+        else => return err,
+    };
+    const alloc = request.arena;
+    const y = try db.User.byKey(alloc, .uuid, x);
+    return y.?;
+}

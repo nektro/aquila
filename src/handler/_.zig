@@ -71,7 +71,7 @@ fn StaticPek(comptime path: string) type {
 
             try _internal.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
-                .logged_in = false,
+                .user = try _internal.getUserOp(response, request),
             });
         }
     };

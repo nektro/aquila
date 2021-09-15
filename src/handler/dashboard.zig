@@ -16,8 +16,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/dashboard.pek", .{
         .aquila_version = @import("root").version,
-        .logged_in = true,
-        .user = u,
+        .user = @as(?db.User, u),
+        .owner = u,
         .repo = r,
         .pkgs = p,
     });
