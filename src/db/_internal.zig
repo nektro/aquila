@@ -45,7 +45,7 @@ pub fn FindByGen(comptime S: type, comptime H: type, searchCol: std.meta.FieldEn
     };
 }
 
-fn FieldType(comptime T: type, comptime name: string) type {
+pub fn FieldType(comptime T: type, comptime name: string) type {
     inline for (std.meta.fields(T)) |item| {
         if (std.mem.eql(u8, item.name, name)) {
             return item.field_type;

@@ -26,9 +26,20 @@ pub const Remote = struct {
         pub const BaseType = string;
     };
 
-    usingnamespace _internal.ByKeyGen(Remote);
-
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
+
+    pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: _internal.FieldType(Remote, @tagName(key))) !?Remote {
+        for (try all(alloc)) |item| {
+            const a = @field(item, @tagName(key));
+            if (@TypeOf(value) == string and std.mem.eql(u8, a, value)) {
+                return item;
+            }
+            if (std.meta.eql(a, value)) {
+                return item;
+            }
+        }
+        return null;
+    }
 
     pub fn all(alloc: *std.mem.Allocator) ![]const Remote {
         if (all_remotes.len > 0) return all_remotes;
