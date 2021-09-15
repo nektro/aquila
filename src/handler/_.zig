@@ -13,6 +13,7 @@ const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
 const _user = @import("./user.zig");
 const _package = @import("./package.zig");
+const _dashboard = @import("./dashboard.zig");
 
 pub fn init(alloc: *std.mem.Allocator) !void {
     var secret_seed: [std.rand.DefaultCsprng.secret_seed_length]u8 = undefined;
@@ -30,6 +31,7 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         http.router.get("/contact", StaticPek("/contact.pek").get),
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),
+        http.router.get("/dashboard", Middleware(_dashboard.get).next),
         http.router.get("/:remote/:user", Middleware(_user.get).next),
         http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
     });

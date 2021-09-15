@@ -18,6 +18,8 @@ pub const Remote = struct {
 
     pub const table_name = "remotes";
 
+    pub var all_remotes: []const Remote = &.{};
+
     pub const Type = enum {
         github,
 
@@ -27,4 +29,9 @@ pub const Remote = struct {
     usingnamespace _internal.ByKeyGen(Remote);
 
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
+
+    pub fn all(alloc: *std.mem.Allocator) ![]const Remote {
+        if (all_remotes.len > 0) return all_remotes;
+        return db.collect(alloc, Remote, "select * from " ++ table_name, .{});
+    }
 };

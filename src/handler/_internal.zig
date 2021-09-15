@@ -61,3 +61,17 @@ pub const JWT = struct {
         return try jwt.encodeMessage(alloc, .HS256, msg, .{ .key = jwt_secret });
     }
 };
+
+pub fn getUser(response: *http.Response, request: http.Request) !db.User {
+    const x = JWT.veryifyRequest(request) catch |err| switch (err) {
+        error.NoTokenFound, error.InvalidSignature => {
+            try response.headers.put("Location", "./login");
+            try response.writeHeader(.found);
+            return error.HttpNoOp;
+        },
+        else => return err,
+    };
+    const alloc = request.arena;
+    const y = try db.User.byKey(alloc, .uuid, x);
+    return y.?;
+}

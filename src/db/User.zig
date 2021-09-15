@@ -3,6 +3,7 @@ const string = []const u8;
 
 const _db = @import("./_db.zig");
 const Package = _db.Package;
+const Remote = _db.Remote;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
@@ -26,5 +27,14 @@ pub const User = struct {
 
     pub fn packages(self: User, alloc: *std.mem.Allocator) ![]const Package {
         return try Package.byKeyAll(alloc, .owner, self.uuid);
+    }
+
+    pub fn remote(self: User, alloc: *std.mem.Allocator) !Remote {
+        for (try Remote.all(alloc)) |item| {
+            if (item.id == self.provider) {
+                return item;
+            }
+        }
+        unreachable;
     }
 };
