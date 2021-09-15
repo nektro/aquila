@@ -1,13 +1,13 @@
 2
-git https://github.com/Luukdegram/apple_pie commit-a237cc9b2a7366778fa38fc23a5054feacba8f34
-git https://github.com/nektro/zig-pek commit-3452a56e84fb1972e799e0b539a1b2e06bd6fa28
+git https://github.com/Luukdegram/apple_pie commit-f3495ea538f1503cb77ce283f1897e1ce9320d93
+git https://github.com/nektro/zig-pek commit-4f787a692959390d41b948f87426dfdf69d832af
 git https://github.com/nektro/zig-range commit-890ca308fe09b3d5c866d5cfb3b3d7a95dbf939f
 git https://github.com/kivikakk/htmlentities.zig commit-c3cbe4cb3a9a9bd60e7c9fedcf9b97e087b98d6c
 git https://github.com/nektro/zig-zorm commit-38a255e5698796eb13a171a6ce6f33b98d65cfe2
 git https://github.com/vrischmann/zig-sqlite commit-658f9fab1f61ee207d1951f93c5ab3e242828e08
 git https://github.com/nektro/zig-extras commit-6b617fc40eb889d5138ab3c00a1f79db7f15385b
 git https://github.com/leroycep/zig-jwt commit-054d96bdd93d0f2ff93510f544990c0308126460
-git https://github.com/nektro/zig-oauth2 commit-54487dbd6b08763c681e6494b96279d2d86b86ca
+git https://github.com/nektro/zig-oauth2 commit-d0799b0e4b5cf986473d0041fd5a16cd98ad3852
 git https://github.com/MasterQ32/zig-uri commit-52cdd2061bec0579519f0d30280597f3a1db8b75
 git https://github.com/nektro/iguanaTLS commit-953ad821fae6c920fb82399493663668cd91bde7
 git https://github.com/truemedian/zfetch commit-e65c50fb924701d51fd83826b28948c957aad13e
