@@ -5,6 +5,7 @@ const files = @import("self/files");
 const pek = @import("pek");
 const jwt = @import("jwt");
 const extras = @import("extras");
+const ulid = @import("ulid");
 
 const cookies = @import("../cookies.zig");
 const db = @import("../db/_db.zig");
@@ -72,7 +73,7 @@ pub fn getUser(response: *http.Response, request: http.Request) !db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, x);
+    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.fromString(alloc, x));
     return y.?;
 }
 
@@ -84,6 +85,6 @@ pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, x);
+    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.fromString(alloc, x));
     return y.?;
 }

@@ -1,5 +1,6 @@
 const std = @import("std");
 const string = []const u8;
+const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
 const Package = _db.Package;
@@ -8,12 +9,11 @@ const Remote = _db.Remote;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const ULID = string;
 const Time = string;
 
 pub const User = struct {
     id: u64,
-    uuid: ULID,
+    uuid: ulid.ULID,
     provider: u64,
     snowflake: string,
     name: string,

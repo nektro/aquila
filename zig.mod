@@ -15,3 +15,4 @@ dev_dependencies:
   - src: git https://github.com/nektro/zig-oauth2
   - src: git https://github.com/nektro/zig-flag
   - src: git https://github.com/nektro/zig-json
+  - src: git https://github.com/nektro/zig-ulid

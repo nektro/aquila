@@ -15,3 +15,4 @@ git https://github.com/truemedian/hzzp commit-417eb13fefb05835c0534e622b5a6e2dc2
 git https://github.com/MasterQ32/zig-network commit-15b88658809cac9022ec7d59449b0cd3ebfd0361
 git https://github.com/nektro/zig-json commit-3ea23e8ae3798d3929b4c4b54ce739a67914f3ec
 git https://github.com/nektro/zig-flag commit-ed7f7186cdafaeb3c257c5de14a8d7662c8a8237
+git https://github.com/nektro/zig-ulid commit-f19055bc604f023b8bea0283b1f8b595161c4cf3

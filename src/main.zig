@@ -6,6 +6,7 @@ const http = @import("apple_pie");
 const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const flag = @import("flag");
+const ulid = @import("ulid");
 
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
@@ -88,8 +89,8 @@ fn handle_sig() void {
     std.os.exit(0);
 }
 
-pub fn pek_get_user_path(alloc: *std.mem.Allocator, ulid: string) !string {
-    const user = try db.User.byKey(alloc, .uuid, ulid);
+pub fn pek_get_user_path(alloc: *std.mem.Allocator, uid: ulid.ULID) !string {
+    const user = try db.User.byKey(alloc, .uuid, uid);
     return try std.fmt.allocPrint(alloc, "{d}/{s}", .{ user.?.provider, user.?.name });
 }
 

@@ -1,5 +1,6 @@
 const std = @import("std");
 const string = []const u8;
+const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
 const Version = _db.Version;
@@ -13,7 +14,7 @@ const Time = string;
 pub const Package = struct {
     id: u64,
     uuid: ULID,
-    owner: ULID,
+    owner: ulid.ULID,
     name: string,
     created_on: Time,
     remote: u64,
