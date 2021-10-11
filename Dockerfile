@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 ARG RELEASE_NUM
 RUN apk add bash sudo wget curl jq git
-RUN ./download_zig.sh 0.9.0-dev.946+6237dc0ab
+RUN ./download_zig.sh 0.9.0-dev.1343+75cecef63
 RUN zigmod ci
 RUN zig build -Dversion=r${RELEASE_NUM}
 
