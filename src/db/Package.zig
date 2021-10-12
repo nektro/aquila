@@ -8,12 +8,11 @@ const Version = _db.Version;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const ULID = string;
 const Time = string;
 
 pub const Package = struct {
     id: u64,
-    uuid: ULID,
+    uuid: ulid.ULID,
     owner: ulid.ULID,
     name: string,
     created_on: Time,

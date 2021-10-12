@@ -1,5 +1,6 @@
 const std = @import("std");
 const string = []const u8;
+const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
 const User = _db.User;
@@ -7,12 +8,9 @@ const User = _db.User;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const ULID = string;
-const Time = string;
-
 pub const Remote = struct {
     id: u64,
-    uuid: ULID,
+    uuid: ulid.ULID,
     @"type": Type,
     domain: string,
 

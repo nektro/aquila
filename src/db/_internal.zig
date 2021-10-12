@@ -1,9 +1,13 @@
 const std = @import("std");
 const string = []const u8;
 const zorm = @import("zorm");
+const ulid = @import("ulid");
 
 pub const Engine = zorm.engine(.sqlite3);
 pub var db: Engine = undefined;
+
+const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
+pub var factory = ulid.Factory.init(epoch, std.crypto.random);
 
 pub fn ByKeyGen(comptime T: type) type {
     return struct {

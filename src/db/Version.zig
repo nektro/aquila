@@ -1,18 +1,18 @@
 const std = @import("std");
 const string = []const u8;
+const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const ULID = string;
 const Time = string;
 
 pub const Version = struct {
     id: u64,
-    uuid: ULID,
-    p_for: ULID,
+    uuid: ulid.ULID,
+    p_for: ulid.ULID,
     created_on: Time,
     commit_to: string,
     unpacked_size: u64,
@@ -20,7 +20,7 @@ pub const Version = struct {
     files: string,
     tar_size: u64,
     tar_hash: string,
-    approved_by: ULID,
+    approved_by: ulid.ULID,
     real_major: u32,
     real_minor: u32,
     deps: string,
