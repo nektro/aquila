@@ -3,11 +3,10 @@ const string = []const u8;
 const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
+const Time = _db.Time;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
-
-const Time = string;
 
 pub const Version = struct {
     id: u64,

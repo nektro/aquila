@@ -114,12 +114,6 @@ pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) 
     return pkg.?.description;
 }
 
-/// TODO RFC3339 -> RFC1123
-pub fn pek_fix_date(alloc: *std.mem.Allocator, in: string) !string {
-    _ = alloc;
-    return in;
-}
-
 pub fn pek_tree_url(alloc: *std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
     return switch (remo.type) {
         .github => try std.fmt.allocPrint(alloc, "https://github.com/{s}/tree/{s}", .{ repo, commit }),

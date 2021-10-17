@@ -5,11 +5,10 @@ const ulid = @import("ulid");
 const _db = @import("./_db.zig");
 const Package = _db.Package;
 const Remote = _db.Remote;
+const Time = _db.Time;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
-
-const Time = string;
 
 pub const User = struct {
     id: u64,

@@ -16,3 +16,4 @@ git https://github.com/MasterQ32/zig-network commit-0439bd7127ecb8f927a5cecb0bee
 git https://github.com/nektro/zig-json commit-3ea23e8ae3798d3929b4c4b54ce739a67914f3ec
 git https://github.com/nektro/zig-flag commit-ed7f7186cdafaeb3c257c5de14a8d7662c8a8237
 git https://github.com/nektro/zig-ulid commit-f19055bc604f023b8bea0283b1f8b595161c4cf3
+git https://github.com/nektro/zig-time commit-12ee22949f562288588f8fe612c3bce3b258c036

@@ -16,3 +16,4 @@ dev_dependencies:
   - src: git https://github.com/nektro/zig-flag
   - src: git https://github.com/nektro/zig-json
   - src: git https://github.com/nektro/zig-ulid
+  - src: git https://github.com/nektro/zig-time

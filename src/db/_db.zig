@@ -21,3 +21,4 @@ pub const Remote = @import("./Remote.zig").Remote;
 pub const User = @import("./User.zig").User;
 pub const Package = @import("./Package.zig").Package;
 pub const Version = @import("./Version.zig").Version;
+pub const Time = @import("./Time.zig").Time;
