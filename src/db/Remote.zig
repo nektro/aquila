@@ -11,7 +11,7 @@ const db = &_internal.db;
 pub const Remote = struct {
     id: u64,
     uuid: ulid.ULID,
-    @"type": Type,
+    type: Type,
     domain: string,
 
     pub const table_name = "remotes";

@@ -121,7 +121,7 @@ pub fn pek_fix_date(alloc: *std.mem.Allocator, in: string) !string {
 }
 
 pub fn pek_tree_url(alloc: *std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
-    return switch (remo.@"type") {
+    return switch (remo.type) {
         .github => try std.fmt.allocPrint(alloc, "https://github.com/{s}/tree/{s}", .{ repo, commit }),
     };
 }
