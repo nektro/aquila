@@ -29,11 +29,11 @@ pub const Time = struct {
 
     pub fn bindField(self: Self, alloc: *std.mem.Allocator) !BaseType {
         // modified RFC3339
-        return try self.formatAlloc(alloc, "YYYY-MM-DD HH:mm:ss");
+        return try self.formatAlloc(alloc, "YYY-MM-DD HH:mm:ss");
     }
 
     pub fn toString(self: Self, alloc: *std.mem.Allocator) !string {
         // RFC1123
-        return try self.formatAlloc(alloc, "ddd, DD MMM YYYY HH:mm:ss z");
+        return try self.formatAlloc(alloc, "ddd, DD MMM YYY HH:mm:ss z");
     }
 };
