@@ -1,4 +1,4 @@
-            h2("Package "code({pkg.name})" details")
+            h2("Package "code({pkg.name})" Details")
             table[class="left"](
                 tbody(
                     tr(td("ULID")td({pkg.uuid}))
