@@ -9,7 +9,7 @@ const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
 pub const Remote = struct {
-    id: u64,
+    id: u64 = 0,
     uuid: ulid.ULID,
     type: Type,
     domain: string,
@@ -42,5 +42,16 @@ pub const Remote = struct {
     pub fn all(alloc: *std.mem.Allocator) ![]const Remote {
         if (all_remotes.len > 0) return all_remotes;
         return db.collect(alloc, Remote, "select * from " ++ table_name, .{});
+    }
+
+    pub fn create(alloc: *std.mem.Allocator, ty: Type, domain: string) !Remote {
+        const held = db.mutex.acquire();
+        defer held.release();
+
+        return _internal.insert(alloc, &Remote{
+            .uuid = _internal.factory.newULID(),
+            .type = ty,
+            .domain = domain,
+        });
     }
 };

@@ -11,7 +11,7 @@ const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
 pub const User = struct {
-    id: u64,
+    id: u64 = 0,
     uuid: ulid.ULID,
     provider: u64,
     snowflake: string,
@@ -19,6 +19,19 @@ pub const User = struct {
     joined_on: Time,
 
     pub const table_name = "users";
+
+    pub fn create(alloc: *std.mem.Allocator, provider: u64, snowflake: string, name: string) !User {
+        const held = db.mutex.acquire();
+        defer held.release();
+
+        return try _internal.insert(alloc, &User{
+            .uuid = _internal.factory.newULID(),
+            .provider = provider,
+            .snowflake = snowflake,
+            .name = name,
+            .joined_on = Time.now(),
+        });
+    }
 
     usingnamespace _internal.ByKeyGen(User);
 

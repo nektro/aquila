@@ -36,4 +36,8 @@ pub const Time = struct {
         // RFC1123
         return try self.formatAlloc(alloc, "ddd, DD MMM YYY HH:mm:ss z");
     }
+
+    pub fn now() Self {
+        return .{ .ctx = time.DateTime.now() };
+    }
 };
