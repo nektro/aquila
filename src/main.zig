@@ -44,7 +44,7 @@ pub fn main() !void {
 
     //
 
-    try db.connect(alloc, flag.getSingle("db") orelse "data/access.db");
+    try db.connect(alloc, flag.getSingle("db") orelse "aquila.db");
 
     //
 
