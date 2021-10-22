@@ -42,7 +42,7 @@
                                 a[class="link-as-text" href=({#version_pkg_path this})]
                                 span(i[class="star icon"]" "{#version_pkg_stars this})
                             )
-                            div(i[class="tag icon"]" "{#version_str this})
+                            div(i[class="tag icon"]" "{this})
                             div({#version_pkg_description this}"&nbsp;")
                         )
                     )

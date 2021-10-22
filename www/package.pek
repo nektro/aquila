@@ -25,7 +25,7 @@
                 tbody(
                     {#each versions}
                     tr(
-                        td(a[href=("./"{pkg.name}"/"{#version_str this})]({#version_str this}))
+                        td(a[href=("./"{pkg.name}"/"{this})]({this}))
                         td({this.created_on})
                         td(a[href=({#tree_url repo pkg.remote_name this.commit_to})]("Tree"))
                         // td // TODO

@@ -1,6 +1,6 @@
 2
 git https://github.com/Luukdegram/apple_pie commit-7214291fc4e26f2da3d5fd1bacf79bbc5e4a119b
-git https://github.com/nektro/zig-pek commit-56919ce43dcc3ecee22eb7d51e90dcef0ce7f4bb
+git https://github.com/nektro/zig-pek commit-2352c1b2b2a15b3ce60914adcbc9567184efac59
 git https://github.com/nektro/zig-range commit-890ca308fe09b3d5c866d5cfb3b3d7a95dbf939f
 git https://github.com/kivikakk/htmlentities.zig commit-c3cbe4cb3a9a9bd60e7c9fedcf9b97e087b98d6c
 git https://github.com/nektro/zig-zorm commit-bfa9c50ff95f9e35c7ee3aca34bb3670ebfd73bf
@@ -15,5 +15,5 @@ git https://github.com/truemedian/hzzp commit-91ab8e741992e8db30b3ee1cd9e7cd5a07
 git https://github.com/MasterQ32/zig-network commit-0439bd7127ecb8f927a5cecb0beeb1569db2fb95
 git https://github.com/nektro/zig-json commit-3ea23e8ae3798d3929b4c4b54ce739a67914f3ec
 git https://github.com/nektro/zig-flag commit-ed7f7186cdafaeb3c257c5de14a8d7662c8a8237
-git https://github.com/nektro/zig-ulid commit-f19055bc604f023b8bea0283b1f8b595161c4cf3
+git https://github.com/nektro/zig-ulid commit-6dd5abbe4d72caf88188ec0d1cb56bcad4cd95b4
 git https://github.com/nektro/zig-time commit-64bc6c77e8189c60a5223877827b4753eb2b483d

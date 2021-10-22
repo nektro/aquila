@@ -32,4 +32,10 @@ pub const Version = struct {
     pub fn latest(alloc: *std.mem.Allocator) ![]const Version {
         return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
     }
+
+    pub fn format(self: Version, comptime fmt: []const u8, options: std.fmt.FormatOptions, writer: anytype) !void {
+        _ = fmt;
+        _ = options;
+        try writer.print("v{d}.{d}", .{ self.real_major, self.real_minor });
+    }
 };

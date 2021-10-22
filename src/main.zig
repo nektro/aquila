@@ -124,10 +124,6 @@ pub fn pek_version_pkg_stars(alloc: *std.mem.Allocator, vers: db.Version) !u64 {
     return pkg.?.star_count;
 }
 
-pub fn pek_version_str(alloc: *std.mem.Allocator, vers: db.Version) !string {
-    return try std.fmt.allocPrint(alloc, "v{d}.{d}", .{ vers.real_major, vers.real_minor });
-}
-
 pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
     return pkg.?.description;
