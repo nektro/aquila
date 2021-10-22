@@ -8,6 +8,7 @@ pub var db: Engine = undefined;
 
 const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 pub var factory = ulid.Factory.init(epoch, std.crypto.random);
+const _db = @import("./_db.zig");
 
 pub fn ByKeyGen(comptime T: type) type {
     return struct {
@@ -95,4 +96,21 @@ fn Merge(comptime T: type) type {
         fields = fields ++ &[_]std.builtin.TypeInfo.StructField{structField(f.name, f.field_type)};
     }
     return Struct(fields);
+}
+
+pub fn insert(alloc: *std.mem.Allocator, value: anytype) !std.meta.Child(@TypeOf(value)) {
+    const T = std.meta.Child(@TypeOf(value));
+    @field(value, "id") = try nextId(alloc, T);
+    comptime var parens: string = "";
+    inline for (std.meta.fields(T)) |_, i| {
+        if (i != 0) parens = parens ++ ", ";
+        parens = parens ++ "?";
+    }
+    try db.exec(alloc, "insert into " ++ T.table_name ++ " values (" ++ parens ++ ")", value.*);
+    return value.*;
+}
+
+fn nextId(alloc: *std.mem.Allocator, comptime T: type) !u64 {
+    const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
+    return (n orelse 0) + 1;
 }
