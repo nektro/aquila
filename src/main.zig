@@ -74,6 +74,19 @@ pub fn main() !void {
     oa2.clients = clients.toOwnedSlice();
     oa2.callbackPath = "/callback";
 
+    {
+        const current = try db.Remote.all(alloc);
+        std.debug.assert(oa2.clients.len >= current.len);
+        var i: usize = 0;
+        while (i < current.len) : (i += 1) {
+            std.debug.assert(std.mem.eql(u8, oa2.clients[i].provider.domain(), current[i].domain));
+        }
+        while (i < oa2.clients.len) : (i += 1) {
+            const idp = oa2.clients[i].provider;
+            _ = try db.Remote.create(alloc, oa2IdToRemoTy(idp.id), idp.domain());
+        }
+    }
+
     const port = try std.fmt.parseUnsigned(u16, flag.getSingle("port") orelse "8000", 10);
     std.log.info("starting server on port {d}", .{port});
     try http.listenAndServe(
@@ -87,6 +100,12 @@ pub fn main() !void {
 fn handle_sig() void {
     db.close();
     std.os.exit(0);
+}
+
+fn oa2IdToRemoTy(id: string) db.Remote.Type {
+    if (std.mem.eql(u8, id, "github.com")) return .github;
+
+    std.debug.panic("unsupported client provider: {s}", .{id});
 }
 
 pub fn pek_get_user_path(alloc: *std.mem.Allocator, uid: ulid.ULID) !string {
