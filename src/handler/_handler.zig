@@ -93,15 +93,10 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     _ = val;
 
     const alloc = request.arena;
-    const r = try db.Remote.byKey(alloc, .domain, idp.domain());
-    var u = try r.?.findUserBy(alloc, .snowflake, id);
-
-    if (u == null) {
-        // TODO insert new users
-        return error.TODO;
-    }
+    const r = (try db.Remote.byKey(alloc, .domain, idp.domain())) orelse unreachable;
+    const u = (try r.findUserBy(alloc, .snowflake, id)) orelse try db.User.create(alloc, r.id, id, name);
 
     try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
-        try _internal.JWT.encodeMessage(alloc, u.?.uuid),
+        try _internal.JWT.encodeMessage(alloc, try u.uuid.toString(alloc)),
     }));
 }
