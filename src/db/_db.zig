@@ -17,6 +17,11 @@ pub fn connect(alloc: *std.mem.Allocator, path: string) !void {
     const abspath = try std.fs.path.resolve(alloc, &.{path});
     const nulpath = try extras.addSentinel(alloc, u8, abspath, 0);
     db.* = try Engine.connect(nulpath);
+
+    try _internal.createTableT(alloc, Remote);
+    try _internal.createTableT(alloc, User);
+    try _internal.createTableT(alloc, Package);
+    try _internal.createTableT(alloc, Version);
 }
 
 pub fn close() void {

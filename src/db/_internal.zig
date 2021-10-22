@@ -114,3 +114,53 @@ fn nextId(alloc: *std.mem.Allocator, comptime T: type) !u64 {
     const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
     return (n orelse 0) + 1;
 }
+
+pub fn createTableT(alloc: *std.mem.Allocator, comptime T: type) !void {
+    const tI = @typeInfo(T).Struct;
+    const fields = tI.fields;
+    try createTable(alloc, T.table_name, comptime colToCol(fields[0]), comptime fieldsToCols(fields[1..]));
+}
+
+fn createTable(alloc: *std.mem.Allocator, comptime name: string, comptime pk: [2]string, comptime cols: []const [2]string) !void {
+    if (try db.doesTableExist(alloc, name)) {} else {
+        std.log.scoped(.db).info("creating table '{s}' with primary column '{s}'", .{ name, pk[0] });
+        try db.exec(alloc, comptime std.fmt.comptimePrint("create table {s}({s} {s})", .{ name, pk[0], pk[1] }), .{});
+    }
+    inline for (cols) |item| {
+        if (try db.hasColumnWithName(alloc, name, item[0])) {} else {
+            std.log.scoped(.db).info("adding column to '{s}': '{s}'", .{ name, item[0] });
+            try db.exec(alloc, comptime std.fmt.comptimePrint("alter table {s} add {s} {s}", .{ name, item[0], item[1] }), .{});
+        }
+    }
+}
+
+fn fieldsToCols(comptime fields: []const std.builtin.TypeInfo.StructField) []const [2]string {
+    comptime {
+        var result: [fields.len][2]string = undefined;
+        for (fields) |item, i| {
+            result[i] = colToCol(item);
+        }
+        return &result;
+    }
+}
+
+fn colToCol(comptime field: std.builtin.TypeInfo.StructField) [2]string {
+    return [_]string{
+        field.name,
+        typeToSqliteType(field.field_type),
+    };
+}
+
+fn typeToSqliteType(comptime T: type) string {
+    if (comptime std.meta.trait.isZigString(T)) {
+        return "text";
+    }
+    switch (@typeInfo(T)) {
+        .Struct, .Enum, .Union => if (@hasDecl(T, "BaseType")) return typeToSqliteType(T.BaseType),
+        else => {},
+    }
+    return switch (T) {
+        u32, u64 => "int",
+        else => @compileError("typeToSqliteType: " ++ @typeName(T)),
+    };
+}
