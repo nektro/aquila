@@ -17,3 +17,4 @@ dev_dependencies:
   - src: git https://github.com/nektro/zig-json
   - src: git https://github.com/nektro/zig-ulid
   - src: git https://github.com/nektro/zig-time
+  - src: git https://github.com/truemedian/zfetch

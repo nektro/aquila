@@ -1,9 +1,15 @@
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
+const extras = @import("extras");
+const zfetch = @import("zfetch");
+const json = @import("json");
+
+const _handler = @import("../handler/_handler.zig");
 
 const _db = @import("./_db.zig");
 const User = _db.User;
+const Package = _db.Package;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
@@ -24,9 +30,15 @@ pub const Remote = struct {
         pub const BaseType = string;
     };
 
+    pub const Repo = struct {
+        id: string,
+        name: string,
+        added: bool,
+    };
+
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
 
-    pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: _internal.FieldType(Remote, @tagName(key))) !?Remote {
+    pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
         for (try all(alloc)) |item| {
             const a = @field(item, @tagName(key));
             if (@TypeOf(value) == string and std.mem.eql(u8, a, value)) {
@@ -54,4 +66,67 @@ pub const Remote = struct {
             .domain = domain,
         });
     }
+
+    pub fn listUserRepos(self: Remote, alloc: *std.mem.Allocator, user: User) ![]const Repo {
+        var list = std.ArrayList(Repo).init(alloc);
+        const pkgs = try user.packages(alloc);
+
+        switch (self.type) {
+            .github => blk: {
+                const val = try self.apiRequest(alloc, user, "/user/repos?per_page=100");
+                if (val == null) break :blk;
+                for (val.?.Array) |item| {
+                    if (std.mem.eql(u8, item.getT("language", .String) orelse "", "Zig")) {
+                        const id = try std.fmt.allocPrint(alloc, "{d}", .{item.get("id").?.Int});
+                        const name = item.get("full_name").?.String;
+                        try list.append(.{ .id = id, .name = name, .added = containsPackage(pkgs, id, name) });
+                    }
+                }
+            },
+        }
+        return list.toOwnedSlice();
+    }
+
+    fn apiRequest(self: Remote, alloc: *std.mem.Allocator, user: ?User, endpoint: string) !?json.Value {
+        const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
+        defer alloc.free(url);
+
+        const req = try zfetch.Request.init(alloc, url, null);
+        defer req.deinit();
+
+        var headers = zfetch.Headers.init(alloc);
+        defer headers.deinit();
+
+        if (user) |_| {
+            if (_handler.getAccessToken(try user.?.uuid.toString(alloc))) |token| {
+                try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token }));
+            }
+        }
+
+        try req.do(.GET, headers, null);
+        const r = req.reader();
+        const body_content = try r.readAllAlloc(alloc, std.math.maxInt(usize));
+        const val = try json.parse(alloc, body_content);
+
+        if (req.status.code >= 400) {
+            std.log.err("{s} {s} {d} {}", .{ @tagName(self.type), endpoint, req.status.code, val });
+            return null;
+        }
+        return val;
+    }
+
+    fn apiRoot(self: Remote) error{}!string {
+        return switch (self.type) {
+            .github => "https://api.github.com",
+        };
+    }
 };
+
+fn containsPackage(haystack: []const Package, id: string, name: string) bool {
+    for (haystack) |item| {
+        if (std.mem.eql(u8, item.remote_id, id) and std.mem.eql(u8, item.remote_name, name)) {
+            return true;
+        }
+    }
+    return false;
+}

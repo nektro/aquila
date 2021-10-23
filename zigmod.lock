@@ -13,7 +13,7 @@ git https://github.com/nektro/iguanaTLS commit-954fd016964d44dfe8648985fd7c06f00
 git https://github.com/truemedian/zfetch commit-242a9d88d2baba40e23ba35b15aabe1e34b22110
 git https://github.com/truemedian/hzzp commit-91ab8e741992e8db30b3ee1cd9e7cd5a072ca294
 git https://github.com/MasterQ32/zig-network commit-0439bd7127ecb8f927a5cecb0beeb1569db2fb95
-git https://github.com/nektro/zig-json commit-3ea23e8ae3798d3929b4c4b54ce739a67914f3ec
+git https://github.com/nektro/zig-json commit-7f0e661371d41cfdc8b1649ed00e7a750c82e57a
 git https://github.com/nektro/zig-flag commit-ed7f7186cdafaeb3c257c5de14a8d7662c8a8237
 git https://github.com/nektro/zig-ulid commit-6dd5abbe4d72caf88188ec0d1cb56bcad4cd95b4
 git https://github.com/nektro/zig-time commit-64bc6c77e8189c60a5223877827b4753eb2b483d

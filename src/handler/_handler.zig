@@ -14,6 +14,7 @@ const _index = @import("./index.zig");
 const _user = @import("./user.zig");
 const _package = @import("./package.zig");
 const _dashboard = @import("./dashboard.zig");
+const _import = @import("./import.zig");
 
 pub fn init(alloc: *std.mem.Allocator) !void {
     var secret_seed: [std.rand.DefaultCsprng.secret_seed_length]u8 = undefined;
@@ -27,6 +28,7 @@ pub fn init(alloc: *std.mem.Allocator) !void {
 }
 
 pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
+    @setEvalBranchQuota(10000);
     return http.router.Router(void, &.{
         http.router.get("/", Middleware(_index.get).next),
         file_route("/theme.css"),
@@ -35,6 +37,7 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),
         http.router.get("/dashboard", Middleware(_dashboard.get).next),
+        http.router.get("/import", Middleware(_import.get).next),
         http.router.get("/:remote/:user", Middleware(_user.get).next),
         http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
     });
@@ -107,4 +110,8 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     try _internal.access_tokens.put(ulid, try std.mem.dupe(_internal.access_tokens.allocator, u8, val.get("access_token").?.String));
     try _internal.token_liveness.put(ulid, std.time.timestamp());
     try _internal.token_expires.put(ulid, val.get("expires_in", .Int) orelse std.time.s_per_day);
+}
+
+pub fn getAccessToken(ulid: string) ?string {
+    return _internal.access_tokens.get(ulid);
 }

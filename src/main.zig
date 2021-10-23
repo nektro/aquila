@@ -7,6 +7,7 @@ const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const flag = @import("flag");
 const ulid = @import("ulid");
+const zfetch = @import("zfetch");
 
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
@@ -52,6 +53,9 @@ pub fn main() !void {
     signal.listenFor(std.os.linux.SIG.TERM, handle_sig);
 
     //
+
+    try zfetch.init();
+    defer zfetch.deinit();
 
     try handler.init(alloc);
 

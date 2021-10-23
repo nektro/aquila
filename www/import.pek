@@ -1,0 +1,39 @@
+            h2("Import A New Project")
+            table(
+                thead(
+                    th("API ID")
+                    th("Repo")
+                    th
+                )
+                tbody(
+                    {#each list}
+                    {#ifnot this.added}
+                    tr(
+                        td({this.id})
+                        td(a[href=("https://remote.domain/this.name") target="_blank"]({this.name}))
+                        td(a[href=("./do_import?repo="{this.name})]("Select"))
+                    )
+                    /ifnot/
+                    /each/
+                )
+            )
+            h3("Already Imported")
+            table(
+                thead(
+                    th("API ID")
+                    th("Repo")
+                    th
+                )
+                tbody(
+                    {#each list}
+                    {#ifnot this.added}
+                    tr(
+                        //
+                    )
+                    /ifnot/
+                    /each/
+                )
+            )
+        )
+    )
+)
