@@ -88,9 +88,10 @@ pub fn isLoggedIn(request: http.Request) !bool {
     return true;
 }
 
-pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value) !void {
+pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value, val2: json.Value) !void {
     _ = name;
     _ = val;
+    _ = val2;
 
     const alloc = request.arena;
     const r = (try db.Remote.byKey(alloc, .domain, idp.domain())) orelse unreachable;
