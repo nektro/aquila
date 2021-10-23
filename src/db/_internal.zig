@@ -2,6 +2,7 @@ const std = @import("std");
 const string = []const u8;
 const zorm = @import("zorm");
 const ulid = @import("ulid");
+const extras = @import("extras");
 
 pub const Engine = zorm.engine(.sqlite3);
 pub var db: Engine = undefined;
@@ -12,7 +13,7 @@ const _db = @import("./_db.zig");
 
 pub fn ByKeyGen(comptime T: type) type {
     return struct {
-        pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: FieldType(T, @tagName(key))) !?T {
+        pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !?T {
             return try db.first(
                 alloc,
                 T,
@@ -21,7 +22,7 @@ pub fn ByKeyGen(comptime T: type) type {
             );
         }
 
-        pub fn byKeyAll(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: FieldType(T, @tagName(key))) ![]const T {
+        pub fn byKeyAll(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) ![]const T {
             return try db.collect(
                 alloc,
                 T,
@@ -35,7 +36,7 @@ pub fn ByKeyGen(comptime T: type) type {
 pub fn FindByGen(comptime S: type, comptime H: type, searchCol: std.meta.FieldEnum(H), selfCol: std.meta.FieldEnum(S)) type {
     const querystub = "select * from " ++ H.table_name ++ " where " ++ @tagName(searchCol) ++ " = ?";
     return struct {
-        pub fn first(self: S, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(H), value: FieldType(H, @tagName(key))) !?H {
+        pub fn first(self: S, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(H), value: extras.FieldType(H, key)) !?H {
             const query = querystub ++ " and " ++ @tagName(key) ++ " = ?";
             return try db.first(
                 alloc,
@@ -48,15 +49,6 @@ pub fn FindByGen(comptime S: type, comptime H: type, searchCol: std.meta.FieldEn
             );
         }
     };
-}
-
-pub fn FieldType(comptime T: type, comptime name: string) type {
-    inline for (std.meta.fields(T)) |item| {
-        if (std.mem.eql(u8, item.name, name)) {
-            return item.field_type;
-        }
-    }
-    @compileError(@typeName(T) ++ " does not have a field named " ++ name);
 }
 
 fn foo(comptime name: string, value: anytype) Foo(name, @TypeOf(value)) {
