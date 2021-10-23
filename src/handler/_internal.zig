@@ -11,6 +11,10 @@ const cookies = @import("../cookies.zig");
 const db = @import("../db/_db.zig");
 
 pub var jwt_secret: string = "";
+pub var access_tokens: std.StringHashMap(string) = undefined;
+pub var token_liveness: std.StringHashMap(i64) = undefined;
+pub var token_expires: std.StringHashMap(i64) = undefined;
+pub var last_check: i64 = 0;
 
 pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: string, data: anytype) !void {
     _ = request;
@@ -87,4 +91,24 @@ pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
     const alloc = request.arena;
     const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.fromString(alloc, x));
     return y.?;
+}
+
+pub fn cleanMaps() !void {
+    if (std.time.timestamp() - last_check < std.time.s_per_hour) return;
+    defer last_check = std.time.timestamp();
+
+    var iter = token_expires.iterator();
+    while (iter.next()) |entry| {
+        const now = std.time.timestamp();
+        const uid = entry.key_ptr.*;
+        const then = token_liveness.get(uid).?;
+        const token = access_tokens.get(uid).?;
+        if (then - now > entry.value_ptr.*) {
+            _ = access_tokens.remove(uid);
+            _ = token_liveness.remove(uid);
+            _ = token_expires.remove(uid);
+            access_tokens.allocator.free(uid);
+            access_tokens.allocator.free(token);
+        }
+    }
 }

@@ -21,6 +21,9 @@ pub fn init(alloc: *std.mem.Allocator) !void {
     var csprng = std.rand.DefaultCsprng.init(secret_seed);
 
     _internal.jwt_secret = try extras.randomSlice(alloc, &csprng.random, u8, 64);
+    _internal.access_tokens = std.StringHashMap(string).init(alloc);
+    _internal.token_liveness = std.StringHashMap(i64).init(alloc);
+    _internal.token_expires = std.StringHashMap(i64).init(alloc);
 }
 
 pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
@@ -90,14 +93,18 @@ pub fn isLoggedIn(request: http.Request) !bool {
 
 pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value, val2: json.Value) !void {
     _ = name;
-    _ = val;
     _ = val2;
 
     const alloc = request.arena;
     const r = (try db.Remote.byKey(alloc, .domain, idp.domain())) orelse unreachable;
     const u = (try r.findUserBy(alloc, .snowflake, id)) orelse try db.User.create(alloc, r.id, id, name);
+    const ulid = try std.mem.dupe(_internal.access_tokens.allocator, u8, try u.uuid.toString(alloc));
 
     try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
-        try _internal.JWT.encodeMessage(alloc, try u.uuid.toString(alloc)),
+        try _internal.JWT.encodeMessage(alloc, ulid),
     }));
+    try _internal.cleanMaps();
+    try _internal.access_tokens.put(ulid, try std.mem.dupe(_internal.access_tokens.allocator, u8, val.get("access_token").?.String));
+    try _internal.token_liveness.put(ulid, std.time.timestamp());
+    try _internal.token_expires.put(ulid, val.get("expires_in", .Int) orelse std.time.s_per_day);
 }
