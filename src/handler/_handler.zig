@@ -109,7 +109,7 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     try _internal.cleanMaps();
     try _internal.access_tokens.put(ulid, try std.mem.dupe(_internal.access_tokens.allocator, u8, val.get("access_token").?.String));
     try _internal.token_liveness.put(ulid, std.time.timestamp());
-    try _internal.token_expires.put(ulid, val.get("expires_in", .Int) orelse std.time.s_per_day);
+    try _internal.token_expires.put(ulid, val.getT("expires_in", .Int) orelse std.time.s_per_day);
 }
 
 pub fn getAccessToken(ulid: string) ?string {
