@@ -21,7 +21,7 @@ pub fn init(alloc: *std.mem.Allocator) !void {
     std.crypto.random.bytes(&secret_seed);
     var csprng = std.rand.DefaultCsprng.init(secret_seed);
 
-    _internal.jwt_secret = try extras.randomSlice(alloc, &csprng.random, u8, 64);
+    _internal.jwt_secret = try extras.randomSlice(alloc, &csprng.random(), u8, 64);
     _internal.access_tokens = std.StringHashMap(string).init(alloc);
     _internal.token_liveness = std.StringHashMap(i64).init(alloc);
     _internal.token_expires = std.StringHashMap(i64).init(alloc);

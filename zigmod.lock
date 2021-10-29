@@ -9,11 +9,11 @@ git https://github.com/nektro/zig-extras commit-090ee5f1834af4ed7714101b24d7daec
 git https://github.com/leroycep/zig-jwt commit-054d96bdd93d0f2ff93510f544990c0308126460
 git https://github.com/nektro/zig-oauth2 commit-0dec3df53867ff19514ef5efc15c33a268171f1e
 git https://github.com/MasterQ32/zig-uri commit-52cdd2061bec0579519f0d30280597f3a1db8b75
-git https://github.com/nektro/iguanaTLS commit-954fd016964d44dfe8648985fd7c06f0067be6b0
+git https://github.com/nektro/iguanaTLS commit-a48976beb7135b472ce8aa2f276df3b8eb775440
 git https://github.com/truemedian/zfetch commit-77fdd34e90db02f1224cdc7e5231ecd004ff1200
 git https://github.com/truemedian/hzzp commit-91ab8e741992e8db30b3ee1cd9e7cd5a072ca294
 git https://github.com/MasterQ32/zig-network commit-0439bd7127ecb8f927a5cecb0beeb1569db2fb95
 git https://github.com/nektro/zig-json commit-7f0e661371d41cfdc8b1649ed00e7a750c82e57a
 git https://github.com/nektro/zig-flag commit-ed7f7186cdafaeb3c257c5de14a8d7662c8a8237
-git https://github.com/nektro/zig-ulid commit-6dd5abbe4d72caf88188ec0d1cb56bcad4cd95b4
+git https://github.com/nektro/zig-ulid commit-46452bdc5f40a6ee50ecf48d6ae893af0d8a5e5a
 git https://github.com/nektro/zig-time commit-88e83395f79e1aa2b8188e934c4a8894f6d6bc5f
