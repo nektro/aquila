@@ -21,8 +21,8 @@ pub const User = struct {
     pub const table_name = "users";
 
     pub fn create(alloc: *std.mem.Allocator, provider: u64, snowflake: string, name: string) !User {
-        const held = db.mutex.acquire();
-        defer held.release();
+        db.mutex.lock();
+        defer db.mutex.unlock();
 
         return try _internal.insert(alloc, &User{
             .uuid = _internal.factory.newULID(),

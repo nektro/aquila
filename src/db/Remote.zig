@@ -57,8 +57,8 @@ pub const Remote = struct {
     }
 
     pub fn create(alloc: *std.mem.Allocator, ty: Type, domain: string) !Remote {
-        const held = db.mutex.acquire();
-        defer held.release();
+        db.mutex.lock();
+        defer db.mutex.unlock();
 
         return _internal.insert(alloc, &Remote{
             .uuid = _internal.factory.newULID(),
