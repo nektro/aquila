@@ -5,7 +5,7 @@ ARG RELEASE_NUM
 RUN apk add bash sudo wget curl jq git
 RUN ./download_zig.sh 0.9.0-dev.1599+008b0ec5e
 RUN zigmod ci
-RUN zig build -Dversion=r${RELEASE_NUM}
+RUN zig build -Dversion=r${RELEASE_NUM} -Drelease
 
 FROM alpine
 COPY --from=golang /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
