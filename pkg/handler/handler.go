@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -110,24 +109,6 @@ func dirSize(dirpath string) int64 {
 func fileSize(filepath string) int64 {
 	info, _ := os.Stat(filepath)
 	return info.Size()
-}
-
-func copyFile(src string, dest string) error {
-	existing, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer existing.Close()
-	newfile, err := os.Create(dest)
-	if err != nil {
-		return err
-	}
-	defer newfile.Close()
-	_, err = io.Copy(newfile, existing)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func fixPackages(in []*db.Package) []map[string]interface{} {

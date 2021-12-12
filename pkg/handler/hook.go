@@ -134,7 +134,7 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 	tarhash := "sha256-" + strings.ToLower(util.HashStream("SHA256", tarf))
 	dirr := etc.DataRoot() + "/packages/" + user.UUID.String() + "/" + details.ID
 	c.AssertNilErr(os.MkdirAll(dirr, os.ModePerm))
-	c.AssertNilErr(copyFile(fil, dirr+"/"+commit+".tar.gz"))
+	c.AssertNilErr(os.Rename(fil, dirr+"/"+commit+".tar.gz"))
 
 	c.Assert(db.Version{}.ByCommit(pkg, commit) == nil, "Version at this commit already created.")
 	vnew := db.CreateVersion(pkg, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, devdeps)
