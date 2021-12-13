@@ -62,4 +62,8 @@ pub const Package = struct {
     pub fn versions(self: Package, alloc: *std.mem.Allocator) ![]const Version {
         return try Version.byKeyAll(alloc, .p_for, self.uuid);
     }
+
+    pub fn setLatest(self: Package, alloc: *std.mem.Allocator, vers: Version) !void {
+        try self.updateColumn(alloc, .latest_version, try std.fmt.allocPrint(alloc, "{}", .{vers}));
+    }
 };
