@@ -1,16 +1,19 @@
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
+const extras = @import("extras");
 
 const _db = @import("./_db.zig");
 const Version = _db.Version;
 const Time = _db.Time;
+const User = _db.User;
+const Remote = _db.Remote;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
 pub const Package = struct {
-    id: u64,
+    id: u64 = 0,
     uuid: ulid.ULID,
     owner: ulid.ULID,
     name: string,
@@ -25,6 +28,26 @@ pub const Package = struct {
     star_count: u64,
 
     pub const table_name = "packages";
+
+    pub fn create(alloc: *std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64) !Package {
+        db.mutex.lock();
+        defer db.mutex.unlock();
+
+        return try _internal.insert(alloc, &Package{
+            .uuid = _internal.factory.newULID(),
+            .owner = owner.uuid,
+            .name = name,
+            .created_on = Time.now(),
+            .remote = remote.id,
+            .remote_id = rm_id,
+            .remote_name = rm_name,
+            .description = desc,
+            .license = license,
+            .latest_version = "",
+            .hook_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 16),
+            .star_count = star_count,
+        });
+    }
 
     usingnamespace _internal.ByKeyGen(Package);
 
