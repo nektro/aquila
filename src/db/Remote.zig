@@ -36,6 +36,15 @@ pub const Remote = struct {
         added: bool,
     };
 
+    pub const RepoDetails = struct {
+        id: string,
+        name: string,
+        clone_url: string,
+        description: string,
+        default_branch: string,
+        star_count: u32,
+    };
+
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
 
     pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
@@ -118,6 +127,32 @@ pub const Remote = struct {
     fn apiRoot(self: Remote) error{}!string {
         return switch (self.type) {
             .github => "https://api.github.com",
+        };
+    }
+
+    pub fn getRepo(self: Remote, alloc: *std.mem.Allocator, repo: string) !RepoDetails {
+        return self.parseDetails(
+            alloc,
+            (try self.apiRequest(
+                alloc,
+                null,
+                try std.mem.join(alloc, "/", switch (self.type) {
+                    .github => &.{ "", "repos", repo },
+                }),
+            )) orelse return error.ApiRequestFail,
+        );
+    }
+
+    fn parseDetails(self: Remote, alloc: *std.mem.Allocator, raw: json.Value) !RepoDetails {
+        return switch (self.type) {
+            .github => .{
+                .id = try std.fmt.allocPrint(alloc, "{}", .{raw.getT("id", .Int).?}),
+                .name = raw.getT("name", .String).?,
+                .clone_url = raw.getT("clone_url", .String).?,
+                .description = raw.getT("description", .String) orelse "",
+                .default_branch = raw.getT("default_branch", .String).?,
+                .star_count = @intCast(u32, raw.getT("stargazers_count", .Int).?),
+            },
         };
     }
 };
