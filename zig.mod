@@ -18,3 +18,4 @@ root_dependencies:
   - src: git https://github.com/nektro/zig-ulid
   - src: git https://github.com/nektro/zig-time
   - src: git https://github.com/truemedian/zfetch
+  - src: git https://github.com/nektro/zigmod

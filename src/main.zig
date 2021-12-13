@@ -8,6 +8,7 @@ const oauth2 = @import("oauth2");
 const flag = @import("flag");
 const ulid = @import("ulid");
 const zfetch = @import("zfetch");
+const zigmod = @import("zigmod");
 
 const git = @import("./git.zig");
 const docker = @import("./docker.zig");
@@ -57,6 +58,9 @@ pub fn main() !void {
 
     try zfetch.init();
     defer zfetch.deinit();
+
+    try zigmod.init();
+    defer zigmod.deinit();
 
     try handler.init(alloc);
 
