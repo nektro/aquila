@@ -77,7 +77,7 @@ pub fn getUser(response: *http.Response, request: http.Request) !db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.fromString(alloc, x));
+    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.parse(alloc, x));
     return y.?;
 }
 
@@ -89,7 +89,7 @@ pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.fromString(alloc, x));
+    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.parse(alloc, x));
     return y.?;
 }
 
