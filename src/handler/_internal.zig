@@ -112,3 +112,38 @@ pub fn cleanMaps() !void {
         }
     }
 }
+
+pub fn mergeSlices(alloc: *std.mem.Allocator, comptime T: type, side_a: []const T, side_b: []const T) ![]const T {
+    var list = std.ArrayList(T).init(alloc);
+    defer list.deinit();
+    try list.ensureTotalCapacity(side_a.len + side_b.len);
+    try list.appendSlice(side_a);
+    try list.appendSlice(side_b);
+    return list.toOwnedSlice();
+}
+
+/// workaround for https://github.com/ziglang/zig/issues/10317
+pub fn dirSize(alloc: *std.mem.Allocator, path: string) !usize {
+    var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
+    defer dir.close();
+    return try extras.dirSize(alloc, dir);
+}
+
+/// workaround for https://github.com/ziglang/zig/issues/10317
+pub fn fileList(alloc: *std.mem.Allocator, path: string) ![]const string {
+    var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
+    defer dir.close();
+    return try extras.fileList(alloc, dir);
+}
+
+pub fn assert(cond: bool, response: *http.Response, comptime fmt: string, args: anytype) !void {
+    if (!cond) {
+        try response.writer().print(fmt, args);
+        return error.HttpNoOp;
+    }
+}
+
+pub fn fail(response: *http.Response, comptime fmt: string, args: anytype) (http.Response.Writer.Error || error{HttpNoOp}) {
+    try response.writer().print(fmt, args);
+    return error.HttpNoOp;
+}
