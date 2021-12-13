@@ -12,6 +12,6 @@ x86_64-linux-musl
 for item in $targets
 do
     echo "$version.$rev $item"
-    zig build -Dtarget=$item -Duse-full-name -Dversion=$version.$rev --prefix .
+    zig build -Dtarget=$item -Duse-full-name -Dversion=$version.$rev --prefix . -Drelease
     echo
 done
