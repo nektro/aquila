@@ -155,6 +155,65 @@ pub const Remote = struct {
             },
         };
     }
+
+    const GithubWebhookData = struct {
+        name: string,
+        config: struct {
+            url: string,
+            events: []const string,
+            content_type: string,
+            active: bool,
+        },
+    };
+
+    pub fn installWebhook(self: Remote, alloc: *std.mem.Allocator, user: User, rm_id: string, rm_name: string, hookurl: string) !?json.Value {
+        _ = rm_id;
+        return switch (self.type) {
+            .github => try self.apiPost(alloc, user, try std.mem.concat(alloc, u8, &.{ "/repos/", rm_name, "/hooks" }), GithubWebhookData{
+                .name = "web",
+                .config = .{
+                    .url = hookurl,
+                    .events = &.{"push"},
+                    .content_type = "json",
+                    .active = true,
+                },
+            }),
+        };
+    }
+
+    fn apiPost(self: Remote, alloc: *std.mem.Allocator, user: ?User, endpoint: string, data: anytype) !?json.Value {
+        const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
+        defer alloc.free(url);
+
+        const req = try zfetch.Request.init(alloc, url, null);
+        defer req.deinit();
+
+        var headers = zfetch.Headers.init(alloc);
+        defer headers.deinit();
+
+        if (user) |_| {
+            if (_handler.getAccessToken(try user.?.uuid.toString(alloc))) |token| {
+                try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token }));
+            }
+        }
+        try headers.appendValue("Content-Type", "application/json");
+        try headers.appendValue("Accept", "application/vnd.github.v3+json");
+
+        var payload = std.ArrayList(u8).init(alloc);
+        defer payload.deinit();
+        try std.json.stringify(data, .{}, payload.writer());
+
+        try req.do(.POST, headers, payload.toOwnedSlice());
+        const r = req.reader();
+        const body_content = try r.readAllAlloc(alloc, std.math.maxInt(usize));
+        const val = try json.parse(alloc, body_content);
+
+        if (req.status.code >= 400) {
+            std.log.err("{s} {s} {d} {}", .{ @tagName(self.type), endpoint, req.status.code, val });
+            return null;
+        }
+        return val;
+    }
 };
 
 fn containsPackage(haystack: []const Package, id: string, name: string) bool {
