@@ -64,7 +64,7 @@ fn file_route(comptime path: string) http.router.Route {
                 try response.headers.put("Content-Type", mediatype);
             }
             const w = response.writer();
-            try w.writeAll(files.open(path).?);
+            try w.writeAll(@field(files, path));
         }
     };
     return http.router.get(path, T.f);

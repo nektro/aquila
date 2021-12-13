@@ -21,8 +21,8 @@ pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, re
     try response.headers.put("Content-Type", "text/html");
 
     const w = response.writer();
-    const head = comptime files.open("/_header.pek").?;
-    const page = comptime files.open(name) orelse @compileError("file '" ++ name ++ "' not found in your files cache");
+    const head = files.@"/_header.pek";
+    const page = @field(files, name);
     const tmpl = comptime pek.parse(head ++ page);
     try pek.compile(alloc, w, tmpl, data);
 }
