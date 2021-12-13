@@ -20,6 +20,7 @@ pub const name = "Aquila";
 pub var version: string = "";
 pub const log_level: std.log.Level = .debug;
 pub var datadirpath: string = "";
+pub var domain: string = "";
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -52,6 +53,8 @@ pub fn main() !void {
     try db.connect(alloc, dbpath);
     const real = try std.fs.realpathAlloc(alloc, dbpath);
     datadirpath = std.fs.path.dirname(real).?;
+
+    domain = flag.getSingle("domain") orelse @panic("missing required --domain flag");
 
     //
 
