@@ -10,6 +10,7 @@
                     {#ifnot this.added}
                     tr(
                         td({this.id})
+                        // TODO
                         td(a[href=("https://remote.domain/this.name") target="_blank"]({this.name}))
                         td(a[href=("./do_import?repo="{this.name})]("Select"))
                     )
@@ -26,11 +27,14 @@
                 )
                 tbody(
                     {#each list}
-                    {#ifnot this.added}
+                    {#if this.added}
                     tr(
-                        //
+                        td({this.id})
+                        // TODO
+                        td(a[href=("https://remote.domain/this.name") target="_blank"]({this.name}))
+                        td(a[href=("./do_import?repo="{this.name})]("Select"))
                     )
-                    /ifnot/
+                    /if/
                     /each/
                 )
             )
