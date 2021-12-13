@@ -6,12 +6,13 @@ const zigmod = @import("zigmod");
 const _db = @import("./_db.zig");
 const Time = _db.Time;
 const User = _db.User;
+const Package = _db.Package;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
 pub const Version = struct {
-    id: u64,
+    id: u64 = 0,
     uuid: ulid.ULID,
     p_for: ulid.ULID,
     created_on: Time,
@@ -30,6 +31,30 @@ pub const Version = struct {
     build_deps: DepList,
 
     pub const table_name = "versions";
+
+    pub fn create(alloc: *std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep) !Version {
+        db.mutex.lock();
+        defer db.mutex.unlock();
+
+        return try _internal.insert(alloc, &Version{
+            .uuid = _internal.factory.newULID(),
+            .p_for = pkg.uuid,
+            .created_on = Time.now(),
+            .commit_to = commit,
+            .unpacked_size = unpackedsize,
+            .total_size = totalsize,
+            .files = try _internal.safeJoin(alloc, "\n", files),
+            .tar_size = tarsize,
+            .tar_hash = tarhash,
+            .approved_by = "",
+            .real_major = 0,
+            .real_minor = 0,
+            .deps = DepList{ .deps = deps },
+            .dev_deps = DepList{ .deps = &.{} },
+            .root_deps = DepList{ .deps = rootdeps },
+            .build_deps = DepList{ .deps = builddeps },
+        });
+    }
 
     usingnamespace _internal.ByKeyGen(Version);
 

@@ -167,3 +167,16 @@ fn typeToSqliteType(comptime T: type) string {
         else => @compileError("typeToSqliteType: " ++ @typeName(T)),
     };
 }
+
+/// workaround for https://github.com/ziglang/zig/issues/6706
+pub fn safeJoin(alloc: *std.mem.Allocator, separator: string, slices: []const string) !string {
+    var res = std.ArrayList(u8).init(alloc);
+    defer res.deinit();
+    try res.append('w');
+
+    for (slices) |item, i| {
+        if (i > 0) try res.appendSlice(separator);
+        try res.appendSlice(item);
+    }
+    return res.toOwnedSlice()[1..];
+}
