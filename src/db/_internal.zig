@@ -30,6 +30,17 @@ pub fn ByKeyGen(comptime T: type) type {
                 foo(@tagName(key), value),
             );
         }
+
+        pub fn updateColumn(self: T, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !void {
+            return try db.exec(
+                alloc,
+                "update " ++ T.table_name ++ " set " ++ @tagName(key) ++ " = ? where id = ?",
+                merge(.{
+                    foo(@tagName(key), value),
+                    foo("id", self.id),
+                }),
+            );
+        }
     };
 }
 
