@@ -34,20 +34,20 @@ jobs:
       - run: zigmod version
       - run: zigmod ci
       - run: zig build
-      - run: ./build_all_zig.sh
+      # - run: ./build_all_zig.sh
 
-      # Github Release
-      - run: ./changelog.sh
-      - run: zigmod aq install 1/nektro/ghr
-      - run: ./make_release.sh ${{ secrets.GITHUB_TOKEN }}
+      # # Github Release
+      # - run: ./changelog.sh
+      # - run: zigmod aq install 1/nektro/ghr
+      # - run: ./make_release.sh ${{ secrets.GITHUB_TOKEN }}
 
-      # Docker image
-      - uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USER }}
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}
-          repository: ${{ env.GITHUB_REPOSITORY }}
-          tags: latest,r${{ env.RELEASE_NUM }}
-          build_args: RELEASE_NUM=${{ env.RELEASE_NUM }}
-        env:
-          RELEASE_NUM: ${{ $(./release_num.sh) }}
+      # # Docker image
+      # - uses: docker/build-push-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USER }}
+      #     password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      #     repository: ${{ env.GITHUB_REPOSITORY }}
+      #     tags: latest,r${{ env.RELEASE_NUM }}
+      #     build_args: RELEASE_NUM=${{ env.RELEASE_NUM }}
+      #   env:
+      #     RELEASE_NUM: ${{ $(./release_num.sh) }}
