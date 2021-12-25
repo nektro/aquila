@@ -7,10 +7,9 @@ const zigmod = @import("zigmod");
 
 const db = @import("./../db/_db.zig");
 const git = @import("./../git.zig");
+const cmisc = @import("./../cmisc.zig");
 
 const _internal = @import("./_internal.zig");
-
-extern "c" fn mkdtemp(template: [*:0]const u8) [*:0]u8;
 
 pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
     _ = args;
@@ -26,9 +25,12 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     }
 
     const r = try u.remote(alloc);
+
+    //
+
     const details = r.getRepo(alloc, repo) catch return _internal.fail(response, "error: fetching repo from remote failed\n", .{});
 
-    var path = std.mem.span(mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
+    var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
 
     const result1 = try std.ChildProcess.exec(.{
         .allocator = alloc,
@@ -93,6 +95,9 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     var p = try db.Package.create(alloc, u, name, r, details.id, repo, desc, license, details.star_count);
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps);
+
+    //
+
     try v.setVersion(alloc, u, 0, 1);
     try p.setLatest(alloc, v);
 
