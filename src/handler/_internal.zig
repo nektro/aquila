@@ -16,7 +16,7 @@ pub var token_liveness: std.StringHashMap(i64) = undefined;
 pub var token_expires: std.StringHashMap(i64) = undefined;
 pub var last_check: i64 = 0;
 
-pub fn writePageResponse(alloc: *std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: string, data: anytype) !void {
+pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: string, data: anytype) !void {
     _ = request;
     try response.headers.put("Content-Type", "text/html");
 
@@ -62,7 +62,7 @@ pub const JWT = struct {
         return q.get("jwt");
     }
 
-    pub fn encodeMessage(alloc: *std.mem.Allocator, msg: string) !string {
+    pub fn encodeMessage(alloc: std.mem.Allocator, msg: string) !string {
         return try jwt.encodeMessage(alloc, .HS256, msg, .{ .key = jwt_secret });
     }
 };
@@ -113,7 +113,7 @@ pub fn cleanMaps() !void {
     }
 }
 
-pub fn mergeSlices(alloc: *std.mem.Allocator, comptime T: type, side_a: []const T, side_b: []const T) ![]const T {
+pub fn mergeSlices(alloc: std.mem.Allocator, comptime T: type, side_a: []const T, side_b: []const T) ![]const T {
     var list = std.ArrayList(T).init(alloc);
     defer list.deinit();
     try list.ensureTotalCapacity(side_a.len + side_b.len);
@@ -123,14 +123,14 @@ pub fn mergeSlices(alloc: *std.mem.Allocator, comptime T: type, side_a: []const 
 }
 
 /// workaround for https://github.com/ziglang/zig/issues/10317
-pub fn dirSize(alloc: *std.mem.Allocator, path: string) !usize {
+pub fn dirSize(alloc: std.mem.Allocator, path: string) !usize {
     var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
     defer dir.close();
     return try extras.dirSize(alloc, dir);
 }
 
 /// workaround for https://github.com/ziglang/zig/issues/10317
-pub fn fileList(alloc: *std.mem.Allocator, path: string) ![]const string {
+pub fn fileList(alloc: std.mem.Allocator, path: string) ![]const string {
     var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
     defer dir.close();
     return try extras.fileList(alloc, dir);

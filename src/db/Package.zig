@@ -29,7 +29,7 @@ pub const Package = struct {
 
     pub const table_name = "packages";
 
-    pub fn create(alloc: *std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64) !Package {
+    pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64) !Package {
         db.mutex.lock();
         defer db.mutex.unlock();
 
@@ -51,19 +51,19 @@ pub const Package = struct {
 
     usingnamespace _internal.ByKeyGen(Package);
 
-    pub fn latest(alloc: *std.mem.Allocator) ![]const Package {
+    pub fn latest(alloc: std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
     }
 
-    pub fn topStarred(alloc: *std.mem.Allocator) ![]const Package {
+    pub fn topStarred(alloc: std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by star_count desc limit 15", .{});
     }
 
-    pub fn versions(self: Package, alloc: *std.mem.Allocator) ![]const Version {
+    pub fn versions(self: Package, alloc: std.mem.Allocator) ![]const Version {
         return try Version.byKeyAll(alloc, .p_for, self.uuid);
     }
 
-    pub fn setLatest(self: Package, alloc: *std.mem.Allocator, vers: Version) !void {
+    pub fn setLatest(self: Package, alloc: std.mem.Allocator, vers: Version) !void {
         try self.updateColumn(alloc, .latest_version, try std.fmt.allocPrint(alloc, "{}", .{vers}));
     }
 };

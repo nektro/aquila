@@ -24,7 +24,7 @@ pub var domain: string = "";
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const alloc = &gpa.allocator;
+    const alloc = gpa.allocator();
 
     const rev: []const string = if (git.rev_HEAD(alloc, std.fs.cwd()) catch null) |h| &.{ ".", h[0..9] } else &.{ "", "" };
     const con: string = if (docker.amInside(alloc) catch false) ".docker" else "";
@@ -124,33 +124,33 @@ fn oa2IdToRemoTy(id: string) db.Remote.Type {
     std.debug.panic("unsupported client provider: {s}", .{id});
 }
 
-pub fn pek_get_user_path(alloc: *std.mem.Allocator, uid: ulid.ULID) !string {
+pub fn pek_get_user_path(alloc: std.mem.Allocator, uid: ulid.ULID) !string {
     const user = try db.User.byKey(alloc, .uuid, uid);
     return try std.fmt.allocPrint(alloc, "{d}/{s}", .{ user.?.provider, user.?.name });
 }
 
-pub fn pek_version_pkg_path(alloc: *std.mem.Allocator, vers: db.Version) !string {
+pub fn pek_version_pkg_path(alloc: std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
     const user = try db.User.byKey(alloc, .uuid, pkg.?.owner);
     return try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ user.?.provider, user.?.name, pkg.?.name });
 }
 
-pub fn pek_version_pkg_stars(alloc: *std.mem.Allocator, vers: db.Version) !u64 {
+pub fn pek_version_pkg_stars(alloc: std.mem.Allocator, vers: db.Version) !u64 {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
     return pkg.?.star_count;
 }
 
-pub fn pek_version_pkg_description(alloc: *std.mem.Allocator, vers: db.Version) !string {
+pub fn pek_version_pkg_description(alloc: std.mem.Allocator, vers: db.Version) !string {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
     return pkg.?.description;
 }
 
-pub fn pek_tree_url(alloc: *std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
+pub fn pek_tree_url(alloc: std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
     return switch (remo.type) {
         .github => try std.fmt.allocPrint(alloc, "https://github.com/{s}/tree/{s}", .{ repo, commit }),
     };
 }
 
-pub fn pek_fix_bytes(alloc: *std.mem.Allocator, size: u64) !string {
+pub fn pek_fix_bytes(alloc: std.mem.Allocator, size: u64) !string {
     return try extras.fmtByteCountIEC(alloc, size);
 }

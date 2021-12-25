@@ -17,7 +17,7 @@ const _dashboard = @import("./dashboard.zig");
 const _import = @import("./import.zig");
 const _do_import = @import("./do_import.zig");
 
-pub fn init(alloc: *std.mem.Allocator) !void {
+pub fn init(alloc: std.mem.Allocator) !void {
     var secret_seed: [std.rand.DefaultCsprng.secret_seed_length]u8 = undefined;
     std.crypto.random.bytes(&secret_seed);
     var csprng = std.rand.DefaultCsprng.init(secret_seed);
@@ -103,13 +103,13 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     const alloc = request.arena;
     const r = (try db.Remote.byKey(alloc, .domain, idp.domain())) orelse unreachable;
     const u = (try r.findUserBy(alloc, .snowflake, id)) orelse try db.User.create(alloc, r.id, id, name);
-    const ulid = try std.mem.dupe(_internal.access_tokens.allocator, u8, try u.uuid.toString(alloc));
+    const ulid = try _internal.access_tokens.allocator.dupe(u8, try u.uuid.toString(alloc));
 
     try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
         try _internal.JWT.encodeMessage(alloc, ulid),
     }));
     try _internal.cleanMaps();
-    try _internal.access_tokens.put(ulid, try std.mem.dupe(_internal.access_tokens.allocator, u8, val.get("access_token").?.String));
+    try _internal.access_tokens.put(ulid, try _internal.access_tokens.allocator.dupe(u8, val.get("access_token").?.String));
     try _internal.token_liveness.put(ulid, std.time.timestamp());
     try _internal.token_expires.put(ulid, val.getT("expires_in", .Int) orelse std.time.s_per_day);
 }

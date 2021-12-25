@@ -47,7 +47,7 @@ pub const Remote = struct {
 
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
 
-    pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
+    pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
         for (try all(alloc)) |item| {
             const a = @field(item, @tagName(key));
             if (@TypeOf(value) == string and std.mem.eql(u8, a, value)) {
@@ -60,12 +60,12 @@ pub const Remote = struct {
         return null;
     }
 
-    pub fn all(alloc: *std.mem.Allocator) ![]const Remote {
+    pub fn all(alloc: std.mem.Allocator) ![]const Remote {
         if (all_remotes.len > 0) return all_remotes;
         return db.collect(alloc, Remote, "select * from " ++ table_name, .{});
     }
 
-    pub fn create(alloc: *std.mem.Allocator, ty: Type, domain: string) !Remote {
+    pub fn create(alloc: std.mem.Allocator, ty: Type, domain: string) !Remote {
         db.mutex.lock();
         defer db.mutex.unlock();
 
@@ -76,7 +76,7 @@ pub const Remote = struct {
         });
     }
 
-    pub fn listUserRepos(self: Remote, alloc: *std.mem.Allocator, user: User) ![]const Repo {
+    pub fn listUserRepos(self: Remote, alloc: std.mem.Allocator, user: User) ![]const Repo {
         var list = std.ArrayList(Repo).init(alloc);
         const pkgs = try user.packages(alloc);
 
@@ -96,7 +96,7 @@ pub const Remote = struct {
         return list.toOwnedSlice();
     }
 
-    fn apiRequest(self: Remote, alloc: *std.mem.Allocator, user: ?User, endpoint: string) !?json.Value {
+    fn apiRequest(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string) !?json.Value {
         const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
         defer alloc.free(url);
 
@@ -130,7 +130,7 @@ pub const Remote = struct {
         };
     }
 
-    pub fn getRepo(self: Remote, alloc: *std.mem.Allocator, repo: string) !RepoDetails {
+    pub fn getRepo(self: Remote, alloc: std.mem.Allocator, repo: string) !RepoDetails {
         return self.parseDetails(
             alloc,
             (try self.apiRequest(
@@ -143,7 +143,7 @@ pub const Remote = struct {
         );
     }
 
-    fn parseDetails(self: Remote, alloc: *std.mem.Allocator, raw: json.Value) !RepoDetails {
+    pub fn parseDetails(self: Remote, alloc: std.mem.Allocator, raw: json.Value) !RepoDetails {
         return switch (self.type) {
             .github => .{
                 .id = try std.fmt.allocPrint(alloc, "{}", .{raw.getT("id", .Int).?}),
@@ -166,7 +166,7 @@ pub const Remote = struct {
         },
     };
 
-    pub fn installWebhook(self: Remote, alloc: *std.mem.Allocator, user: User, rm_id: string, rm_name: string, hookurl: string) !?json.Value {
+    pub fn installWebhook(self: Remote, alloc: std.mem.Allocator, user: User, rm_id: string, rm_name: string, hookurl: string) !?json.Value {
         _ = rm_id;
         return switch (self.type) {
             .github => try self.apiPost(alloc, user, try std.mem.concat(alloc, u8, &.{ "/repos/", rm_name, "/hooks" }), GithubWebhookData{
@@ -181,7 +181,7 @@ pub const Remote = struct {
         };
     }
 
-    fn apiPost(self: Remote, alloc: *std.mem.Allocator, user: ?User, endpoint: string, data: anytype) !?json.Value {
+    fn apiPost(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string, data: anytype) !?json.Value {
         const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
         defer alloc.free(url);
 

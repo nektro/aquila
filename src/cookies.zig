@@ -4,7 +4,7 @@ const http = @import("apple_pie");
 
 pub const Jar = std.StringHashMap(string);
 
-pub fn parse(alloc: *std.mem.Allocator, headers: http.Request.Headers) !Jar {
+pub fn parse(alloc: std.mem.Allocator, headers: http.Request.Headers) !Jar {
     var map = Jar.init(alloc);
     const h = headers.get("Cookie");
     if (h == null) return map;

@@ -7,13 +7,13 @@ pub const Time = struct {
 
     const Self = @This();
 
-    pub fn formatAlloc(self: Self, alloc: *std.mem.Allocator, comptime fmt: string) !string {
+    pub fn formatAlloc(self: Self, alloc: std.mem.Allocator, comptime fmt: string) !string {
         return self.ctx.formatAlloc(alloc, fmt);
     }
 
     pub const BaseType = string;
 
-    pub fn readField(alloc: *std.mem.Allocator, value: BaseType) !Self {
+    pub fn readField(alloc: std.mem.Allocator, value: BaseType) !Self {
         _ = alloc;
         return Self{
             .ctx = time.DateTime.init(
@@ -27,12 +27,12 @@ pub const Time = struct {
         };
     }
 
-    pub fn bindField(self: Self, alloc: *std.mem.Allocator) !BaseType {
+    pub fn bindField(self: Self, alloc: std.mem.Allocator) !BaseType {
         // modified RFC3339
         return try self.formatAlloc(alloc, "YYY-MM-DD HH:mm:ss");
     }
 
-    pub fn toString(self: Self, alloc: *std.mem.Allocator) !string {
+    pub fn toString(self: Self, alloc: std.mem.Allocator) !string {
         // RFC1123
         return try self.formatAlloc(alloc, "ddd, DD MMM YYY HH:mm:ss z");
     }

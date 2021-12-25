@@ -13,7 +13,7 @@ const _db = @import("./_db.zig");
 
 pub fn ByKeyGen(comptime T: type) type {
     return struct {
-        pub fn byKey(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !?T {
+        pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !?T {
             return try db.first(
                 alloc,
                 T,
@@ -22,7 +22,7 @@ pub fn ByKeyGen(comptime T: type) type {
             );
         }
 
-        pub fn byKeyAll(alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) ![]const T {
+        pub fn byKeyAll(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) ![]const T {
             return try db.collect(
                 alloc,
                 T,
@@ -31,7 +31,7 @@ pub fn ByKeyGen(comptime T: type) type {
             );
         }
 
-        pub fn updateColumn(self: T, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !void {
+        pub fn updateColumn(self: T, alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !void {
             return try db.exec(
                 alloc,
                 "update " ++ T.table_name ++ " set " ++ @tagName(key) ++ " = ? where id = ?",
@@ -47,7 +47,7 @@ pub fn ByKeyGen(comptime T: type) type {
 pub fn FindByGen(comptime S: type, comptime H: type, searchCol: std.meta.FieldEnum(H), selfCol: std.meta.FieldEnum(S)) type {
     const querystub = "select * from " ++ H.table_name ++ " where " ++ @tagName(searchCol) ++ " = ?";
     return struct {
-        pub fn first(self: S, alloc: *std.mem.Allocator, comptime key: std.meta.FieldEnum(H), value: extras.FieldType(H, key)) !?H {
+        pub fn first(self: S, alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(H), value: extras.FieldType(H, key)) !?H {
             const query = querystub ++ " and " ++ @tagName(key) ++ " = ?";
             return try db.first(
                 alloc,
@@ -101,7 +101,7 @@ fn Merge(comptime T: type) type {
     return Struct(fields);
 }
 
-pub fn insert(alloc: *std.mem.Allocator, value: anytype) !std.meta.Child(@TypeOf(value)) {
+pub fn insert(alloc: std.mem.Allocator, value: anytype) !std.meta.Child(@TypeOf(value)) {
     const T = std.meta.Child(@TypeOf(value));
     @field(value, "id") = try nextId(alloc, T);
     comptime var parens: string = "";
@@ -113,18 +113,18 @@ pub fn insert(alloc: *std.mem.Allocator, value: anytype) !std.meta.Child(@TypeOf
     return value.*;
 }
 
-fn nextId(alloc: *std.mem.Allocator, comptime T: type) !u64 {
+fn nextId(alloc: std.mem.Allocator, comptime T: type) !u64 {
     const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
     return (n orelse 0) + 1;
 }
 
-pub fn createTableT(alloc: *std.mem.Allocator, comptime T: type) !void {
+pub fn createTableT(alloc: std.mem.Allocator, comptime T: type) !void {
     const tI = @typeInfo(T).Struct;
     const fields = tI.fields;
     try createTable(alloc, T.table_name, comptime colToCol(fields[0]), comptime fieldsToCols(fields[1..]));
 }
 
-fn createTable(alloc: *std.mem.Allocator, comptime name: string, comptime pk: [2]string, comptime cols: []const [2]string) !void {
+fn createTable(alloc: std.mem.Allocator, comptime name: string, comptime pk: [2]string, comptime cols: []const [2]string) !void {
     if (try db.doesTableExist(alloc, name)) {} else {
         std.log.scoped(.db).info("creating table '{s}' with primary column '{s}'", .{ name, pk[0] });
         try db.exec(alloc, comptime std.fmt.comptimePrint("create table {s}({s} {s})", .{ name, pk[0], pk[1] }), .{});
@@ -169,7 +169,7 @@ fn typeToSqliteType(comptime T: type) string {
 }
 
 /// workaround for https://github.com/ziglang/zig/issues/6706
-pub fn safeJoin(alloc: *std.mem.Allocator, separator: string, slices: []const string) !string {
+pub fn safeJoin(alloc: std.mem.Allocator, separator: string, slices: []const string) !string {
     var res = std.ArrayList(u8).init(alloc);
     defer res.deinit();
     try res.append('w');

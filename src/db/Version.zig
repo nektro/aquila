@@ -32,7 +32,7 @@ pub const Version = struct {
 
     pub const table_name = "versions";
 
-    pub fn create(alloc: *std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep) !Version {
+    pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep) !Version {
         db.mutex.lock();
         defer db.mutex.unlock();
 
@@ -58,7 +58,7 @@ pub const Version = struct {
 
     usingnamespace _internal.ByKeyGen(Version);
 
-    pub fn latest(alloc: *std.mem.Allocator) ![]const Version {
+    pub fn latest(alloc: std.mem.Allocator) ![]const Version {
         return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
     }
 
@@ -68,7 +68,7 @@ pub const Version = struct {
         try writer.print("v{d}.{d}", .{ self.real_major, self.real_minor });
     }
 
-    pub fn setVersion(self: Version, alloc: *std.mem.Allocator, approver: User, major: u32, minor: u32) !void {
+    pub fn setVersion(self: Version, alloc: std.mem.Allocator, approver: User, major: u32, minor: u32) !void {
         try self.updateColumn(alloc, .approved_by, try approver.uuid.toString(alloc));
         try self.updateColumn(alloc, .real_major, major);
         try self.updateColumn(alloc, .real_minor, minor);
@@ -81,7 +81,7 @@ const DepList = struct {
     const Self = @This();
     pub const BaseType = string;
 
-    pub fn readField(alloc: *std.mem.Allocator, value: BaseType) !Self {
+    pub fn readField(alloc: std.mem.Allocator, value: BaseType) !Self {
         var res = std.ArrayList(zigmod.Dep).init(alloc);
         var iter = std.mem.split(u8, value, "\n");
         while (iter.next()) |line| {
@@ -103,7 +103,7 @@ const DepList = struct {
         return DepList{ .deps = res.toOwnedSlice() };
     }
 
-    pub fn bindField(self: Self, alloc: *std.mem.Allocator) !BaseType {
+    pub fn bindField(self: Self, alloc: std.mem.Allocator) !BaseType {
         var res = std.ArrayList(u8).init(alloc);
         defer res.deinit();
         const w = res.writer();
