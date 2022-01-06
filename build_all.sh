@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+GOPATH=$(go env GOPATH)
+
+set -e
+
 build_template() {
     export CGO_ENABLED=1
     export GOOS=$1
