@@ -71,7 +71,6 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     // TODO use zig to do .tar.gz
     const argv = try _internal.mergeSlices(alloc, string, &.{ "tar", "-czf", tarpath }, filelist);
-    std.log.warn("{s}", .{argv});
 
     const result2 = try std.ChildProcess.exec(.{
         .allocator = alloc,
