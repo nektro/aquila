@@ -49,10 +49,10 @@ pub const Version = struct {
             .approved_by = "",
             .real_major = 0,
             .real_minor = 0,
-            .deps = DepList{ .deps = deps },
-            .dev_deps = DepList{ .deps = &.{} },
-            .root_deps = DepList{ .deps = rootdeps },
-            .build_deps = DepList{ .deps = builddeps },
+            .deps = DepList{ .data = deps },
+            .dev_deps = DepList{ .data = &.{} },
+            .root_deps = DepList{ .data = rootdeps },
+            .build_deps = DepList{ .data = builddeps },
         });
     }
 
@@ -109,7 +109,7 @@ const StringList = struct {
 };
 
 const DepList = struct {
-    deps: []const zigmod.Dep,
+    data: []const zigmod.Dep,
 
     const Self = @This();
     pub const BaseType = string;
@@ -133,7 +133,7 @@ const DepList = struct {
                 .yaml = null,
             });
         }
-        return DepList{ .deps = res.toOwnedSlice() };
+        return DepList{ .data = res.toOwnedSlice() };
     }
 
     pub fn bindField(self: Self, alloc: std.mem.Allocator) !BaseType {
@@ -145,7 +145,7 @@ const DepList = struct {
         // this workaround forces `.ptr` to not be `@0` when no other data has been written
         try w.writeAll("w");
 
-        for (self.deps) |item, i| {
+        for (self.data) |item, i| {
             if (i > 0) try w.writeAll("\n");
             try w.print("{s} {s} {s}", .{ @tagName(item.type), item.path, item.version });
         }
