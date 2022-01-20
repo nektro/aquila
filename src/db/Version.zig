@@ -19,7 +19,7 @@ pub const Version = struct {
     commit_to: string,
     unpacked_size: u64,
     total_size: u64,
-    files: string,
+    files: StringList,
     tar_size: u64,
     tar_hash: string,
     approved_by: string, // TODO remove this column, app design changed
@@ -43,7 +43,7 @@ pub const Version = struct {
             .commit_to = commit,
             .unpacked_size = unpackedsize,
             .total_size = totalsize,
-            .files = try _internal.safeJoin(alloc, "\n", files),
+            .files = StringList{ .data = files },
             .tar_size = tarsize,
             .tar_hash = tarhash,
             .approved_by = "",
@@ -72,6 +72,39 @@ pub const Version = struct {
         try self.updateColumn(alloc, .approved_by, try approver.uuid.toString(alloc));
         try self.updateColumn(alloc, .real_major, major);
         try self.updateColumn(alloc, .real_minor, minor);
+    }
+};
+
+const StringList = struct {
+    data: []const string,
+
+    const Self = @This();
+    pub const BaseType = string;
+
+    pub fn readField(alloc: std.mem.Allocator, value: BaseType) !Self {
+        var res = std.ArrayList(string).init(alloc);
+        var iter = std.mem.split(u8, value, "\n");
+        while (iter.next()) |line| {
+            if (line.len == 0) continue;
+            try res.append(line);
+        }
+        return Self{ .data = res.toOwnedSlice() };
+    }
+
+    pub fn bindField(self: Self, alloc: std.mem.Allocator) !BaseType {
+        var res = std.ArrayList(u8).init(alloc);
+        defer res.deinit();
+        const w = res.writer();
+        // since list.items is initialized with `&[_]T{}`
+        // this and the `[1..]` at the end are blocked on https://github.com/ziglang/zig/issues/6706
+        // this workaround forces `.ptr` to not be `@0` when no other data has been written
+        try w.writeAll("w");
+
+        for (self.data) |item, i| {
+            if (i > 0) try w.writeAll("\n");
+            try w.writeAll(item);
+        }
+        return res.toOwnedSlice()[1..];
     }
 };
 
