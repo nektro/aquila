@@ -9,15 +9,15 @@ const _internal = @import("./_internal.zig");
 pub fn get(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string }) !void {
     const alloc = request.arena;
     const u = try _internal.getUserOp(response, request);
-    const r = try db.Remote.byKey(alloc, .id, args.remote);
-    const o = try r.?.findUserBy(alloc, .name, args.user);
-    const p = try o.?.packages(alloc);
+    const r = try _internal.reqRemote(request, response, args.remote);
+    const o = try _internal.reqUser(request, response, r, args.user);
+    const p = try o.packages(alloc);
 
     try _internal.writePageResponse(alloc, response, request, "/user.pek", .{
         .aquila_version = @import("root").version,
         .user = u,
-        .repo = r.?,
-        .owner = o.?,
+        .repo = r,
+        .owner = o,
         .pkgs = p,
     });
 }

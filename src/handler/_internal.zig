@@ -138,12 +138,29 @@ pub fn fileList(alloc: std.mem.Allocator, path: string) ![]const string {
 
 pub fn assert(cond: bool, response: *http.Response, comptime fmt: string, args: anytype) !void {
     if (!cond) {
-        try response.writer().print(fmt, args);
-        return error.HttpNoOp;
+        return fail(response, fmt, args);
     }
 }
 
 pub fn fail(response: *http.Response, comptime fmt: string, args: anytype) (http.Response.Writer.Error || error{HttpNoOp}) {
     try response.writer().print(fmt, args);
     return error.HttpNoOp;
+}
+
+pub fn reqRemote(request: http.Request, response: *http.Response, id: u64) !db.Remote {
+    const alloc = request.arena;
+    const r = try db.Remote.byKey(alloc, .id, id);
+    return r orelse fail(response, "error: remote by id '{d}' not found\n", .{id});
+}
+
+pub fn reqUser(request: http.Request, response: *http.Response, r: db.Remote, name: string) !db.User {
+    const alloc = request.arena;
+    const u = try r.findUserBy(alloc, .name, name);
+    return u orelse fail(response, "error: user by name '{s}' not found\n", .{name});
+}
+
+pub fn reqPackage(request: http.Request, response: *http.Response, u: db.User, name: string) !db.Package {
+    const alloc = request.arena;
+    const p = try u.findPackageBy(alloc, .name, name);
+    return p orelse fail(response, "error: package by name '{s}' not found\n", .{name});
 }
