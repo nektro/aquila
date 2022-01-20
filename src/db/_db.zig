@@ -15,6 +15,13 @@ pub const Time = @import("./Time.zig").Time;
 
 pub fn connect(alloc: std.mem.Allocator, path: string) !void {
     const abspath = try std.fs.path.resolve(alloc, &.{path});
+
+    // sqlite no longer does this for us
+    if (!try extras.doesFileExist(null, abspath)) {
+        const f = try std.fs.cwd().createFile(abspath, .{});
+        f.close();
+    }
+
     const nulpath = try extras.addSentinel(alloc, u8, abspath, 0);
     db.* = try Engine.connect(nulpath);
 
