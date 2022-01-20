@@ -125,33 +125,35 @@ fn oa2IdToRemoTy(id: string) db.Remote.Type {
     std.debug.panic("unsupported client provider: {s}", .{id});
 }
 
-pub fn pek_get_user_path(alloc: std.mem.Allocator, uid: ulid.ULID) !string {
+pub fn pek_get_user_path(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, uid: ulid.ULID) !void {
     const user = try db.User.byKey(alloc, .uuid, uid);
-    return try std.fmt.allocPrint(alloc, "{d}/{s}", .{ user.?.provider, user.?.name });
+    try writer.print("{d}/{s}", .{ user.?.provider, user.?.name });
 }
 
-pub fn pek_version_pkg_path(alloc: std.mem.Allocator, vers: db.Version) !string {
+pub fn pek_version_pkg_path(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, vers: db.Version) !void {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
     const user = try db.User.byKey(alloc, .uuid, pkg.?.owner);
-    return try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ user.?.provider, user.?.name, pkg.?.name });
+    try writer.print("{d}/{s}/{s}", .{ user.?.provider, user.?.name, pkg.?.name });
 }
 
-pub fn pek_version_pkg_stars(alloc: std.mem.Allocator, vers: db.Version) !u64 {
+pub fn pek_version_pkg_stars(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, vers: db.Version) !void {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
-    return pkg.?.star_count;
+    try writer.print("{d}", .{pkg.?.star_count});
 }
 
-pub fn pek_version_pkg_description(alloc: std.mem.Allocator, vers: db.Version) !string {
+pub fn pek_version_pkg_description(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, vers: db.Version) !void {
     const pkg = try db.Package.byKey(alloc, .uuid, vers.p_for);
-    return pkg.?.description;
+    try writer.writeAll(pkg.?.description);
 }
 
-pub fn pek_tree_url(alloc: std.mem.Allocator, remo: db.Remote, repo: string, commit: string) !string {
+pub fn pek_tree_url(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, remo: db.Remote, repo: string, commit: string) !void {
+    _ = alloc;
     return switch (remo.type) {
-        .github => try std.fmt.allocPrint(alloc, "https://github.com/{s}/tree/{s}", .{ repo, commit }),
+        .github => try writer.print("https://github.com/{s}/tree/{s}", .{ repo, commit }),
     };
 }
 
-pub fn pek_fix_bytes(alloc: std.mem.Allocator, size: u64) !string {
-    return try extras.fmtByteCountIEC(alloc, size);
+pub fn pek_fix_bytes(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, size: u64) !void {
+    _ = alloc;
+    try writer.writeAll(try extras.fmtByteCountIEC(alloc, size));
 }
