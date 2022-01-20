@@ -1,0 +1,42 @@
+            h2("Package "code({pkg.name})"@"code({version})" Details")
+            table[class="left"](
+                tbody(
+                    tr(td("ULID")td({version.uuid}))
+                    tr(td("For")td(a[href=("/"{repo.id}"/"{owner.name}"/"{pkg.name})]({repo.id}"/"{owner.name}"/"{pkg.name})))
+                    tr(td("Published On")td({version.created_on}))
+                    tr(td("Author")td(a[href=("/"{repo.id}"/"{owner.name})]({repo.id}"/"{owner.name})))
+                    tr(td("Commit")td(code({version.commit_to})))
+                    tr(td("Unpacked Size")td({#fix_bytes version.unpacked_size}))
+                    tr(td("Total Size")td({#fix_bytes version.total_size}))
+                    tr(td("Tar Size")td({#fix_bytes version.tar_size}))
+                    tr(td("Tar Hash")td(code({version.tar_hash})))
+                    tr(td("Tar Download")td(a[href=({version}".tar.gz")]("Download")))
+                )
+            )
+            h3("File List")
+            ul(
+                {#each version.files.data}
+                li(code({this}))
+                /each/
+            )
+            h3("Dependencies")
+            ul(
+                {#each version.deps.data}
+                li(code({#fix_dep this}))
+                /each/
+            )
+            h3("Root Dependencies")
+            ul(
+                {#each version.root_deps.data}
+                li(code({#fix_dep this}))
+                /each/
+            )
+            h3("Build Dependencies")
+            ul(
+                {#each version.build_deps.data}
+                li(code({#fix_dep this}))
+                /each/
+            )
+        )
+    )
+)

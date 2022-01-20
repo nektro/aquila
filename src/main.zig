@@ -157,3 +157,10 @@ pub fn pek_fix_bytes(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer,
     _ = alloc;
     try writer.writeAll(try extras.fmtByteCountIEC(alloc, size));
 }
+
+pub fn pek_fix_dep(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, d: zigmod.Dep) !void {
+    _ = alloc;
+    try writer.writeAll(@tagName(d.type));
+    try writer.print(" {s}", .{d.path});
+    if (d.version.len > 0) try writer.print(" {s}", .{d.version});
+}

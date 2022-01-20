@@ -16,6 +16,7 @@ const _package = @import("./package.zig");
 const _dashboard = @import("./dashboard.zig");
 const _import = @import("./import.zig");
 const _do_import = @import("./do_import.zig");
+const _version = @import("./version.zig");
 
 pub fn init(alloc: std.mem.Allocator) !void {
     var secret_seed: [std.rand.DefaultCsprng.secret_seed_length]u8 = undefined;
@@ -42,6 +43,7 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         http.router.get("/do_import", Middleware(_do_import.get).next),
         http.router.get("/:remote/:user", Middleware(_user.get).next),
         http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
+        http.router.get("/:remote/:user/:package/:version", Middleware(_version.get).next),
     });
 }
 

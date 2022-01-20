@@ -164,3 +164,14 @@ pub fn reqPackage(request: http.Request, response: *http.Response, u: db.User, n
     const p = try u.findPackageBy(alloc, .name, name);
     return p orelse fail(response, "error: package by name '{s}' not found\n", .{name});
 }
+
+pub fn reqVersion(request: http.Request, response: *http.Response, p: db.Package, major: u32, minor: u32) !db.Version {
+    const alloc = request.arena;
+    const v = try p.findVersionBy(alloc, major, minor);
+    return v orelse fail(response, "error: version by id 'v{d}.{d}' not found\n", .{ major, minor });
+}
+
+pub fn parseInt(comptime T: type, input: ?string, response: *http.Response, comptime fmt: string, args: anytype) !T {
+    const str = input orelse return fail(response, fmt, args);
+    return std.fmt.parseUnsigned(T, str, 10) catch fail(response, fmt, args);
+}
