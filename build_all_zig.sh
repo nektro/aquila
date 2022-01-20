@@ -7,6 +7,9 @@ rev=$(git log --format=%h -1)
 
 targets="
 x86_64-linux-musl
+aarch64-linux-musl
+riscv64-linux-musl
+powerpc64-linux-musl
 "
 
 for item in $targets
