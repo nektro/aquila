@@ -14,7 +14,7 @@ git https://github.com/truemedian/zfetch commit-d7c0424d4251f23c9e3f87878e4d8687
 git https://github.com/truemedian/hzzp commit-bf5aaf224e94561e035a631c3c40fbf02faa27d2
 git https://github.com/MasterQ32/zig-network commit-b9c52822f3bb3ce25164a2f1f6eedee4d1c0a279
 git https://github.com/nektro/zig-json commit-908ecfa6d611f3ee0d9d89434e7494a653cfd5e1
-git https://github.com/nektro/zig-flag commit-cd1a32c6b4be9ed0e6c84a94dbe026990575cb2d
+git https://github.com/nektro/zig-flag commit-c066b62dc13640279c30b3b8b05aca6fd7a43f6e
 git https://github.com/nektro/zig-ulid commit-eeb1c87f499416bd08c8ba4896f616a3cb6f7d77
 git https://github.com/nektro/zig-time commit-60659345352a1d63c8a087c6bec784d026ceedd3
 git https://github.com/nektro/zigmod commit-58ea4175f98b725c22eac691a41c0b03f9dcdebb

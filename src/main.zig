@@ -38,6 +38,7 @@ pub fn main() !void {
     //
 
     flag.init(alloc);
+    defer flag.deinit();
 
     try flag.addSingle("domain");
     try flag.addSingle("db");
