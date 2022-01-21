@@ -136,13 +136,14 @@ pub fn fileList(alloc: std.mem.Allocator, path: string) ![]const string {
     return try extras.fileList(alloc, dir);
 }
 
-pub fn assert(cond: bool, response: *http.Response, comptime fmt: string, args: anytype) !void {
+pub fn assert(cond: bool, response: *http.Response, status: http.Response.Status, comptime fmt: string, args: anytype) !void {
     if (!cond) {
-        return fail(response, fmt, args);
+        return fail(response, status, fmt, args);
     }
 }
 
-pub fn fail(response: *http.Response, comptime fmt: string, args: anytype) (http.Response.Writer.Error || error{HttpNoOp}) {
+pub fn fail(response: *http.Response, status: http.Response.Status, comptime fmt: string, args: anytype) (http.Response.Writer.Error || error{HttpNoOp}) {
+    response.status_code = status;
     try response.writer().print(fmt ++ "\n", args);
     return error.HttpNoOp;
 }
@@ -150,28 +151,28 @@ pub fn fail(response: *http.Response, comptime fmt: string, args: anytype) (http
 pub fn reqRemote(request: http.Request, response: *http.Response, id: u64) !db.Remote {
     const alloc = request.arena;
     const r = try db.Remote.byKey(alloc, .id, id);
-    return r orelse fail(response, "error: remote by id '{d}' not found", .{id});
+    return r orelse fail(response, .not_found, "error: remote by id '{d}' not found", .{id});
 }
 
 pub fn reqUser(request: http.Request, response: *http.Response, r: db.Remote, name: string) !db.User {
     const alloc = request.arena;
     const u = try r.findUserBy(alloc, .name, name);
-    return u orelse fail(response, "error: user by name '{s}' not found", .{name});
+    return u orelse fail(response, .not_found, "error: user by name '{s}' not found", .{name});
 }
 
 pub fn reqPackage(request: http.Request, response: *http.Response, u: db.User, name: string) !db.Package {
     const alloc = request.arena;
     const p = try u.findPackageBy(alloc, .name, name);
-    return p orelse fail(response, "error: package by name '{s}' not found", .{name});
+    return p orelse fail(response, .not_found, "error: package by name '{s}' not found", .{name});
 }
 
 pub fn reqVersion(request: http.Request, response: *http.Response, p: db.Package, major: u32, minor: u32) !db.Version {
     const alloc = request.arena;
     const v = try p.findVersionBy(alloc, major, minor);
-    return v orelse fail(response, "error: version by id 'v{d}.{d}' not found", .{ major, minor });
+    return v orelse fail(response, .not_found, "error: version by id 'v{d}.{d}' not found", .{ major, minor });
 }
 
 pub fn parseInt(comptime T: type, input: ?string, response: *http.Response, comptime fmt: string, args: anytype) !T {
-    const str = input orelse return fail(response, fmt, args);
-    return std.fmt.parseUnsigned(T, str, 10) catch fail(response, fmt, args);
+    const str = input orelse return fail(response, .bad_request, fmt, args);
+    return std.fmt.parseUnsigned(T, str, 10) catch fail(response, .bad_request, fmt, args);
 }
