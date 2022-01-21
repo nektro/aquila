@@ -28,7 +28,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     //
 
-    const details = r.getRepo(alloc, repo) catch return _internal.fail(response, "error: fetching repo from remote failed\n", .{});
+    const details = r.getRepo(alloc, repo) catch return _internal.fail(response, "error: fetching repo from remote failed", .{});
 
     var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
 
@@ -38,13 +38,13 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         .argv = &.{ "git", "clone", "--recursive", details.clone_url, "." },
         .max_output_bytes = std.math.maxInt(usize),
     });
-    try _internal.assert(result1.term == .Exited, response, "error: executing git clone failed: {}\n", .{result1.term});
+    try _internal.assert(result1.term == .Exited, response, "error: executing git clone failed: {}", .{result1.term});
     try _internal.assert(result1.term.Exited == 0, response, "error: executing tar failed with exit code: {d}\n{s}", .{ result1.term.Exited, result1.stderr });
 
     var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
     defer dir.close();
 
-    const modfile = zigmod.ModFile.from_dir(alloc, dir) catch |err| return _internal.fail(response, "error: parsing zig.mod failed: {s}\n", .{@errorName(err)});
+    const modfile = zigmod.ModFile.from_dir(alloc, dir) catch |err| return _internal.fail(response, "error: parsing zig.mod failed: {s}", .{@errorName(err)});
     const name = modfile.name;
     const license = modfile.yaml.get_string("license");
     const mdesc = modfile.yaml.get("description");
@@ -57,7 +57,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     try dir.deleteTree(".git");
     const unpackedsize = try _internal.dirSize(alloc, path);
 
-    try _internal.assert(try extras.doesFileExist(dir, "zigmod.lock"), response, "error: repository '{s}' does not contain a zigmod.lock file.\n", .{repo});
+    try _internal.assert(try extras.doesFileExist(dir, "zigmod.lock"), response, "error: repository '{s}' does not contain a zigmod.lock file.", .{repo});
     const cachepath = try std.fs.path.join(alloc, &.{ ".zigmod", "deps" });
     zigmod.commands.ci.do(cachepath, dir) catch |err| return _internal.fail(response, "error: zigmod ci failed: {s}\n", .{@errorName(err)});
     try dir.deleteFile("deps.zig");
@@ -65,7 +65,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     try dir.deleteTree(".zigmod");
 
     const filelist = try _internal.fileList(alloc, path);
-    try _internal.assert(filelist.len > 0, response, "error: found no files in repo\n", .{});
+    try _internal.assert(filelist.len > 0, response, "error: found no files in repo", .{});
 
     const tarpath = try std.mem.concat(alloc, u8, &.{ path, ".tar.gz" });
 
@@ -77,7 +77,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         .argv = argv,
         .cwd = path,
     });
-    try _internal.assert(result2.term == .Exited, response, "error: executing tar failed: {}\n", .{result2.term});
+    try _internal.assert(result2.term == .Exited, response, "error: executing tar failed: {}", .{result2.term});
     try _internal.assert(result2.term.Exited == 0, response, "error: executing tar failed with exit code: {d}\n{s}", .{ result2.term.Exited, result2.stderr });
 
     const tarfile = try std.fs.cwd().openFile(tarpath, .{});
