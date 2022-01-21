@@ -30,6 +30,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     const details = r.getRepo(alloc, repo) catch return _internal.fail(response, .internal_server_error, "error: fetching repo from remote failed", .{});
 
+    // TODO assert owner is current user
+
     var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
 
     const result1 = try std.ChildProcess.exec(.{
@@ -70,6 +72,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const tarpath = try std.mem.concat(alloc, u8, &.{ path, ".tar.gz" });
 
     // TODO use zig to do .tar.gz
+    // TODO migrate to using .zip
     const argv = try _internal.mergeSlices(alloc, string, &.{ "tar", "-czf", tarpath }, filelist);
 
     const result2 = try std.ChildProcess.exec(.{
