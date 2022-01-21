@@ -68,10 +68,10 @@ pub const Version = struct {
         try writer.print("v{d}.{d}", .{ self.real_major, self.real_minor });
     }
 
-    pub fn setVersion(self: Version, alloc: std.mem.Allocator, approver: User, major: u32, minor: u32) !void {
-        try self.updateColumn(alloc, .approved_by, try approver.uuid.toString(alloc));
-        try self.updateColumn(alloc, .real_major, major);
-        try self.updateColumn(alloc, .real_minor, minor);
+    pub fn setVersion(self: *Version, alloc: std.mem.Allocator, approver: User, major: u32, minor: u32) !void {
+        try self.update(alloc, .approved_by, try approver.uuid.toString(alloc));
+        try self.update(alloc, .real_major, major);
+        try self.update(alloc, .real_minor, minor);
     }
 };
 
