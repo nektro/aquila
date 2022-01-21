@@ -1,8 +1,5 @@
-const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
-
-const db = @import("./../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
 

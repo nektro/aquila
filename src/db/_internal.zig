@@ -9,7 +9,6 @@ pub var db: Engine = undefined;
 
 const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 pub var factory = ulid.Factory.init(epoch, std.crypto.random.*);
-const _db = @import("./_db.zig");
 
 pub fn ByKeyGen(comptime T: type) type {
     return struct {

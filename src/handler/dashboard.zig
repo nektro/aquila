@@ -1,6 +1,4 @@
-const std = @import("std");
 const http = @import("apple_pie");
-const jwt = @import("jwt");
 
 const db = @import("./../db/_db.zig");
 
