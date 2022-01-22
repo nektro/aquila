@@ -64,6 +64,8 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     const builddeps = modfile.builddeps;
 
     const commit = try git.rev_HEAD(alloc, dir);
+    try _internal.assert((try p.findVersionBy(alloc, .commit_to, commit)) == null, response, .bad_request, "error: Version at this commit already created", .{});
+
     try dir.deleteTree(".git");
     const unpackedsize = try _internal.dirSize(alloc, path);
 
@@ -102,10 +104,6 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
-
-    //
-
-    // TODO c.Assert(db.Version{}.ByCommit(pkg, commit) == nil, "Version at this commit already created.")
 
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps);
     try p.update(alloc, .license, modfile.yaml.get_string("license"));

@@ -51,6 +51,8 @@ pub const Package = struct {
 
     usingnamespace _internal.ByKeyGen(Package);
 
+    pub const findVersionBy = _internal.FindByGen(Package, Version, .p_for, .uuid).first;
+
     pub fn latest(alloc: std.mem.Allocator) ![]const Package {
         return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});
     }
