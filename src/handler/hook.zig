@@ -44,8 +44,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     const details = switch (r.type) {
         .github => try r.parseDetails(alloc, val.get("repository") orelse return _internal.fail(response, .internal_server_error, "error: webhook json key not found: repository", .{})),
     };
-
-    // TODO assert repo owner is this one
+    try _internal.assert(std.mem.eql(u8, details.owner, u.name), response, .forbidden, "error: you do not have the authority to manage this package", .{});
 
     var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
 

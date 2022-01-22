@@ -43,6 +43,7 @@ pub const Remote = struct {
         description: string,
         default_branch: string,
         star_count: u32,
+        owner: string,
     };
 
     pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
@@ -152,6 +153,7 @@ pub const Remote = struct {
                 .description = raw.getT("description", .String) orelse "",
                 .default_branch = raw.getT("default_branch", .String).?,
                 .star_count = @intCast(u32, raw.getT("stargazers_count", .Int).?),
+                .owner = raw.getT(.{ "owner", "login" }, .String).?,
             },
         };
     }
