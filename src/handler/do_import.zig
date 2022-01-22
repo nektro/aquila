@@ -31,8 +31,6 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const details = r.getRepo(alloc, repo) catch return _internal.fail(response, .internal_server_error, "error: fetching repo from remote failed", .{});
     try _internal.assert(std.mem.eql(u8, details.owner, u.name), response, .forbidden, "error: you do not have the authority to manage this package", .{});
 
-    // TODO assert owner is current user
-
     var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
 
     const result1 = try std.ChildProcess.exec(.{
