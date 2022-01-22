@@ -36,10 +36,10 @@ jobs:
       - run: zig build
       - run: ./build_release.sh x86_64-linux-musl
 
-      # # Github Release
-      # - run: ./changelog.sh
-      # - run: zigmod aq install 1/nektro/ghr
-      # - run: ./make_release.sh ${{ secrets.GITHUB_TOKEN }}
+      # Github Release
+      - run: ./changelog.sh
+      - run: zigmod aq install 1/nektro/ghr
+      - run: ./make_release.sh ${{ secrets.GITHUB_TOKEN }}
 
       # # Docker image
       # - uses: docker/build-push-action@v1
