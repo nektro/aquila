@@ -168,7 +168,7 @@ pub fn reqPackage(request: http.Request, response: *http.Response, u: db.User, n
 
 pub fn reqVersion(request: http.Request, response: *http.Response, p: db.Package, major: u32, minor: u32) !db.Version {
     const alloc = request.arena;
-    const v = try p.findVersionBy(alloc, major, minor);
+    const v = try p.findVersionAt(alloc, major, minor);
     return v orelse fail(response, .not_found, "error: version by id 'v{d}.{d}' not found", .{ major, minor });
 }
 

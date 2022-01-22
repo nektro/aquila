@@ -71,7 +71,7 @@ pub const Package = struct {
         return (try db.first(alloc, Version, "select * from versions where p_for = ? and (real_major > 0 or real_minor > 0) order by id desc", .{self.uuid})) orelse @panic("unreachable");
     }
 
-    pub fn findVersionBy(self: Package, alloc: std.mem.Allocator, major: u32, minor: u32) !?Version {
+    pub fn findVersionAt(self: Package, alloc: std.mem.Allocator, major: u32, minor: u32) !?Version {
         return try db.first(alloc, Version, "select * from versions where p_for = ? and real_major = ? and real_minor = ?", .{ self.uuid, major, minor });
     }
 };
