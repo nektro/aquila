@@ -18,13 +18,14 @@ html[lang="en"](
                 )
                 nav[class="terminal-menu"](
                     ul(
-                        li(a[class="menu-item" href="/dashboard"]("Dashboard"))
                         {#if user}
+                        li(a[class="menu-item" href="/dashboard"]("Dashboard"))
                         li(a[class="menu-item" href="/import"]("Import"))
-                        li(a[class="menu-item" href="/notifications"]("Notifications"))
-                        li(a[class="menu-item" href="/settings"]("Settings"))
+                        // li(a[class="menu-item" href="/notifications"]("Notifications"))
+                        // li(a[class="menu-item" href="/settings"]("Settings"))
                         li(a[class="menu-item" href="/logout"]("Logout"))
                         <else>
+                        li(a[class="menu-item" href="/login"]("Log In"))
                         li(a[class="menu-item" href="/about"]("About"))
                         li(a[class="menu-item" href="/contact"]("Contact"))
                         li(a[class="menu-item" href="https://github.com/nektro/aquila"]("Source Code"))
