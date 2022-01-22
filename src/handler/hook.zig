@@ -39,9 +39,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
         },
     }
 
-    //
-
-    const details = switch (r.type) {
+    const details: db.Remote.RepoDetails = switch (r.type) {
         .github => try r.parseDetails(alloc, val.get("repository") orelse return _internal.fail(response, .internal_server_error, "error: webhook json key not found: repository", .{})),
     };
     try _internal.assert(std.mem.eql(u8, details.owner, u.name), response, .forbidden, "error: you do not have the authority to manage this package", .{});
@@ -112,6 +110,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps);
     try p.update(alloc, .license, modfile.yaml.get_string("license"));
     try p.update(alloc, .description, modfile.yaml.get_string("description"));
+    try p.update(alloc, .star_count, details.star_count);
 
     const old_v = try p.getLatestValid(alloc);
     try v.setVersion(alloc, u, old_v.real_major, old_v.real_minor + 1);
