@@ -95,16 +95,12 @@ const StringList = struct {
         var res = std.ArrayList(u8).init(alloc);
         defer res.deinit();
         const w = res.writer();
-        // since list.items is initialized with `&[_]T{}`
-        // this and the `[1..]` at the end are blocked on https://github.com/ziglang/zig/issues/6706
-        // this workaround forces `.ptr` to not be `@0` when no other data has been written
-        try w.writeAll("w");
 
         for (self.data) |item, i| {
             if (i > 0) try w.writeAll("\n");
             try w.writeAll(item);
         }
-        return res.toOwnedSlice()[1..];
+        return res.toOwnedSlice();
     }
 };
 
@@ -140,15 +136,11 @@ const DepList = struct {
         var res = std.ArrayList(u8).init(alloc);
         defer res.deinit();
         const w = res.writer();
-        // since list.items is initialized with `&[_]T{}`
-        // this and the `[1..]` at the end are blocked on https://github.com/ziglang/zig/issues/6706
-        // this workaround forces `.ptr` to not be `@0` when no other data has been written
-        try w.writeAll("w");
 
         for (self.data) |item, i| {
             if (i > 0) try w.writeAll("\n");
             try w.print("{s} {s} {s}", .{ @tagName(item.type), item.path, item.version });
         }
-        return res.toOwnedSlice()[1..];
+        return res.toOwnedSlice();
     }
 };
