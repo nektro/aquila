@@ -2,6 +2,7 @@ id: ehmrk2r56odz4np1cy1oibtqv9q03bxtyz36twutgyti0oj8
 name: aquila
 license: AGPL-3.0
 description: A federated package index and CI system for the Zig programming language built around the Zigmod package manager.
+min_zig_version: 0.9.0
 bin: True
 provides: ["aquila"]
 root_files:
