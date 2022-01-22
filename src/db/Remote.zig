@@ -158,16 +158,6 @@ pub const Remote = struct {
         };
     }
 
-    const GithubWebhookData = struct {
-        name: string,
-        config: struct {
-            url: string,
-            events: []const string,
-            content_type: string,
-            active: bool,
-        },
-    };
-
     pub fn installWebhook(self: Remote, alloc: std.mem.Allocator, user: User, rm_id: string, rm_name: string, hookurl: string) !?json.Value {
         _ = rm_id;
         return switch (self.type) {
@@ -226,3 +216,13 @@ fn containsPackage(haystack: []const Package, id: string, name: string) bool {
     }
     return false;
 }
+
+const GithubWebhookData = struct {
+    name: string,
+    config: struct {
+        url: string,
+        events: []const string,
+        content_type: string,
+        active: bool,
+    },
+};
