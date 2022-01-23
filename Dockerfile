@@ -9,7 +9,7 @@ RUN zig build -Dversion=r${RELEASE_NUM} -Drelease
 
 FROM alpine
 COPY --from=golang /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=golang /app/zig-out/bin/aquila-zig /app/aquila
+COPY --from=golang /app/zig-out/bin/aquila /app/aquila
 RUN apk add git
 
 VOLUME /data

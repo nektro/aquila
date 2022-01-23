@@ -12,7 +12,7 @@ pub fn build(b: *std.build.Builder) void {
 
     const use_full_name = b.option(bool, "use-full-name", "") orelse false;
     const with_os_arch = b.fmt("-{s}-{s}", .{ @tagName(target.os_tag orelse builtin.os.tag), @tagName(target.cpu_arch orelse builtin.cpu.arch) });
-    const exe_name = b.fmt("{s}{s}", .{ "aquila-zig", if (use_full_name) with_os_arch else "" });
+    const exe_name = b.fmt("{s}{s}", .{ "aquila", if (use_full_name) with_os_arch else "" });
 
     const exe = b.addExecutable(exe_name, "src/main.zig");
     exe.setTarget(target);
