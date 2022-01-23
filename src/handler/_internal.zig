@@ -6,9 +6,13 @@ const pek = @import("pek");
 const jwt = @import("jwt");
 const extras = @import("extras");
 const ulid = @import("ulid");
+const root = @import("root");
+const options = @import("build_options");
 
 const cookies = @import("../cookies.zig");
 const db = @import("../db/_db.zig");
+
+const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 
 pub var jwt_secret: string = "";
 pub var access_tokens: std.StringHashMap(string) = undefined;
@@ -28,8 +32,18 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
 }
 
 pub const JWT = struct {
+    const Payload = struct {
+        iss: string, // issuer
+        sub: string, // subject
+        iat: i64, // issued-at
+        exp: i64, // expiration
+        nbf: u64, // not-before
+    };
+
     pub fn veryifyRequest(request: http.Request) !string {
-        return try jwt.validateMessage(request.arena, .HS256, (try tokenFromRequest(request)) orelse return error.NoTokenFound, .{ .key = jwt_secret });
+        const text = (try tokenFromRequest(request)) orelse return error.NoTokenFound;
+        const payload = try jwt.validate(Payload, request.arena, .HS256, text, .{ .key = jwt_secret });
+        return payload.sub;
     }
 
     fn tokenFromRequest(request: http.Request) !?string {
@@ -63,7 +77,14 @@ pub const JWT = struct {
     }
 
     pub fn encodeMessage(alloc: std.mem.Allocator, msg: string) !string {
-        return try jwt.encodeMessage(alloc, .HS256, msg, .{ .key = jwt_secret });
+        const p = Payload{
+            .iss = root.name ++ ".r" ++ options.version,
+            .sub = msg,
+            .iat = std.time.timestamp(),
+            .exp = std.time.timestamp() + (std.time.s_per_hour * 24 * 30),
+            .nbf = epoch / std.time.ms_per_s,
+        };
+        return try jwt.encode(alloc, .HS256, p, .{ .key = jwt_secret });
     }
 };
 
