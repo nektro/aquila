@@ -1,15 +1,6 @@
 FROM alpine as builder
 WORKDIR /app
-COPY . .
-ARG RELEASE_NUM
-RUN apk add bash sudo wget curl jq git
-RUN ./download_zig.sh 0.9.0
-RUN zigmod ci
-RUN zig build -Dversion=r${RELEASE_NUM} -Drelease -Dtarget=x86_64-linux
-
-FROM alpine
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /app/zig-out/bin/aquila /app/aquila
+COPY ./bin/aquila-linux-x86_64 /app/aquila
 RUN apk add git
 
 VOLUME /data
