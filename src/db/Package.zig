@@ -44,7 +44,7 @@ pub const Package = struct {
             .description = desc,
             .license = license,
             .latest_version = "",
-            .hook_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 16),
+            .hook_secret = try extras.randomSlice(alloc, std.crypto.random.*, u8, 16),
             .star_count = star_count,
         });
     }
