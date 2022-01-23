@@ -1,3 +1,4 @@
+const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
 
@@ -12,6 +13,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/user.pek", .{
         .aquila_version = @import("root").version,
+        .title = try std.fmt.allocPrint(alloc, "{d}/{s}", .{ r.id, o.name }),
         .user = u,
         .repo = r,
         .owner = o,

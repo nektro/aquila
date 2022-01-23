@@ -14,6 +14,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/import.pek", .{
         .aquila_version = @import("root").version,
+        .title = "Import a Repository",
         .user = @as(?db.User, u),
         .remote = r,
         .list = l,

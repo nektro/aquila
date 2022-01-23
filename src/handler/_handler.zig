@@ -35,8 +35,8 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
     return http.router.Router(void, &.{
         http.router.get("/", Middleware(_index.get).next),
         file_route("/theme.css"),
-        http.router.get("/about", Middleware(StaticPek("/about.pek").get).next),
-        http.router.get("/contact", Middleware(StaticPek("/contact.pek").get).next),
+        http.router.get("/about", Middleware(StaticPek("/about.pek", "About").get).next),
+        http.router.get("/contact", Middleware(StaticPek("/contact.pek", "Contact").get).next),
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),
         http.router.get("/dashboard", Middleware(_dashboard.get).next),
@@ -76,13 +76,14 @@ fn file_route(comptime path: string) http.router.Route {
     return http.router.get(path, T.f);
 }
 
-fn StaticPek(comptime path: string) type {
+fn StaticPek(comptime path: string, comptime title: string) type {
     return struct {
         pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
             _ = args;
 
             try _internal.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
+                .title = title,
                 .user = try _internal.getUserOp(response, request),
             });
         }

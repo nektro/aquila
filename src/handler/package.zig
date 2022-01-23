@@ -27,6 +27,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/package.pek", .{
         .aquila_version = @import("root").version,
+        .title = try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ r.id, o.name, p.name }),
         .user = u,
         .repo = r,
         .owner = o,
