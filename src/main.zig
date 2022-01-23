@@ -17,8 +17,9 @@ const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 
 pub const name = "Aquila";
-pub var version: string = "";
 pub const log_level: std.log.Level = .debug;
+
+pub var version: string = "";
 pub var datadirpath: string = "";
 pub var domain: string = "";
 
