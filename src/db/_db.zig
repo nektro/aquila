@@ -21,7 +21,7 @@ pub fn connect(alloc: std.mem.Allocator, path: string) !void {
         f.close();
     }
 
-    const nulpath = try extras.addSentinel(alloc, u8, abspath, 0);
+    const nulpath = try alloc.dupeZ(u8, abspath);
     db.* = try Engine.connect(nulpath);
 
     try _internal.createTableT(alloc, Remote);
