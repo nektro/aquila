@@ -1,4 +1,4 @@
-FROM alpine as golang
+FROM alpine as builder
 WORKDIR /app
 COPY . .
 ARG RELEASE_NUM
@@ -8,8 +8,8 @@ RUN zigmod ci
 RUN zig build -Dversion=r${RELEASE_NUM} -Drelease
 
 FROM alpine
-COPY --from=golang /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=golang /app/zig-out/bin/aquila /app/aquila
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/zig-out/bin/aquila /app/aquila
 RUN apk add git
 
 VOLUME /data
