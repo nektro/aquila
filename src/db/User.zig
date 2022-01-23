@@ -10,43 +10,43 @@ const Time = _db.Time;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-pub const User = struct {
-    id: u64 = 0,
-    uuid: ulid.ULID,
-    provider: u64,
-    snowflake: string,
-    name: string,
-    joined_on: Time,
+const User = @This();
 
-    pub const table_name = "users";
+id: u64 = 0,
+uuid: ulid.ULID,
+provider: u64,
+snowflake: string,
+name: string,
+joined_on: Time,
 
-    pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: string) !User {
-        db.mutex.lock();
-        defer db.mutex.unlock();
+pub const table_name = "users";
 
-        return try _internal.insert(alloc, &User{
-            .uuid = _internal.factory.newULID(),
-            .provider = provider,
-            .snowflake = snowflake,
-            .name = name,
-            .joined_on = Time.now(),
-        });
-    }
+pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: string) !User {
+    db.mutex.lock();
+    defer db.mutex.unlock();
 
-    usingnamespace _internal.ByKeyGen(User);
+    return try _internal.insert(alloc, &User{
+        .uuid = _internal.factory.newULID(),
+        .provider = provider,
+        .snowflake = snowflake,
+        .name = name,
+        .joined_on = Time.now(),
+    });
+}
 
-    pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
+usingnamespace _internal.ByKeyGen(User);
 
-    pub fn packages(self: User, alloc: std.mem.Allocator) ![]const Package {
-        return try Package.byKeyAll(alloc, .owner, self.uuid);
-    }
+pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
 
-    pub fn remote(self: User, alloc: std.mem.Allocator) !Remote {
-        for (try Remote.all(alloc)) |item| {
-            if (item.id == self.provider) {
-                return item;
-            }
+pub fn packages(self: User, alloc: std.mem.Allocator) ![]const Package {
+    return try Package.byKeyAll(alloc, .owner, self.uuid);
+}
+
+pub fn remote(self: User, alloc: std.mem.Allocator) !Remote {
+    for (try Remote.all(alloc)) |item| {
+        if (item.id == self.provider) {
+            return item;
         }
-        unreachable;
     }
-};
+    unreachable;
+}
