@@ -22,6 +22,7 @@ pub const log_level: std.log.Level = .debug;
 pub var version: string = "";
 pub var datadirpath: string = "";
 pub var domain: string = "";
+pub var disable_import_repo = false;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -45,6 +46,7 @@ pub fn main() !void {
     try flag.addSingle("db");
     try flag.addSingle("port");
     try flag.addMulti("oauth2-client");
+    try flag.addSingle("disable-import-repo");
 
     _ = try flag.parse(.double);
     try flag.parseEnv();
@@ -57,6 +59,7 @@ pub fn main() !void {
     datadirpath = std.fs.path.dirname(real).?;
 
     domain = flag.getSingle("domain") orelse @panic("missing required --domain flag");
+    disable_import_repo = parseBoolFlag("disable-import-repo", false);
 
     //
 
@@ -118,6 +121,13 @@ pub fn main() !void {
 fn handle_sig() void {
     db.close();
     std.os.exit(0);
+}
+
+fn parseBoolFlag(comptime flagName: string, default: bool) bool {
+    const v = flag.getSingle(flagName);
+    const d = if (default) "1" else "0";
+    const n = std.fmt.parseInt(u1, v orelse d, 10) catch @panic("failed to parse --" ++ flagName ++ " flag");
+    return n == 1;
 }
 
 fn oa2IdToRemoTy(id: string) db.Remote.Type {

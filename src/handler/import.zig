@@ -1,4 +1,5 @@
 const http = @import("apple_pie");
+const root = @import("root");
 
 const db = @import("./../db/_db.zig");
 
@@ -16,6 +17,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         .aquila_version = @import("root").version,
         .title = "Import a Repository",
         .user = @as(?db.User, u),
+        .disabled = root.disable_import_repo,
         .remote = r,
         .list = l,
     });

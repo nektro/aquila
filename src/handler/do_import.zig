@@ -13,6 +13,7 @@ const _internal = @import("./_internal.zig");
 
 pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
     _ = args;
+    try _internal.assert(!root.disable_import_repo, response, .forbidden, "error: importing a repository is temporarily disabled.", .{});
 
     const alloc = request.arena;
     const u = try _internal.getUser(response, request);

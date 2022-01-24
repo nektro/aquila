@@ -1,4 +1,8 @@
             h2("Import A New Project")
+            {#if disabled}
+            h1("Sorry!")
+            p("Importing a repository is turned off for now. Thank you for understanding.")
+            <else>
             table(
                 thead(
                     th("API ID")
@@ -36,6 +40,7 @@
                     /each/
                 )
             )
+            /if/
         )
     )
 )
