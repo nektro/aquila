@@ -77,7 +77,7 @@ pub fn main() !void {
     try handler.init(alloc);
 
     var clients = std.ArrayList(oauth2.Client).init(alloc);
-    for (flag.getMulti("oauth2-client").?) |item| {
+    for (flag.getMulti("oauth2-client") orelse @panic("missing required --oauth2-client flag")) |item| {
         var iter = std.mem.split(u8, item, "|");
         try clients.append(.{
             .provider = oauth2.providerById(iter.next().?).?,
