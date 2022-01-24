@@ -84,7 +84,7 @@ pub fn listUserRepos(self: Remote, alloc: std.mem.Allocator, user: User) ![]cons
 
     switch (self.type) {
         .github => blk: {
-            const val = try self.apiRequest(alloc, user, "/user/repos?per_page=100");
+            const val = try self.apiRequest(alloc, user, "/user/repos?per_page=100&sort=updated");
             if (val == null) break :blk;
             for (val.?.Array) |item| {
                 if (std.mem.eql(u8, item.getT("language", .String) orelse "", "Zig")) {
