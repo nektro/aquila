@@ -28,7 +28,7 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
     const head = files.@"/_header.pek";
     const page = @field(files, name);
     const tmpl = comptime pek.parse(head ++ page);
-    try pek.compile(alloc, w, tmpl, data);
+    try pek.compile(root, alloc, w, tmpl, data);
 }
 
 pub const JWT = struct {
