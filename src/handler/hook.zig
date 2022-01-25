@@ -37,15 +37,23 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
             const branch = val.getT(.{ "repository", "default_branch" }, .String) orelse return _internal.fail(response, .bad_request, "error: webhook json key not found: repository.default_branch", .{});
             try _internal.assert(std.mem.eql(u8, ref, try std.fmt.allocPrint(alloc, "refs/heads/{s}", .{branch})), response, .bad_request, "error: push even was not to default branch: {s}", .{ref});
         },
+        .gitea => {
+            const event_type = headers.get("X-Gitea-Event") orelse "";
+            try _internal.assert(std.mem.eql(u8, event_type, "push"), response, .bad_request, "error: unknown webhook event type: {s}", .{event_type});
+
+            const ref = val.getT("ref", .String) orelse return _internal.fail(response, .bad_request, "error: webhook json key not found: ref", .{});
+            const branch = val.getT(.{ "repository", "default_branch" }, .String) orelse return _internal.fail(response, .bad_request, "error: webhook json key not found: repository.default_branch", .{});
+            try _internal.assert(std.mem.eql(u8, ref, try std.fmt.allocPrint(alloc, "refs/heads/{s}", .{branch})), response, .bad_request, "error: push even was not to default branch: {s}", .{ref});
+        },
     }
 
     const details: db.Remote.RepoDetails = switch (r.type) {
         .github => try r.parseDetails(alloc, val.get("repository") orelse return _internal.fail(response, .internal_server_error, "error: webhook json key not found: repository", .{})),
+        .gitea => try r.parseDetails(alloc, val.get("repository") orelse return _internal.fail(response, .internal_server_error, "error: webhook json key not found: repository", .{})),
     };
     try _internal.assert(std.mem.eql(u8, details.owner, u.name), response, .forbidden, "error: you do not have the authority to manage this package", .{});
 
     var path = std.mem.span(cmisc.mkdtemp(try alloc.dupeZ(u8, "/tmp/XXXXXX")));
-
     const result1 = try std.ChildProcess.exec(.{
         .allocator = alloc,
         .cwd = path,

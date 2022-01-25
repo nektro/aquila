@@ -27,6 +27,7 @@ pub var all_remotes: []const Remote = &.{};
 
 pub const Type = enum {
     github,
+    gitea,
 
     pub const BaseType = string;
 };
@@ -94,12 +95,25 @@ pub fn listUserRepos(self: Remote, alloc: std.mem.Allocator, user: User) ![]cons
                 }
             }
         },
+        .gitea => blk: {
+            const endpoint = try std.fmt.allocPrint(alloc, "/repos/search?uid={s}&limit=100&sort=updated&private=false", .{user.snowflake});
+            const resp = (try self.apiRequest(alloc, user, endpoint)) orelse break :blk;
+            const val = resp.getT("data", .Array) orelse break :blk;
+            for (val) |item| {
+                // NOTE: this filter will not have an effect until Gitea 1.17.0 lands (#18395)
+                if (std.mem.eql(u8, item.getT("language", .String) orelse "", "Zig")) {
+                    const id = try std.fmt.allocPrint(alloc, "{d}", .{item.getT("id", .Int).?});
+                    const name = item.getT("full_name", .String).?;
+                    try list.append(.{ .id = id, .name = name, .added = containsPackage(pkgs, id) });
+                }
+            }
+        },
     }
     return list.toOwnedSlice();
 }
 
 fn apiRequest(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string) !?json.Value {
-    const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
+    const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(alloc), endpoint });
     defer alloc.free(url);
 
     const req = try zfetch.Request.init(alloc, url, null);
@@ -110,7 +124,10 @@ fn apiRequest(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: str
 
     if (user) |_| {
         if (_handler.getAccessToken(try user.?.uuid.toString(alloc))) |token| {
-            try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token }));
+            switch (self.type) {
+                .github => try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token })),
+                .gitea => try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "token", token })),
+            }
         }
     }
 
@@ -126,9 +143,10 @@ fn apiRequest(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: str
     return val;
 }
 
-fn apiRoot(self: Remote) error{}!string {
+fn apiRoot(self: Remote, alloc: std.mem.Allocator) !string {
     return switch (self.type) {
         .github => "https://api.github.com",
+        .gitea => try std.fmt.allocPrint(alloc, "https://{s}/api/v1", .{self.domain}),
     };
 }
 
@@ -140,6 +158,7 @@ pub fn getRepo(self: Remote, alloc: std.mem.Allocator, repo: string) !RepoDetail
             null,
             try std.mem.join(alloc, "/", switch (self.type) {
                 .github => &.{ "", "repos", repo },
+                .gitea => &.{ "", "repos", repo },
             }),
         )) orelse return error.ApiRequestFail,
     );
@@ -156,6 +175,15 @@ pub fn parseDetails(self: Remote, alloc: std.mem.Allocator, raw: json.Value) !Re
             .star_count = @intCast(u32, raw.getT("stargazers_count", .Int).?),
             .owner = raw.getT(.{ "owner", "login" }, .String).?,
         },
+        .gitea => .{
+            .id = try std.fmt.allocPrint(alloc, "{}", .{raw.getT("id", .Int).?}),
+            .name = raw.getT("name", .String).?,
+            .clone_url = raw.getT("clone_url", .String).?,
+            .description = raw.getT("description", .String).?,
+            .default_branch = raw.getT("default_branch", .String).?,
+            .star_count = @intCast(u32, raw.getT("stars_count", .Int).?),
+            .owner = raw.getT(.{ "owner", "login" }, .String).?,
+        },
     };
 }
 
@@ -165,11 +193,14 @@ pub fn installWebhook(self: Remote, alloc: std.mem.Allocator, user: User, rm_id:
         .github => try self.apiPost(alloc, user, try std.mem.concat(alloc, u8, &.{ "/repos/", rm_name, "/hooks" }), GithubWebhookData{
             .config = .{ .url = hookurl },
         }),
+        .gitea => try self.apiPost(alloc, user, try std.mem.concat(alloc, u8, &.{ "/repos/", rm_name, "/hooks" }), GiteaCreateHookBody{
+            .config = .{ .url = hookurl },
+        }),
     };
 }
 
 fn apiPost(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string, data: anytype) !?json.Value {
-    const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(), endpoint });
+    const url = try std.mem.concat(alloc, u8, &.{ try self.apiRoot(alloc), endpoint });
     defer alloc.free(url);
 
     const req = try zfetch.Request.init(alloc, url, null);
@@ -219,4 +250,14 @@ const GithubWebhookData = struct {
         content_type: string = "json",
         active: bool = true,
     },
+};
+
+const GiteaCreateHookBody = struct {
+    active: bool = true,
+    config: struct {
+        url: string,
+        content_type: string = "json",
+    },
+    events: []const string = &.{"push"},
+    type: string = "gitea",
 };

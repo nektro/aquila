@@ -101,10 +101,13 @@ pub fn main() !void {
         std.debug.assert(oa2.clients.len >= current.len);
         var i: usize = 0;
         while (i < current.len) : (i += 1) {
-            std.debug.assert(std.mem.eql(u8, oa2.clients[i].provider.domain(), current[i].domain));
+            const p = oa2.clients[i].provider;
+            std.log.info("Remote #{d} is now live with {s}", .{ i + 1, p.id });
+            std.debug.assert(std.mem.eql(u8, p.domain(), current[i].domain));
         }
         while (i < oa2.clients.len) : (i += 1) {
             const idp = oa2.clients[i].provider;
+            std.log.info("Remote +{d} is now live with {s}", .{ i + 1, idp.id });
             _ = try db.Remote.create(alloc, oa2IdToRemoTy(idp.id), idp.domain());
         }
     }
@@ -134,6 +137,13 @@ fn parseBoolFlag(comptime flagName: string, default: bool) bool {
 fn oa2IdToRemoTy(id: string) db.Remote.Type {
     if (std.mem.eql(u8, id, "github.com")) return .github;
 
+    if (std.mem.indexOfScalar(u8, id, ',')) |ind| {
+        if (std.meta.stringToEnum(db.Remote.Type, id[0..ind])) |t| {
+            return t;
+        }
+        std.debug.panic("unsupported client provider: {s}", .{id[0..ind]});
+    }
+
     std.debug.panic("unsupported client provider: {s}", .{id});
 }
 
@@ -162,6 +172,7 @@ pub fn pek_tree_url(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, 
     _ = alloc;
     return switch (remo.type) {
         .github => try writer.print("https://github.com/{s}/tree/{s}", .{ repo, commit }),
+        .gitea => try writer.print("https://{s}/{s}/src/commit/{s}", .{ remo.domain, repo, commit }),
     };
 }
 
