@@ -197,3 +197,13 @@ pub fn parseInt(comptime T: type, input: ?string, response: *http.Response, comp
     const str = input orelse return fail(response, .bad_request, fmt, args);
     return std.fmt.parseUnsigned(T, str, 10) catch fail(response, .bad_request, fmt, args);
 }
+
+pub fn rename(old_path: string, new_path: string) !void {
+    std.fs.cwd().rename(old_path, new_path) catch |err| switch (err) {
+        error.RenameAcrossMountPoints => {
+            try std.fs.copyFileAbsolute(old_path, new_path, .{});
+            try std.fs.cwd().deleteFile(old_path);
+        },
+        else => |e| return e,
+    };
+}

@@ -100,7 +100,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     try std.fs.cwd().makePath(destdirpath);
 
     const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ commit, ".tar.gz" }) });
-    try std.fs.cwd().rename(tarpath, destpath);
+    try _internal.rename(tarpath, destpath);
     try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
