@@ -7,7 +7,7 @@ git https://github.com/nektro/zig-zorm commit-e5176e73203424da95a9d660648016d6f3
 git https://github.com/vrischmann/zig-sqlite commit-b77453146b36299ace10da06f2d54264e0b3d376
 git https://github.com/nektro/zig-extras commit-bdb6e6a326849bf3448ec5261e1392f8da8cef53
 git https://github.com/leroycep/zig-jwt commit-137598749184c830ad07d9e5762b9db5e9a326c6
-git https://github.com/nektro/zig-oauth2 commit-d9e27de43cebb036283df003e076b8f05fc0c7ef
+git https://github.com/nektro/zig-oauth2 commit-bcc354a5a7c1edf16aa843048853f7f08a90a44e
 git https://github.com/MasterQ32/zig-uri commit-01155026c8362bb75dcab10bafc31abff0c8bac4
 git https://github.com/nektro/iguanaTLS commit-d49c382a52c2c10dee940d22c3e0a034d0cbac5a
 git https://github.com/truemedian/zfetch commit-271cab5da4d12c8f08e67aa0cd5268da100e52f1
