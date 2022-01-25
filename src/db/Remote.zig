@@ -64,7 +64,7 @@ pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote),
 
 pub fn all(alloc: std.mem.Allocator) ![]const Remote {
     if (all_remotes.len > 0) return all_remotes;
-    return db.collect(alloc, Remote, "select * from " ++ table_name, .{});
+    return try db.collect(alloc, Remote, "select * from " ++ table_name ++ " order by id asc", .{});
 }
 
 pub fn create(alloc: std.mem.Allocator, ty: Type, domain: string) !Remote {
