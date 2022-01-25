@@ -90,7 +90,7 @@ pub fn listUserRepos(self: Remote, alloc: std.mem.Allocator, user: User) ![]cons
                 if (std.mem.eql(u8, item.getT("language", .String) orelse "", "Zig")) {
                     const id = try std.fmt.allocPrint(alloc, "{d}", .{item.get("id").?.Int});
                     const name = item.get("full_name").?.String;
-                    try list.append(.{ .id = id, .name = name, .added = containsPackage(pkgs, id, name) });
+                    try list.append(.{ .id = id, .name = name, .added = containsPackage(pkgs, id) });
                 }
             }
         },
@@ -202,9 +202,9 @@ fn apiPost(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string
     return val;
 }
 
-fn containsPackage(haystack: []const Package, id: string, name: string) bool {
+fn containsPackage(haystack: []const Package, id: string) bool {
     for (haystack) |item| {
-        if (std.mem.eql(u8, item.remote_id, id) and std.mem.eql(u8, item.remote_name, name)) {
+        if (std.mem.eql(u8, item.remote_id, id)) {
             return true;
         }
     }
