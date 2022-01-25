@@ -163,13 +163,7 @@ pub fn installWebhook(self: Remote, alloc: std.mem.Allocator, user: User, rm_id:
     _ = rm_id;
     return switch (self.type) {
         .github => try self.apiPost(alloc, user, try std.mem.concat(alloc, u8, &.{ "/repos/", rm_name, "/hooks" }), GithubWebhookData{
-            .name = "web",
-            .config = .{
-                .url = hookurl,
-                .events = &.{"push"},
-                .content_type = "json",
-                .active = true,
-            },
+            .config = .{ .url = hookurl },
         }),
     };
 }
@@ -218,11 +212,11 @@ fn containsPackage(haystack: []const Package, id: string, name: string) bool {
 }
 
 const GithubWebhookData = struct {
-    name: string,
+    name: string = "web",
     config: struct {
         url: string,
-        events: []const string,
-        content_type: string,
-        active: bool,
+        events: []const string = &.{"push"},
+        content_type: string = "json",
+        active: bool = true,
     },
 };
