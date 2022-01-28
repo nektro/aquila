@@ -20,7 +20,7 @@ const _hook = @import("./hook.zig");
 const _version = @import("./version.zig");
 
 pub fn init(alloc: std.mem.Allocator) !void {
-    _internal.jwt_secret = try extras.randomSlice(alloc, std.crypto.random.*, u8, 64);
+    _internal.jwt_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 64);
     _internal.access_tokens = std.StringHashMap(string).init(alloc);
     _internal.token_liveness = std.StringHashMap(i64).init(alloc);
     _internal.token_expires = std.StringHashMap(i64).init(alloc);
