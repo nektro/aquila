@@ -112,6 +112,5 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         try std.mem.concat(alloc, u8, &.{ "https://", root.domain, desturl, "/hook?secret=", p.hook_secret }),
     );
 
-    try response.headers.put("Location", try std.mem.concat(alloc, u8, &.{ ".", desturl }));
-    try response.writeHeader(.found);
+    try _internal.redirectTo(response, try std.mem.concat(alloc, u8, &.{ ".", desturl }));
 }
