@@ -13,7 +13,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const v = try p.versions(alloc);
 
     const h = try request.headers(alloc);
-    if (std.mem.eql(u8, h.get("accept") orelse "", "application/json")) {
+    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
+    if (std.mem.eql(u8, h.get("Accept") orelse h.get("accept") orelse "", "application/json")) {
         // stub for `zigmod aq add x/y/z`
         // TODO fill out json api
         try response.headers.put("Content-Type", "application/json");

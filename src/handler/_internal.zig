@@ -58,7 +58,8 @@ pub const JWT = struct {
 
     fn tokenFromHeader(request: http.Request) !?string {
         const headers = try request.headers(request.arena);
-        const auth = headers.get("Authorization");
+        // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
+        const auth = headers.get("Authorization") orelse headers.get("authorization");
         if (auth == null) return null;
         const ret = extras.trimPrefix(auth.?, "Bearer ");
         if (ret.len == auth.?.len) return null;

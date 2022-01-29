@@ -6,7 +6,8 @@ pub const Jar = std.StringHashMap(string);
 
 pub fn parse(alloc: std.mem.Allocator, headers: http.Request.Headers) !Jar {
     var map = Jar.init(alloc);
-    const h = headers.get("Cookie");
+    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
+    const h = headers.get("Cookie") orelse headers.get("cookie");
     if (h == null) return map;
 
     var iter = std.mem.split(u8, h.?, ";");
