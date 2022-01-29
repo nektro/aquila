@@ -1,3 +1,6 @@
+const Remote = @This();
+pub const table_name = "remotes";
+
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
@@ -14,14 +17,10 @@ const Package = _db.Package;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const Remote = @This();
-
 id: u64 = 0,
 uuid: ulid.ULID,
 type: Type,
 domain: string,
-
-pub const table_name = "remotes";
 
 usingnamespace _internal.TableTypeMixin(Remote);
 

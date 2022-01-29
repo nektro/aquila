@@ -1,3 +1,6 @@
+const Version = @This();
+pub const table_name = "versions";
+
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
@@ -10,8 +13,6 @@ const Package = _db.Package;
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
-
-const Version = @This();
 
 id: u64 = 0,
 uuid: ulid.ULID,
@@ -31,8 +32,6 @@ dev_deps: DepList,
 root_deps: DepList,
 build_deps: DepList,
 readme: string,
-
-pub const table_name = "versions";
 
 pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep, readme: string) !Version {
     db.mutex.lock();

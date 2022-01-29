@@ -1,3 +1,6 @@
+const User = @This();
+pub const table_name = "users";
+
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
@@ -10,16 +13,12 @@ const Time = _db.Time;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const User = @This();
-
 id: u64 = 0,
 uuid: ulid.ULID,
 provider: u64,
 snowflake: string,
 name: string,
 joined_on: Time,
-
-pub const table_name = "users";
 
 pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: string) !User {
     db.mutex.lock();

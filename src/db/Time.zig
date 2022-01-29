@@ -1,3 +1,5 @@
+const Self = @This();
+
 const std = @import("std");
 const string = []const u8;
 const time = @import("time");
@@ -5,8 +7,6 @@ const time = @import("time");
 const _internal = @import("./_internal.zig");
 
 ctx: time.DateTime,
-
-const Self = @This();
 
 usingnamespace _internal.TableTypeMixin(Self);
 

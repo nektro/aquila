@@ -1,3 +1,6 @@
+const Package = @This();
+pub const table_name = "packages";
+
 const std = @import("std");
 const string = []const u8;
 const ulid = @import("ulid");
@@ -12,8 +15,6 @@ const Remote = _db.Remote;
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;
 
-const Package = @This();
-
 id: u64 = 0,
 uuid: ulid.ULID,
 owner: ulid.ULID,
@@ -27,8 +28,6 @@ license: string,
 latest_version: string,
 hook_secret: string,
 star_count: u64,
-
-pub const table_name = "packages";
 
 pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64) !Package {
     db.mutex.lock();
