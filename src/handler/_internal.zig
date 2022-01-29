@@ -213,3 +213,13 @@ pub fn redirectTo(response: *http.Response, dest: string) !void {
     try response.headers.put("Location", dest);
     try response.writeHeader(.found);
 }
+
+pub fn readFileContents(dir: std.fs.Dir, alloc: std.mem.Allocator, path: string) !?string {
+    const file = dir.openFile(path, .{}) catch |err| switch (err) {
+        error.FileNotFound => return null,
+        error.IsDir => return null,
+        else => |e| return e,
+    };
+    defer file.close();
+    return try file.reader().readAllAlloc(alloc, 1024 * 1024 * 2); // 2mb
+}

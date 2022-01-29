@@ -30,10 +30,11 @@ deps: DepList, // TODO remove this column, no longer used in upstream Zigmod
 dev_deps: DepList,
 root_deps: DepList,
 build_deps: DepList,
+readme: string,
 
 pub const table_name = "versions";
 
-pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep) !Version {
+pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep, readme: string) !Version {
     db.mutex.lock();
     defer db.mutex.unlock();
 
@@ -54,6 +55,7 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
         .dev_deps = DepList{ .data = &.{} },
         .root_deps = DepList{ .data = rootdeps },
         .build_deps = DepList{ .data = builddeps },
+        .readme = readme,
     });
 }
 

@@ -93,9 +93,10 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
+    const readme = (_internal.readFileContents(dir, alloc, "README.md") catch null) orelse "";
 
     var p = try db.Package.create(alloc, u, name, r, details.id, repo, desc, license, details.star_count);
-    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps);
+    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
 
     //
 
