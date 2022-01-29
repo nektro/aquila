@@ -103,7 +103,7 @@ pub fn listUserRepos(self: Remote, alloc: std.mem.Allocator, user: User) ![]cons
             const val = resp.getT("data", .Array) orelse break :blk;
             for (val) |item| {
                 // NOTE: this filter will not have an effect until Gitea 1.17.0 lands (#18395)
-                if (std.mem.eql(u8, item.getT("language", .String) orelse "", "Zig")) {
+                if (std.mem.eql(u8, item.getT("language", .String) orelse "Zig", "Zig")) {
                     const id = try std.fmt.allocPrint(alloc, "{d}", .{item.getT("id", .Int).?});
                     const name = item.getT("full_name", .String).?;
                     try list.append(.{ .id = id, .name = name, .added = containsPackage(pkgs, id) });
