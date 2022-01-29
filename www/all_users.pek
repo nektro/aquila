@@ -1,0 +1,9 @@
+            h1("All Users")
+            ul(
+                {#each list}
+                li(a[href=("../"{this.provider}"/"{this.name})]({this.provider}"/"{this.name}))
+                /each/
+            )
+        )
+    )
+)

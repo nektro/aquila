@@ -34,6 +34,10 @@ pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: 
     });
 }
 
+pub fn all(alloc: std.mem.Allocator, comptime ord: _internal.Order) ![]const User {
+    return try db.collect(alloc, User, "select * from users order by id " ++ @tagName(ord), .{});
+}
+
 usingnamespace _internal.TableTypeMixin(User);
 usingnamespace _internal.ByKeyGen(User);
 

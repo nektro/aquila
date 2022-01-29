@@ -19,6 +19,7 @@ const _import = @import("./import.zig");
 const _do_import = @import("./do_import.zig");
 const _hook = @import("./hook.zig");
 const _version = @import("./version.zig");
+const _all = @import("./all.zig");
 
 pub fn init(alloc: std.mem.Allocator) !void {
     _internal.jwt_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 64);
@@ -40,6 +41,8 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         http.router.get("/dashboard", Middleware(_dashboard.get).next),
         http.router.get("/import", Middleware(_import.get).next),
         http.router.get("/do_import", Middleware(_do_import.get).next),
+        http.router.get("/all/users", Middleware(_all.users).next),
+        http.router.get("/all/packages", Middleware(_all.packages).next),
         http.router.get("/:remote/:user", Middleware(_user.get).next),
         http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
         http.router.post("/:remote/:user/:package/hook", Middleware(_hook.post).next),

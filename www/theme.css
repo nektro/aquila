@@ -63,3 +63,14 @@ img.badge {
     height: 15px;
     image-rendering: pixelated;
 }
+.wide-title {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.wide-title a {
+    display: block;
+}
+.wide-title div {
+    font-weight: normal;
+}

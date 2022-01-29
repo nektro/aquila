@@ -50,6 +50,10 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
     });
 }
 
+pub fn all(alloc: std.mem.Allocator, comptime ord: _internal.Order) ![]const Package {
+    return try db.collect(alloc, Package, "select * from packages order by id " ++ @tagName(ord), .{});
+}
+
 usingnamespace _internal.TableTypeMixin(Package);
 usingnamespace _internal.ByKeyGen(Package);
 
