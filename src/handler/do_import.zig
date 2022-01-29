@@ -59,7 +59,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     try dir.deleteTree(".git");
     const unpackedsize = try _internal.dirSize(alloc, path);
 
-    const cachepath = try std.fs.path.join(alloc, &.{ ".zigmod", "deps" });
+    const cachepath = try std.fs.path.join(alloc, &.{ path, ".zigmod", "deps" });
     zigmod.commands.ci.do(alloc, cachepath, dir) catch |err| return _internal.fail(response, .internal_server_error, "error: zigmod ci failed: {s}", .{@errorName(err)});
     try dir.deleteFile("deps.zig");
     const totalsize = try _internal.dirSize(alloc, path);
