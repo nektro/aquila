@@ -10,6 +10,20 @@ pub var db: Engine = undefined;
 const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 pub var factory = ulid.Factory.init(epoch, std.crypto.random);
 
+pub const Order = enum {
+    asc,
+    desc,
+};
+
+pub fn TableTypeMixin(comptime T: type) type {
+    return struct {
+        pub fn size(alloc: std.mem.Allocator) !u64 {
+            const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
+            return n orelse 0;
+        }
+    };
+}
+
 pub fn ByKeyGen(comptime T: type) type {
     return struct {
         pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) !?T {
@@ -118,8 +132,7 @@ pub fn insert(alloc: std.mem.Allocator, value: anytype) !std.meta.Child(@TypeOf(
 }
 
 fn nextId(alloc: std.mem.Allocator, comptime T: type) !u64 {
-    const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
-    return (n orelse 0) + 1;
+    return (try T.size(alloc)) + 1;
 }
 
 pub fn createTableT(alloc: std.mem.Allocator, comptime T: type) !void {

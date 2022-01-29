@@ -23,6 +23,8 @@ domain: string,
 
 pub const table_name = "remotes";
 
+usingnamespace _internal.TableTypeMixin(Remote);
+
 pub var all_remotes: []const Remote = &.{};
 
 pub const Type = enum {

@@ -57,6 +57,7 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
     });
 }
 
+usingnamespace _internal.TableTypeMixin(Version);
 usingnamespace _internal.ByKeyGen(Version);
 
 pub fn latest(alloc: std.mem.Allocator) ![]const Version {
