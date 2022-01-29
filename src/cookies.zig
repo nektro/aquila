@@ -22,3 +22,7 @@ pub fn parse(alloc: std.mem.Allocator, headers: http.Request.Headers) !Jar {
     }
     return map;
 }
+
+pub fn delete(response: *http.Response, comptime name: string) !void {
+    try response.headers.put("Set-Cookie", name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+}
