@@ -15,5 +15,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         .latest_packages = try db.Package.latest(alloc),
         .latest_versions = try db.Version.latest(alloc),
         .top_starred = try db.Package.topStarred(alloc),
+        .user_count = try db.User.size(alloc),
+        .pkg_count = try db.Package.size(alloc),
     });
 }

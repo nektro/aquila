@@ -1,5 +1,6 @@
             h1("Aquila")
             p("A federated package index and CI system for the Zig programming language built around the "a[href="https://github.com/nektro/zigmod"]("Zigmod")" package manager.")
+            p("Join the "a({user_count}" users")" and "a({pkg_count}" packages")" already on Aquila to get started today!")
             p(a[href="./dashboard" class="btn btn-primary"]("Login"))
             hr
             div[class="home-cols"](
