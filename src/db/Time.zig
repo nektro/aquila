@@ -8,8 +8,6 @@ const _internal = @import("./_internal.zig");
 
 ctx: time.DateTime,
 
-usingnamespace _internal.TableTypeMixin(Self);
-
 pub fn formatAlloc(self: Self, alloc: std.mem.Allocator, comptime fmt: string) !string {
     return self.ctx.formatAlloc(alloc, fmt);
 }
