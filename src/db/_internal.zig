@@ -135,21 +135,21 @@ fn nextId(alloc: std.mem.Allocator, comptime T: type) !u64 {
     return (try T.size(alloc)) + 1;
 }
 
-pub fn createTableT(alloc: std.mem.Allocator, comptime T: type) !void {
+pub fn createTableT(alloc: std.mem.Allocator, eng: *Engine, comptime T: type) !void {
     const tI = @typeInfo(T).Struct;
     const fields = tI.fields;
-    try createTable(alloc, T.table_name, comptime colToCol(fields[0]), comptime fieldsToCols(fields[1..]));
+    try createTable(alloc, eng, T.table_name, comptime colToCol(fields[0]), comptime fieldsToCols(fields[1..]));
 }
 
-fn createTable(alloc: std.mem.Allocator, comptime name: string, comptime pk: [2]string, comptime cols: []const [2]string) !void {
-    if (try db.doesTableExist(alloc, name)) {} else {
+fn createTable(alloc: std.mem.Allocator, eng: *Engine, comptime name: string, comptime pk: [2]string, comptime cols: []const [2]string) !void {
+    if (try eng.doesTableExist(alloc, name)) {} else {
         std.log.scoped(.db).info("creating table '{s}' with primary column '{s}'", .{ name, pk[0] });
-        try db.exec(alloc, comptime std.fmt.comptimePrint("create table {s}({s} {s})", .{ name, pk[0], pk[1] }), .{});
+        try eng.exec(alloc, comptime std.fmt.comptimePrint("create table {s}({s} {s})", .{ name, pk[0], pk[1] }), .{});
     }
     inline for (cols) |item| {
-        if (try db.hasColumnWithName(alloc, name, item[0])) {} else {
+        if (try eng.hasColumnWithName(alloc, name, item[0])) {} else {
             std.log.scoped(.db).info("adding column to '{s}': '{s}'", .{ name, item[0] });
-            try db.exec(alloc, comptime std.fmt.comptimePrint("alter table {s} add {s} {s}", .{ name, item[0], item[1] }), .{});
+            try eng.exec(alloc, comptime std.fmt.comptimePrint("alter table {s} add {s} {s}", .{ name, item[0], item[1] }), .{});
         }
     }
 }
