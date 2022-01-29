@@ -91,8 +91,9 @@ pub const JWT = struct {
 
 pub fn getUser(response: *http.Response, request: http.Request) !db.User {
     const x = JWT.veryifyRequest(request) catch |err| switch (err) {
-        error.NoTokenFound, error.InvalidSignature => {
+        error.NoTokenFound, error.InvalidSignature => |e| {
             try response.headers.put("Location", "./login");
+            try response.headers.put("X-Jwt-Fail", @errorName(e));
             try response.writeHeader(.found);
             return error.HttpNoOp;
         },
