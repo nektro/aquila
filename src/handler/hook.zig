@@ -77,7 +77,6 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     try dir.deleteTree(".git");
     const unpackedsize = try _internal.dirSize(alloc, path);
 
-    try _internal.assert(try extras.doesFileExist(dir, "zigmod.lock"), response, .bad_request, "error: repository does not contain a zigmod.lock file.", .{});
     const cachepath = try std.fs.path.join(alloc, &.{ ".zigmod", "deps" });
     zigmod.commands.ci.do(alloc, cachepath, dir) catch |err| return _internal.fail(response, .internal_server_error, "error: zigmod ci failed: {s}", .{@errorName(err)});
     try dir.deleteFile("deps.zig");
