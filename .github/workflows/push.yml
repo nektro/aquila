@@ -44,4 +44,3 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           repository: ${{ env.GITHUB_REPOSITORY }}
           tags: latest,r${{ env.RELEASE_NUM }}
-          build_args: RELEASE_NUM=${{ env.RELEASE_NUM }}
