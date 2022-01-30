@@ -24,8 +24,6 @@ domain: string,
 
 usingnamespace _internal.TableTypeMixin(Remote);
 
-pub var all_remotes: []const Remote = &.{};
-
 pub const Type = enum {
     github,
     gitea,
@@ -52,7 +50,7 @@ pub const RepoDetails = struct {
 pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
 
 pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
-    for (try all(alloc)) |item| {
+    for (try Remote.all(alloc, .asc)) |item| {
         const a = @field(item, @tagName(key));
         if (@TypeOf(value) == string and std.mem.eql(u8, a, value)) {
             return item;
@@ -62,11 +60,6 @@ pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote),
         }
     }
     return null;
-}
-
-pub fn all(alloc: std.mem.Allocator) ![]const Remote {
-    if (all_remotes.len > 0) return all_remotes;
-    return try db.collect(alloc, Remote, "select * from " ++ table_name ++ " order by id asc", .{});
 }
 
 pub fn create(alloc: std.mem.Allocator, ty: Type, domain: string) !Remote {

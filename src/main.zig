@@ -97,7 +97,7 @@ pub fn main() !void {
     oa2.callbackPath = "/callback";
 
     {
-        const current = try db.Remote.all(alloc);
+        const current = try db.Remote.all(alloc, .asc);
         std.debug.assert(oa2.clients.len >= current.len);
         var i: usize = 0;
         while (i < current.len) : (i += 1) {

@@ -21,6 +21,10 @@ pub fn TableTypeMixin(comptime T: type) type {
             const n = try db.first(alloc, u64, "select id from " ++ T.table_name ++ " order by id desc limit 1", .{});
             return n orelse 0;
         }
+
+        pub fn all(alloc: std.mem.Allocator, comptime ord: Order) ![]const T {
+            return try db.collect(alloc, T, "select * from " ++ T.table_name ++ " order by id " ++ @tagName(ord), .{});
+        }
     };
 }
 
