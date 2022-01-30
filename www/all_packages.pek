@@ -9,7 +9,6 @@
                                 i[class="tag icon"]{this.latest_version}" "
                                 i[class="balance scale icon"]" "{#if this.license}{this.license}<else>"No"/if/" License"
                             )
-                            div
                         )
                         {#if this.description}
                         div({this.description}"&nbsp;")
