@@ -3,3 +3,5 @@
 .zigmod
 deps.zig
 zig-*
+iso
+images
