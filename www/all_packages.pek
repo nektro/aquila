@@ -5,7 +5,7 @@
                     div(
                         h3[class="wide-title" style="margin-bottom: 0;"](
                             a[href=("../"{#get_user_path this.owner}"/"{this.name})]({#get_user_path this.owner}"/"{this.name})
-                            div(i[class="tag icon"]span({this.latest_version}))
+                            div(small({this.latest_version}))
                         )
                         {#if this.description}
                         div({this.description}"&nbsp;")

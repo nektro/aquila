@@ -120,7 +120,8 @@ img.badge {
 #page-version section > ul li .icon {
     font-size: 1.5em;
 }
-#page-version section h1 small {
+#page-version section h1 small,
+.pkg-list .terminal-card h3 small {
     color: #999;
 }
 input[type="radio"][name="tab"][id="t-readme"]:checked~div.page#readme,
