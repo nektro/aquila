@@ -140,12 +140,6 @@ input[type="radio"][name="tab"]+label {
     border-bottom: 1px solid #666;
     text-align: center;
 }
-label.fill-line {
-    display: inline-block;
-    padding: 1em;
-    border-bottom: 1px solid #666;
-    width: calc(100% - 23em);
-}
 input[type="radio"][name="tab"]:checked+label {
     border-bottom-color: #fff;
 }
