@@ -7,7 +7,6 @@
                             a[href=("./"{owner.name}"/"{this.name})]({this.name})
                             {#ifequal repo.type "github"}span(img[src=("https://img.shields.io/github/stars/"{this.remote_name}"?style=flat")])/ifequal/
                         )
-                        div(i[class="balance scale icon"]" "{#if this.license}{this.license}<else>"No"/if/" License")
                         div({this.description}"&nbsp;")
                     )
                 )
