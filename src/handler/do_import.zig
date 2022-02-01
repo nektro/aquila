@@ -4,9 +4,9 @@ const http = @import("apple_pie");
 const extras = @import("extras");
 const root = @import("root");
 const zigmod = @import("zigmod");
+const git = @import("git");
 
 const db = @import("./../db/_db.zig");
-const git = @import("./../git.zig");
 const cmisc = @import("./../cmisc.zig");
 
 const _internal = @import("./_internal.zig");
@@ -55,7 +55,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const rootdeps = modfile.rootdeps;
     const builddeps = modfile.builddeps;
 
-    const commit = try git.rev_HEAD(alloc, dir);
+    const commit = try git.getHEAD(alloc, dir);
     try dir.deleteTree(".git");
     const unpackedsize = try extras.dirSize(alloc, dir);
 

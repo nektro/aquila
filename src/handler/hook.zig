@@ -5,9 +5,9 @@ const json = @import("json");
 const extras = @import("extras");
 const root = @import("root");
 const zigmod = @import("zigmod");
+const git = @import("git");
 
 const db = @import("./../db/_db.zig");
-const git = @import("./../git.zig");
 const cmisc = @import("./../cmisc.zig");
 
 const _internal = @import("./_internal.zig");
@@ -71,7 +71,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     const rootdeps = modfile.rootdeps;
     const builddeps = modfile.builddeps;
 
-    const commit = try git.rev_HEAD(alloc, dir);
+    const commit = try git.getHEAD(alloc, dir);
     try _internal.assert((try p.findVersionBy(alloc, .commit_to, commit)) == null, response, .bad_request, "error: Version at this commit already created", .{});
 
     try dir.deleteTree(".git");

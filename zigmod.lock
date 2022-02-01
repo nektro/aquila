@@ -28,3 +28,4 @@ git https://github.com/nektro/zig-leven commit-ab852cf74fa0b4edc530d925f0654b62c
 git https://github.com/nektro/zig-fs-check commit-dcd8da90fcb8bf3c9887e713bf0ec072bc897dd5
 git https://github.com/nektro/zig-inquirer commit-14c3492c46f9765c3e77436741794d1a3118cbee
 git https://github.com/arqv/ini commit-b93f5b5ff9449f9af68ae3081f6a5e858b6698d9
+git https://github.com/nektro/zig-git commit-f629cd04c9907c1f39e527a30e99393c2cc643f3

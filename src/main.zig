@@ -9,8 +9,8 @@ const flag = @import("flag");
 const ulid = @import("ulid");
 const zfetch = @import("zfetch");
 const zigmod = @import("zigmod");
+const git = @import("git");
 
-const git = @import("./git.zig");
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");
 const handler = @import("./handler/_handler.zig");
@@ -34,7 +34,7 @@ pub fn main() !void {
         try w.writeAll(options.version);
 
         if (std.mem.eql(u8, options.version, "dev")) {
-            if (git.rev_HEAD(alloc, std.fs.cwd()) catch null) |h| {
+            if (git.getHEAD(alloc, std.fs.cwd()) catch null) |h| {
                 try w.print(".{s}", .{h[0..9]});
             }
         }
