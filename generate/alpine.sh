@@ -19,7 +19,8 @@ fi
 set -x
 
 iso="alpine-virt-$version-$arch.iso"
-url="https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/$arch/$iso"
+shortv=$(echo $version | cut -d . -f -2)
+url="https://dl-cdn.alpinelinux.org/alpine/v$shortv/releases/$arch/$iso"
 
 zigarch=$(zig run tools/os-zigify-arch.zig -- $os $arch)
 hdd="images/$os.$zigarch.qcow2"
