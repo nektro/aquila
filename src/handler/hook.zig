@@ -75,15 +75,15 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     try _internal.assert((try p.findVersionBy(alloc, .commit_to, commit)) == null, response, .bad_request, "error: Version at this commit already created", .{});
 
     try dir.deleteTree(".git");
-    const unpackedsize = try _internal.dirSize(alloc, path);
+    const unpackedsize = try extras.dirSize(alloc, dir);
 
     const cachepath = try std.fs.path.join(alloc, &.{ path, ".zigmod", "deps" });
     zigmod.commands.ci.do(alloc, cachepath, dir) catch |err| return _internal.fail(response, .internal_server_error, "error: zigmod ci failed: {s}", .{@errorName(err)});
     try dir.deleteFile("deps.zig");
-    const totalsize = try _internal.dirSize(alloc, path);
+    const totalsize = try extras.dirSize(alloc, dir);
     try dir.deleteTree(".zigmod");
 
-    const filelist = try _internal.fileList(alloc, path);
+    const filelist = try extras.fileList(alloc, dir);
     try _internal.assert(filelist.len > 0, response, .internal_server_error, "error: found no files in repo", .{});
 
     const tarpath = try std.mem.concat(alloc, u8, &.{ path, ".tar.gz" });

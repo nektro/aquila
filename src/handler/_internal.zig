@@ -144,20 +144,6 @@ pub fn mergeSlices(alloc: std.mem.Allocator, comptime T: type, side_a: []const T
     return list.toOwnedSlice();
 }
 
-/// workaround for https://github.com/ziglang/zig/issues/10317
-pub fn dirSize(alloc: std.mem.Allocator, path: string) !usize {
-    var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
-    defer dir.close();
-    return try extras.dirSize(alloc, dir);
-}
-
-/// workaround for https://github.com/ziglang/zig/issues/10317
-pub fn fileList(alloc: std.mem.Allocator, path: string) ![]const string {
-    var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
-    defer dir.close();
-    return try extras.fileList(alloc, dir);
-}
-
 pub fn assert(cond: bool, response: *http.Response, status: http.Response.Status, comptime fmt: string, args: anytype) !void {
     if (!cond) {
         return fail(response, status, fmt, args);
