@@ -1,5 +1,5 @@
             h1("All Packages")
-            div(
+            div[class="pkg-list"](
                 {#each list}
                 div[class="terminal-card"](
                     div(

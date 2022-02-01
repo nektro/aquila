@@ -48,6 +48,7 @@ table.left tr td {
 .pkg-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-gap: 1em;
 }
 .pkg-grid .terminal-card {
     margin: 0;
@@ -66,11 +67,29 @@ img.badge {
 .wide-title {
     margin-bottom: 0;
     display: flex;
-    justify-content: space-between;
 }
 .wide-title a {
     display: block;
 }
 .wide-title div {
     font-weight: normal;
+    margin-left: 1em;
+}
+.wide-title div .icon {
+    padding-right: 0;
+    display: inline;
+}
+
+.pkg-list {
+    display: flex;
+    flex-direction: column;
+}
+.pkg-list .terminal-card {
+    margin: 0;
+    padding: .5em 0;
+    border-color: transparent;
+    border-bottom-color: var(--secondary-color);
+}
+.pkg-list .terminal-card:last-child {
+    border-bottom-color: transparent;
 }
