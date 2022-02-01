@@ -128,7 +128,7 @@ input[type="radio"][name="tab"][id="t-readme"]:checked~div.page#readme,
 input[type="radio"][name="tab"][id="t-dependencies"]:checked~div.page#dependencies,
 input[type="radio"][name="tab"][id="t-dependents"]:checked~div.page#dependents,
 input[type="radio"][name="tab"][id="t-contents"]:checked~div.page#contents,
-input[type="radio"][name="tab"][id="t-versions"]:checked~div.page#versions {
+input[type="radio"][name="tab"][id="t-history"]:checked~div.page#history {
     display: block;
 }
 input[type="radio"][name="tab"] {

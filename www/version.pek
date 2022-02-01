@@ -22,6 +22,9 @@
                     input[type="radio" id="t-dependencies" name="tab" value="t-dependencies"]
                     label[for="t-dependencies"]({version.deps.data.len}" Dependencies")
 
+                    input[type="radio" id="t-history" name="tab" value="t-history"]
+                    label[for="t-history"]("History")
+
                     div[class="page" id="readme"](
                         h2("Readme Viewer coming soon!")
                     )
@@ -61,6 +64,32 @@
                         )
                         /if/
                     )
+
+                    div[class="page" id="history"](
+                        h2("History")
+                        table(
+                            thead(
+                                tr(
+                                    th
+                                    th("Published On")
+                                    th("Tree @ Commit")
+                                    // th("Compare Diff") // TODO
+                                    th("Size")
+                                )
+                            )
+                            tbody(
+                                {#each versions}
+                                tr(
+                                    td(a[href=("./"{package.name}"/"{this})]({this}))
+                                    td({this.created_on})
+                                    td(a[href=({#tree_url repo package.remote_name this.commit_to})]("Tree"))
+                                    // td // TODO
+                                    td({#fix_bytes this.unpacked_size})
+                                )
+                                /each/
+                            )
+                        )
+                    )
                 )
                 aside(
                     h1
@@ -74,7 +103,7 @@
                         dt("License")
                         dd({package.license})
                         dt("Author")
-                        dd(a[href=("../../"{owner.provider}"/"{owner.name})]({owner.provider}"/"{owner.name}))
+                        dd(a[href=("/"{owner.provider}"/"{owner.name})]({owner.provider}"/"{owner.name}))
 
                         br
                         dt("Archive Size")
