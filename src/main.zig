@@ -28,9 +28,21 @@ pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const alloc = gpa.allocator();
 
-    const rev: []const string = if (git.rev_HEAD(alloc, std.fs.cwd()) catch null) |h| &.{ ".", h[0..9] } else &.{ "", "" };
-    const con: string = if (docker.amInside(alloc) catch false) ".docker" else "";
-    version = try std.fmt.allocPrint(alloc, "{s}{s}{s}{s}.zig{}", .{ options.version, rev[0], rev[1], con, builtin.zig_version });
+    {
+        var sbuilder = std.ArrayList(u8).init(alloc);
+        const w = sbuilder.writer();
+        try w.writeAll(options.version);
+
+        if (std.mem.eql(u8, options.version, "dev")) {
+            if (git.rev_HEAD(alloc, std.fs.cwd()) catch null) |h| {
+                try w.print(".{s}", .{h[0..9]});
+            }
+        }
+        if (docker.amInside(alloc) catch false) try w.writeAll(".docker");
+        try w.print(".zig{}", .{builtin.zig_version});
+        version = sbuilder.toOwnedSlice();
+    }
+
     std.log.info("Starting {s} {s}", .{ name, version });
 
     oauth2.providers.github.id = "github.com";
