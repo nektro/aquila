@@ -39,7 +39,7 @@ usingnamespace _internal.ByKeyGen(User);
 pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
 
 pub fn packages(self: User, alloc: std.mem.Allocator) ![]const Package {
-    return try Package.byKeyAll(alloc, .owner, self.uuid);
+    return try Package.byKeyAll(alloc, .owner, self.uuid, .asc);
 }
 
 pub fn remote(self: User, alloc: std.mem.Allocator) !Remote {

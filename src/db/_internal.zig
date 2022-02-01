@@ -39,11 +39,11 @@ pub fn ByKeyGen(comptime T: type) type {
             );
         }
 
-        pub fn byKeyAll(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key)) ![]const T {
+        pub fn byKeyAll(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(T), value: extras.FieldType(T, key), comptime ord: Order) ![]const T {
             return try db.collect(
                 alloc,
                 T,
-                "select * from " ++ T.table_name ++ " where " ++ @tagName(key) ++ " = ?",
+                "select * from " ++ T.table_name ++ " where " ++ @tagName(key) ++ " = ? order by id " ++ @tagName(ord),
                 foo(@tagName(key), value),
             );
         }

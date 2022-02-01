@@ -35,7 +35,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         .owner = o,
         .package = p,
         .versions = v,
-        .version = v[v.len - 1],
+        .version = v[0],
     });
 }
 

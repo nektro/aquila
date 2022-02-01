@@ -63,7 +63,7 @@ pub fn topStarred(alloc: std.mem.Allocator) ![]const Package {
 }
 
 pub fn versions(self: Package, alloc: std.mem.Allocator) ![]const Version {
-    return try Version.byKeyAll(alloc, .p_for, self.uuid);
+    return try Version.byKeyAll(alloc, .p_for, self.uuid, .desc);
 }
 
 pub fn setLatest(self: *Package, alloc: std.mem.Allocator, vers: Version) !void {
