@@ -10,6 +10,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/index.pek", .{
         .aquila_version = @import("root").version,
+        .page = "index",
         .title = "Zig Package Index",
         .user = try _internal.getUserOp(response, request),
         .latest_packages = try db.Package.latest(alloc),

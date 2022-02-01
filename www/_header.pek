@@ -10,7 +10,7 @@ html[lang="en"](
         link[rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/components/icon.min.css" integrity="sha512-I7/aUklkRw/Q5C9/7X2EH1jsng7oBb2P29tXv15+83/hu8qE0BZJyXmCX2u230RZlcf0oylQqmStJGCPxQpUQw==" crossorigin="anonymous"]
         link[rel="stylesheet" href="/theme.css"]
     )
-    body(
+    body[id=("page-"{page})](
         div[class="container"](
             div[class="terminal-nav"](
                 div[class="terminal-logo"](

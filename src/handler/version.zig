@@ -41,11 +41,13 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/version.pek", .{
         .aquila_version = @import("root").version,
+        .page = "version",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}/{s} @ v{d}.{d}", .{ r.id, o.name, p.name, v.real_major, v.real_minor }),
         .user = u,
         .repo = r,
         .owner = o,
-        .pkg = p,
+        .package = p,
+        .versions = try p.versions(alloc),
         .version = v,
     });
 }

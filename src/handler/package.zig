@@ -26,14 +26,16 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
         return;
     }
 
-    try _internal.writePageResponse(alloc, response, request, "/package.pek", .{
+    try _internal.writePageResponse(alloc, response, request, "/version.pek", .{
         .aquila_version = @import("root").version,
+        .page = "version",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ r.id, o.name, p.name }),
         .user = u,
         .repo = r,
         .owner = o,
-        .pkg = p,
+        .package = p,
         .versions = v,
+        .version = v[v.len - 1],
     });
 }
 

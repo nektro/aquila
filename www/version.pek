@@ -1,41 +1,96 @@
-            h2("Package "code({pkg.name})"@"code({version})" Details")
-            table[class="left"](
-                tbody(
-                    tr(td("ULID")td({version.uuid}))
-                    tr(td("For")td(a[href=("/"{repo.id}"/"{owner.name}"/"{pkg.name})]({repo.id}"/"{owner.name}"/"{pkg.name})))
-                    tr(td("Published On")td({version.created_on}))
-                    tr(td("Author")td(a[href=("/"{repo.id}"/"{owner.name})]({repo.id}"/"{owner.name})))
-                    tr(td("Commit")td(code({version.commit_to})))
-                    tr(td("Unpacked Size")td({#fix_bytes version.unpacked_size}))
-                    tr(td("Total Size")td({#fix_bytes version.total_size}))
-                    tr(td("Tar Size")td({#fix_bytes version.tar_size}))
-                    tr(td("Tar Hash")td(code({version.tar_hash})))
-                    tr(td("Tar Download")td(a[href=({version}".tar.gz")]("Download")))
+            main(
+                section(
+                    h1(
+                        span({owner.provider}"/"{owner.name}"/"{package.name})
+                        small({version})
+                    )
+                    ul(
+                        li(
+                            i[class="git alternate icon"]
+                            a[href=({#tree_url repo package.remote_name version.commit_to})]({version.commit_to})
+                        )
+                    )
+                    p({package.description})
+                    hr
+
+                    input[type="radio" id="t-readme" name="tab" value="t-readme" checked=""]
+                    label[for="t-readme"]("Readme")
+
+                    input[type="radio" id="t-contents" name="tab" value="t-contents"]
+                    label[for="t-contents"]("Contents")
+
+                    input[type="radio" id="t-dependencies" name="tab" value="t-dependencies"]
+                    label[for="t-dependencies"]({version.deps.data.len}" Dependencies")
+
+                    div[class="page" id="readme"](
+                        h2("Readme Viewer coming soon!")
+                    )
+
+                    div[class="page" id="contents"](
+                        h2("Package Contents")
+                        ul(
+                            {#each version.files.data}
+                            li({this})
+                            /each/
+                        )
+                    )
+
+                    div[class="page" id="dependencies"](
+                        {#if version.deps.data}
+                        h2("Dependencies")
+                        ul(
+                            {#each version.deps.data}
+                            li(code({#fix_dep this}))
+                            /each/
+                        )
+                        /if/
+                        {#if version.root_deps.data}
+                        h2("Root Dependencies")
+                        ul(
+                            {#each version.root_deps.data}
+                            li(code({#fix_dep this}))
+                            /each/
+                        )
+                        /if/
+                        {#if version.build_deps.data}
+                        h2("Build Dependencies")
+                        ul(
+                            {#each version.build_deps.data}
+                            li(code({#fix_dep this}))
+                            /each/
+                        )
+                        /if/
+                    )
                 )
-            )
-            h3("File List")
-            ul(
-                {#each version.files.data}
-                li(code({this}))
-                /each/
-            )
-            h3("Dependencies")
-            ul(
-                {#each version.deps.data}
-                li(code({#fix_dep this}))
-                /each/
-            )
-            h3("Root Dependencies")
-            ul(
-                {#each version.root_deps.data}
-                li(code({#fix_dep this}))
-                /each/
-            )
-            h3("Build Dependencies")
-            ul(
-                {#each version.build_deps.data}
-                li(code({#fix_dep this}))
-                /each/
+                aside(
+                    h1
+                    dl(
+                        dt("First Published")
+                        dd({package.created_on})
+                        dt("Last Updated")
+                        dd({version.created_on})
+                        dt("Repository")
+                        dd(a[href=("https://"{repo.domain}"/"{package.remote_name})]({repo.domain}" / "{package.remote_name}))
+                        dt("License")
+                        dd({package.license})
+                        dt("Author")
+                        dd(a[href=("../../"{owner.provider}"/"{owner.name})]({owner.provider}"/"{owner.name}))
+
+                        br
+                        dt("Archive Size")
+                        dd({#fix_bytes version.tar_size})
+                        dt("Unpacked Size")
+                        dd({#fix_bytes version.unpacked_size})
+
+                    )
+                    hr
+                    h3("Other Versions")
+                    ul(
+                        {#each versions}
+                        li(a[href=("/"{owner.provider}"/"{owner.name}"/"{package.name}"/"{this})]({this}))
+                        /each/
+                    )
+                )
             )
         )
     )

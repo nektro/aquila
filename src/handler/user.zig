@@ -13,6 +13,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     try _internal.writePageResponse(alloc, response, request, "/user.pek", .{
         .aquila_version = @import("root").version,
+        .page = "user",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}", .{ r.id, o.name }),
         .user = u,
         .repo = r,

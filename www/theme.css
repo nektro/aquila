@@ -93,3 +93,67 @@ img.badge {
 .pkg-list .terminal-card:last-child {
     border-bottom-color: transparent;
 }
+
+/* TODO clean this all up with scss */
+#page-version main {
+    display: flex;
+}
+#page-version aside {
+    margin: 0 1em;
+    white-space: nowrap;
+}
+#page-version section {
+    margin: 0 1em;
+    width: 100%;
+}
+#page-version section > ul {
+    padding-left: 0;
+}
+#page-version section > ul li {
+    display: inline-flex;
+    align-items: center;
+    padding-left: .5em;
+}
+#page-version section > ul li > * {
+    display: block;
+}
+#page-version section > ul li .icon {
+    font-size: 1.5em;
+}
+#page-version section h1 small {
+    color: #999;
+}
+input[type="radio"][name="tab"][id="t-readme"]:checked~div.page#readme,
+input[type="radio"][name="tab"][id="t-dependencies"]:checked~div.page#dependencies,
+input[type="radio"][name="tab"][id="t-dependents"]:checked~div.page#dependents,
+input[type="radio"][name="tab"][id="t-contents"]:checked~div.page#contents,
+input[type="radio"][name="tab"][id="t-versions"]:checked~div.page#versions {
+    display: block;
+}
+input[type="radio"][name="tab"] {
+    display: none;
+}
+input[type="radio"][name="tab"]+label {
+    display: inline-block;
+    padding: 1em;
+    border-bottom: 1px solid #666;
+    text-align: center;
+}
+label.fill-line {
+    display: inline-block;
+    padding: 1em;
+    border-bottom: 1px solid #666;
+    width: calc(100% - 23em);
+}
+input[type="radio"][name="tab"]:checked+label {
+    border-bottom-color: #fff;
+}
+div.page {
+    display: none;
+}
+div.page h2 {
+    margin-top: revert;
+}
+div.page#contents ul {
+    font-family: monospace;
+}
