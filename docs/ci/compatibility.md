@@ -13,7 +13,7 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 |              | Version | x86_64 | arm64 | x86 | arm | riscv64 | ppc64el | mips64el | sparcv9 | s390x |
 |--------------|---------|--------|-------|-----|-----|---------|---------|----------|---------|-------|
-| linux/alpine | 3.15    | 1      | 0     | 1   | 0   |         | 0       |          |         | 0     |
+| linux/alpine | 3.15.0  | 1      | 0     | 1   | 0   |         | 0       |          |         | 0     |
 | linux/debian | 10.10.0 | 1      | 0     | 1   | 0   |         | 0       | 0        |         | 0     |
 | freebsd      | 13.0    | 1      | 0     | 1   |     | 0       | 0       |          |         |       |
 | netbsd       | 9.2     | 1      | 0     | 1   | 0   |         |         | 0        | 0       |       |
