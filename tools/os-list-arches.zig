@@ -17,6 +17,9 @@ pub fn main() !void {
     const os = std.meta.stringToEnum(E, args[0]) orelse @panic("Unsupported OS");
 
     return switch (os) {
+        // https://github.com/ziglang/zig/issues/10731
+        .std, .Arch => {},
+
         .debian => try print(shared.targets.debian.kvs),
         .alpine => try print(shared.targets.alpine.kvs),
         .freebsd => try print(shared.targets.freebsd.kvs),
