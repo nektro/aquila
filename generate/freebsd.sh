@@ -21,7 +21,7 @@ set -x
 iso="FreeBSD-$version-RELEASE-$arch-bootonly.iso"
 url="https://download.freebsd.org/ftp/releases/ISO-IMAGES/$version/$iso"
 
-zigarch=$(zig run tools/os-zigify-arch.zig -- "$os" "$arch")
+zigarch=$(zig run tools/os-zigify-arch.zig --main-pkg-path . -- "$os" "$arch")
 hdd="images/$os.$zigarch.qcow2"
 
 

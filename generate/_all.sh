@@ -7,7 +7,8 @@ set -x
 
 os="$1"
 
-for arc in $(zig run tools/os-list-arches.zig -- "$os")
+# cc https://github.com/ziglang/zig/issues/10754
+for arc in $(zig run tools/os-list-arches.zig --main-pkg-path . -- "$os")
 do
     ./generate/$os.sh $arc
 done

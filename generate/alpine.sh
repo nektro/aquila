@@ -22,7 +22,7 @@ iso="alpine-virt-$version-$arch.iso"
 shortv=$(echo $version | cut -d . -f -2)
 url="https://dl-cdn.alpinelinux.org/alpine/v$shortv/releases/$arch/$iso"
 
-zigarch=$(zig run tools/os-zigify-arch.zig -- $os $arch)
+zigarch=$(zig run tools/os-zigify-arch.zig --main-pkg-path . -- $os $arch)
 hdd="images/$os.$zigarch.qcow2"
 
 
