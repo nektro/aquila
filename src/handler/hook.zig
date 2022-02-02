@@ -18,7 +18,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
     const u = try _internal.reqUser(request, response, r, args.user);
     var p = try _internal.reqPackage(request, response, u, args.package);
 
-    const q = try request.context.url.queryParameters(alloc);
+    const q = try request.context.uri.queryParameters(alloc);
     const secret = q.get("secret") orelse return _internal.fail(response, .not_found, "secret query parameter not found", .{});
     try _internal.assert(std.mem.eql(u8, secret, p.hook_secret), response, .forbidden, "error: webhook secret does not match", .{});
 

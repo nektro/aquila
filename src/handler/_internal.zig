@@ -73,7 +73,7 @@ pub const JWT = struct {
     }
 
     fn tokenFromQuery(request: http.Request) !?string {
-        const q = try request.context.url.queryParameters(request.arena);
+        const q = try request.context.uri.queryParameters(request.arena);
         return q.get("jwt");
     }
 

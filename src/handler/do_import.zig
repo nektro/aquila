@@ -18,7 +18,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const alloc = request.arena;
     const u = try _internal.getUser(response, request);
 
-    const q = try request.context.url.queryParameters(alloc);
+    const q = try request.context.uri.queryParameters(alloc);
     const repo = q.get("repo") orelse return error.HttpNoOp;
 
     for (try u.packages(alloc)) |item| {
