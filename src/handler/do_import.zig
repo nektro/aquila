@@ -88,7 +88,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     const destdirpath = try std.fs.path.join(alloc, &.{ root.datadirpath, "packages", try u.uuid.toString(alloc), details.id });
     try std.fs.cwd().makePath(destdirpath);
 
-    const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ commit, ".tar.gz" }) });
+    const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ "latest", ".tar.gz" }) });
     try _internal.rename(tarpath, destpath);
     try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
