@@ -70,6 +70,11 @@ fn file_route(comptime path: string) http.router.Route {
                 try response.headers.put("Content-Type", mediatype);
             }
             const w = response.writer();
+            if (builtin.mode == .Debug) {
+                const file = try std.fs.cwd().openFile(try std.mem.join(request.arena, "", &.{ "www", path }), .{});
+                defer file.close();
+                return try extras.pipe(file.reader(), w);
+            }
             try response.headers.put("Etag", try etag(request.arena, @field(files, path)));
             try w.writeAll(@field(files, path));
         }
