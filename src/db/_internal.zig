@@ -6,6 +6,7 @@ const extras = @import("extras");
 
 pub const Engine = zorm.engine(.sqlite3);
 pub var db: Engine = undefined;
+pub var db_jobs: Engine = undefined;
 
 const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 pub var factory = ulid.Factory.init(epoch, std.crypto.random);
