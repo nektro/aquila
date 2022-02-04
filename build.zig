@@ -17,6 +17,7 @@ pub fn build(b: *std.build.Builder) void {
     const exe = b.addExecutable(exe_name, "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
+    if (mode != .Debug) exe.strip = true;
 
     const exe_options = b.addOptions();
     exe.addOptions("build_options", exe_options);
