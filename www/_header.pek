@@ -27,7 +27,7 @@ html[lang="en"](
                         <else>
                         li(a[class="menu-item" href="/login"]("Log In"))
                         li(a[class="menu-item" href="/about"]("About"))
-                        li(a[class="menu-item" href="/contact"]("Contact"))
+                        li(a[class="menu-item" href="/stats"]("Statistics"))
                         li(a[class="menu-item" href="https://github.com/nektro/aquila"]("Source Code"))
                         /if/
                         li(code({aquila_version}))

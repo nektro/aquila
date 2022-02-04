@@ -5,6 +5,7 @@ const files = @import("self/files");
 const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const json = @import("json");
+const builtin = @import("builtin");
 
 const mime = @import("../mime.zig");
 const db = @import("../db/_db.zig");
@@ -20,6 +21,7 @@ const _do_import = @import("./do_import.zig");
 const _hook = @import("./hook.zig");
 const _version = @import("./version.zig");
 const _all = @import("./all.zig");
+const _stats = @import("./stats.zig");
 
 pub fn init(alloc: std.mem.Allocator) !void {
     _internal.jwt_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 64);
@@ -33,6 +35,8 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
     return http.router.Router(void, &.{
         http.router.get("/", Middleware(_index.get).next),
         file_route("/theme.css"),
+        http.router.get("/stats", Middleware(_stats.get).next),
+        file_route("/stats.js"),
         http.router.get("/about", Middleware(StaticPek("/about.pek", "About").get).next),
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),

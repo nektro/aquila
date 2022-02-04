@@ -198,3 +198,13 @@ pub fn pek_fix_dep(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, d
     try writer.print(" {s}", .{d.path});
     if (d.version.len > 0) try writer.print(" {s}", .{d.version});
 }
+
+pub fn pek_json_cstat(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, s: []const db.CountStat) !void {
+    _ = alloc;
+    try std.json.stringify(s, .{}, writer);
+}
+
+pub fn pek_json_tstat(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, s: []const db.TimeStat) !void {
+    _ = alloc;
+    try std.json.stringify(s, .{}, writer);
+}

@@ -1,0 +1,36 @@
+            h1("Statistics")
+            script[defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"]
+            script[defer="" src="/stats.js"]
+
+            h3("Number of direct dependencies")
+            canvas[id="chart1"]
+            script[type="application/json"]({#json_cstat chart1})
+            br
+
+            h3("Package size (KB)")
+            canvas[id="chart2"]
+            script[type="application/json"]({#json_cstat chart2})
+            br
+
+            h3("Number of releases per package")
+            canvas[id="chart3"]
+            script[type="application/json"]({#json_cstat chart3})
+            br
+
+            h3("Number of packages per user")
+            canvas[id="chart4"]
+            script[type="application/json"]({#json_cstat chart4})
+            br
+
+            h3("Time since package's first release")
+            canvas[id="chart5"]
+            script[type="application/json"]({#json_tstat chart5})
+            br
+
+            h3("Time without any updates")
+            canvas[id="chart6"]
+            script[type="application/json"]({#json_tstat chart6})
+            br
+        )
+    )
+)
