@@ -70,6 +70,7 @@ fn file_route(comptime path: string) http.router.Route {
                 try response.headers.put("Content-Type", mediatype);
             }
             const w = response.writer();
+            try response.headers.put("Etag", try etag(request.arena, @field(files, path)));
             try w.writeAll(@field(files, path));
         }
     };
@@ -131,4 +132,10 @@ pub fn logout(_: void, response: *http.Response, request: http.Request, args: st
 
     try cookies.delete(response, "jwt");
     try _internal.redirectTo(response, "./");
+}
+
+fn etag(alloc: std.mem.Allocator, input: string) !string {
+    var h = std.hash.Wyhash.init(0);
+    h.update(input);
+    return try std.fmt.allocPrint(alloc, "{x}", .{h.final()});
 }

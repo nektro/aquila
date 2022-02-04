@@ -24,12 +24,31 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
     _ = request;
     try response.headers.put("Content-Type", "text/html");
 
+    var h = std.hash.Wyhash.init(0);
+    h.update(@field(files, name));
+    inline for (std.meta.fields(@TypeOf(data))) |field| {
+        hashUp(&h, @field(data, field.name));
+    }
+    try response.headers.put("Etag", try std.fmt.allocPrint(alloc, "\"{x}\"", .{h.final()}));
+
     const w = response.writer();
     const head = files.@"/_header.pek";
     const page = @field(files, name);
     const tmpl = comptime pek.parse(head ++ page);
     try pek.compile(root, alloc, w, tmpl, data);
 }
+
+const wyhash = struct {
+    pub const Writer = std.io.Writer(*std.hash.Wyhash, error{}, write);
+
+    fn write(self: *std.hash.Wyhash, b: []const u8) error{}!usize {
+        self.update(b);
+    }
+
+    pub fn writer(self: *std.hash.Wyhash) Writer {
+        return .{ .context = self };
+    }
+};
 
 pub const JWT = struct {
     const Payload = struct {
@@ -208,4 +227,47 @@ pub fn readFileContents(dir: std.fs.Dir, alloc: std.mem.Allocator, path: string)
     };
     defer file.close();
     return try file.reader().readAllAlloc(alloc, 1024 * 1024 * 2); // 2mb
+}
+
+pub fn hashUp(h: *std.hash.Wyhash, item: anytype) void {
+    if (comptime std.meta.trait.isZigString(@TypeOf(item))) {
+        h.update(item);
+        return;
+    }
+    switch (@TypeOf(item)) {
+        db.Remote => h.update(item.domain),
+        db.Remote.Repo, db.User, db.Package, db.Version => hashUp(h, item.id),
+        u64 => h.update(&std.mem.toBytes(item)),
+        bool => h.update(if (item) "true" else "false"),
+
+        []const db.User,
+        []const db.Package,
+        []const db.Version,
+        []const db.Remote.Repo,
+        []const db.CountStat,
+        []const db.TimeStat,
+        => {
+            h.update("[");
+            defer h.update("]");
+            for (item) |inner| {
+                hashUp(h, inner);
+            }
+        },
+
+        ?db.User => {
+            h.update(if (item) |_| "1" else "0");
+        },
+
+        db.CountStat => {
+            h.update(item.ulid);
+            hashUp(h, item.count);
+        },
+
+        db.TimeStat => {
+            h.update(item.ulid);
+            h.update(item.time);
+        },
+
+        else => |t| @compileError(@typeName(t)),
+    }
 }
