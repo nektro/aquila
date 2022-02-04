@@ -35,7 +35,6 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         file_route("/theme.css"),
         http.router.get("/logout", Middleware(logout).next),
         http.router.get("/about", Middleware(StaticPek("/about.pek", "About").get).next),
-        http.router.get("/contact", Middleware(StaticPek("/contact.pek", "Contact").get).next),
         http.router.get("/login", Middleware(oa2.login).next),
         http.router.get("/callback", Middleware(oa2.callback).next),
         http.router.get("/dashboard", Middleware(_dashboard.get).next),
