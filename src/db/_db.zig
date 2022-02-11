@@ -43,3 +43,43 @@ pub fn close() void {
     db.close();
     db_jobs.close();
 }
+
+pub const CountStat = struct {
+    ulid: string,
+    count: u64,
+};
+
+// deps per pkg
+pub fn chart1(alloc: std.mem.Allocator) ![]const CountStat {
+    return try db.collect(alloc, CountStat, "select p_for, min(length(deps),(length(deps)-length(replace(deps,'\n',''))+1)) from (select * from versions order by id desc) group by p_for", .{});
+}
+
+// pkg size
+pub fn chart2(alloc: std.mem.Allocator) ![]const CountStat {
+    return try db.collect(alloc, CountStat, "select p_for, tar_size from (select * from versions order by id desc) group by p_for", .{});
+}
+
+// releases per pkg
+pub fn chart3(alloc: std.mem.Allocator) ![]const CountStat {
+    return try db.collect(alloc, CountStat, "select p_for, count(p_for) from versions group by p_for", .{});
+}
+
+// pkgs per user
+pub fn chart4(alloc: std.mem.Allocator) ![]const CountStat {
+    return try db.collect(alloc, CountStat, "select owner, count(owner) from packages group by owner", .{});
+}
+
+pub const TimeStat = struct {
+    ulid: string,
+    time: string,
+};
+
+// time since first release
+pub fn chart5(alloc: std.mem.Allocator) ![]const TimeStat {
+    return try db.collect(alloc, TimeStat, "select p_for, created_on from versions group by p_for", .{});
+}
+
+// time since latest release
+pub fn chart6(alloc: std.mem.Allocator) ![]const TimeStat {
+    return try db.collect(alloc, TimeStat, "select p_for, created_on from (select * from versions order by id desc) group by p_for", .{});
+}
