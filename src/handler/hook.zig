@@ -108,10 +108,11 @@ pub fn post(_: void, response: *http.Response, request: http.Request, args: stru
 
     const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ "latest", ".tar.gz" }) });
     try _internal.rename(tarpath, destpath);
-    try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
     const readme = (_internal.readFileContents(dir, alloc, "README.md") catch null) orelse "";
+
+    try std.fs.cwd().deleteTree(path);
 
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
     try p.update(alloc, .license, modfile.yaml.get_string("license"));

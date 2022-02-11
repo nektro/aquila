@@ -90,7 +90,6 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
 
     const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ "latest", ".tar.gz" }) });
     try _internal.rename(tarpath, destpath);
-    try std.fs.cwd().deleteTree(path);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
     const readme = (_internal.readFileContents(dir, alloc, "README.md") catch null) orelse "";
@@ -98,6 +97,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     var p = try db.Package.create(alloc, u, name, r, details.id, repo, desc, license, details.star_count);
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
 
+    try std.fs.cwd().deleteTree(path);
     //
 
     try v.setVersion(alloc, u, 0, 1);
