@@ -14,6 +14,5 @@ powerpc64-linux-musl
 
 for item in $targets
 do
-    echo "$version.$rev $item"
-    zig build -Dtarget=$item -Duse-full-name -Dversion=$version --prefix . -Drelease
+    ./build_release.sh $item
 done
