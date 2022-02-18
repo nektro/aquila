@@ -9,6 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # debug info about this machine
+      - run: uname -a
+      -run: free
+      -run: env
+      -run: mount
+      -run: lscpu
+      -run: lsmem
+      -run: lsblk
+      -run: lspci
+      -run: lsipc
+
       # Get the code
       - uses: actions/checkout@v2
         with:
@@ -25,6 +36,7 @@ jobs:
       - uses: nektro/actions-setup-zigmod@v1
       - run: zigmod version
       - run: zigmod ci
+      - run: cat ./deps.zig
       - run: zig build
       - run: ./build_release.sh x86_64-linux-musl
 
