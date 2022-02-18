@@ -65,9 +65,9 @@ pub fn main() !void {
     //
 
     const dbpath = flag.getSingle("db") orelse "aquila.db";
+    datadirpath = try std.fs.cwd().realpathAlloc(alloc, dbpath);
+    datadirpath = std.fs.path.dirname(datadirpath).?;
     try db.connect(alloc, dbpath);
-    const real = try std.fs.realpathAlloc(alloc, dbpath);
-    datadirpath = std.fs.path.dirname(real).?;
 
     domain = flag.getSingle("domain") orelse @panic("missing required --domain flag");
     disable_import_repo = parseBoolFlag("disable-import-repo", false);
