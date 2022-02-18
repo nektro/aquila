@@ -19,6 +19,7 @@ jobs:
       - run: lsblk
       - run: lspci
       - run: lsipc
+      - run: whoami
 
       # Get the code
       - uses: actions/checkout@v2
@@ -29,7 +30,7 @@ jobs:
 
       # system dependencies
       - run: export DEBIAN_FRONTEND=noninteractive
-      - run: apt -y install pkg-config libpcre3-dev
+      - run: sudo apt -y install pkg-config libpcre3-dev
 
       # Zig
       - uses: goto-bus-stop/setup-zig@v1
