@@ -11,8 +11,10 @@ const cmisc = @import("./../cmisc.zig");
 
 const _internal = @import("./_internal.zig");
 
-pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
-    _ = args;
+pub const Args: ?type = null;
+
+pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    _ = captures;
     try _internal.assert(!root.disable_import_repo, response, .forbidden, "error: importing a repository is temporarily disabled.", .{});
 
     const alloc = request.arena;
@@ -98,6 +100,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, args: struc
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
 
     try std.fs.cwd().deleteTree(path);
+
     //
 
     try v.setVersion(alloc, u, 0, 1);

@@ -33,31 +33,42 @@ pub fn init(alloc: std.mem.Allocator) !void {
 pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
     @setEvalBranchQuota(10000);
     return http.router.Router(void, &.{
-        http.router.get("/", Middleware(_index.get).next),
+        Route2(.get, "/", _index),
         file_route("/theme.css"),
-        http.router.get("/stats", Middleware(_stats.get).next),
+        Route2(.get, "/stats", _stats),
         file_route("/stats.js"),
-        http.router.get("/about", Middleware(StaticPek("/about.pek", "About").get).next),
-        http.router.get("/login", Middleware(oa2.login).next),
-        http.router.get("/callback", Middleware(oa2.callback).next),
-        http.router.get("/logout", Middleware(logout).next),
-        http.router.get("/dashboard", Middleware(_dashboard.get).next),
-        http.router.get("/import", Middleware(_import.get).next),
-        http.router.get("/do_import", Middleware(_do_import.get).next),
-        http.router.get("/all/users", Middleware(_all.users).next),
-        http.router.get("/all/packages", Middleware(_all.packages).next),
-        http.router.get("/:remote/:user", Middleware(_user.get).next),
-        http.router.get("/:remote/:user/:package", Middleware(_package.get).next),
-        http.router.post("/:remote/:user/:package/hook", Middleware(_hook.post).next),
-        http.router.get("/:remote/:user/:package/:version", Middleware(_version.get).next),
+        Route2(.get, "/about", StaticPek("/about.pek", "About")),
+        Route3(.get, "/login", oa2.login),
+        Route3(.get, "/callback", oa2.callback),
+        Route3(.get, "/logout", logout),
+        Route2(.get, "/dashboard", _dashboard),
+        Route2(.get, "/import", _import),
+        Route2(.get, "/do_import", _do_import),
+        Route3(.get, "/all/users", _all.users),
+        Route3(.get, "/all/packages", _all.packages),
+        Route2(.get, "/:remote/:user", _user),
+        Route2(.get, "/:remote/:user/:package", _package),
+        Route2(.post, "/:remote/:user/:package/hook", _hook),
+        Route2(.get, "/:remote/:user/:package/:version", _version),
     });
 }
 
+fn Route1(comptime method: http.Request.Method, comptime endpoint: string, comptime C: ?type, comptime f: anytype) http.router.Route(void) {
+    return @field(http.router.Builder(void), @tagName(method))(endpoint, C, Middleware(f).next);
+}
+
+fn Route2(comptime method: http.Request.Method, comptime endpoint: string, comptime T: type) http.router.Route(void) {
+    return Route1(method, endpoint, T.Args, @field(T, @tagName(method)));
+}
+
+fn Route3(comptime method: http.Request.Method, comptime endpoint: string, comptime f: anytype) http.router.Route(void) {
+    return Route1(method, endpoint, null, f);
+}
+
 fn Middleware(comptime f: anytype) type {
-    const Args = @typeInfo(@TypeOf(f)).Fn.args[3].arg_type.?;
     return struct {
-        pub fn next(_: void, response: *http.Response, request: http.Request, args: Args) !void {
-            f({}, response, request, args) catch |err| {
+        pub fn next(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+            f({}, response, request, captures) catch |err| {
                 if (@as(anyerror, err) == error.HttpNoOp) return;
                 return err;
             };
@@ -65,31 +76,34 @@ fn Middleware(comptime f: anytype) type {
     };
 }
 
-fn file_route(comptime path: string) http.router.Route {
+fn file_route(comptime path: string) http.router.Route(void) {
     const T = struct {
-        fn f(_: void, response: *http.Response, request: http.Request) !void {
+        fn f(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
             _ = request;
+            _ = captures;
 
             if (comptime mime.typeByExtension(std.fs.path.extension(path))) |mediatype| {
                 try response.headers.put("Content-Type", mediatype);
             }
             const w = response.writer();
             if (builtin.mode == .Debug) {
-                const file = try std.fs.cwd().openFile(try std.mem.join(request.arena, "", &.{ "www", path }), .{});
-                defer file.close();
-                return try extras.pipe(file.reader(), w);
+                if (try openFile(std.fs.cwd(), try std.mem.join(request.arena, "", &.{ "www", path }))) |file| {
+                    defer file.close();
+                    return try extras.pipe(file.reader(), w);
+                }
             }
             try response.headers.put("Etag", try etag(request.arena, @field(files, path)));
             try w.writeAll(@field(files, path));
         }
     };
-    return http.router.get(path, T.f);
+    return Route1(.get, path, null, T.f);
 }
 
 fn StaticPek(comptime path: string, comptime title: string) type {
     return struct {
-        pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
-            _ = args;
+        pub const Args: ?type = null;
+        pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+            _ = captures;
 
             try _internal.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
@@ -134,13 +148,20 @@ pub fn getAccessToken(ulid: string) ?string {
     return _internal.access_tokens.get(ulid);
 }
 
-pub fn logout(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
-    _ = args;
+pub fn logout(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    std.debug.assert(captures == null);
     _ = response;
     _ = request;
 
     try cookies.delete(response, "jwt");
     try _internal.redirectTo(response, "./");
+}
+
+pub fn openFile(dir: std.fs.Dir, path: string) !?std.fs.File {
+    return dir.openFile(path, .{}) catch |err| switch (err) {
+        error.FileNotFound => return null,
+        else => |e| return e,
+    };
 }
 
 fn etag(alloc: std.mem.Allocator, input: string) !string {

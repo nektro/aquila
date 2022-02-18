@@ -4,7 +4,11 @@ const http = @import("apple_pie");
 
 const _internal = @import("./_internal.zig");
 
-pub fn get(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string }) !void {
+pub const Args = struct { remote: u64, user: string };
+
+pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
+
     const alloc = request.arena;
     const u = try _internal.getUserOp(response, request);
     const r = try _internal.reqRemote(request, response, args.remote);

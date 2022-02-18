@@ -4,8 +4,10 @@ const db = @import("./../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
 
-pub fn get(_: void, response: *http.Response, request: http.Request, args: struct {}) !void {
-    _ = args;
+pub const Args: ?type = null;
+
+pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    _ = captures;
     const alloc = request.arena;
 
     try _internal.writePageResponse(alloc, response, request, "/stats.pek", .{

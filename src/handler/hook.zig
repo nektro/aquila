@@ -12,7 +12,11 @@ const cmisc = @import("./../cmisc.zig");
 
 const _internal = @import("./_internal.zig");
 
-pub fn post(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string, package: string }) !void {
+pub const Args = struct { remote: u64, user: string, package: string };
+
+pub fn post(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
+
     const alloc = request.arena;
     const r = try _internal.reqRemote(request, response, args.remote);
     const u = try _internal.reqUser(request, response, r, args.user);

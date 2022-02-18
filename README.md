@@ -21,7 +21,7 @@ $ zig build
 ```
 
 ## Built With
-- Zig master (at least `0.10.0-dev.513+029844210`)
+- Zig master (at least `0.10.0-dev.531+3eb8d01f5`)
 - See [`zig.mod`](./zig.mod) and [`zigmod.lock`](./zigmod.lock)
 
 ## License

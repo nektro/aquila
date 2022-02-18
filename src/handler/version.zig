@@ -4,7 +4,11 @@ const http = @import("apple_pie");
 
 const _internal = @import("./_internal.zig");
 
-pub fn get(_: void, response: *http.Response, request: http.Request, args: struct { remote: u64, user: string, package: string, version: string }) !void {
+pub const Args = struct { remote: u64, user: string, package: string, version: string };
+
+pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
+    const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
+
     try _internal.assert(args.version.len > 0, response, .bad_request, "error: empty version string", .{});
     try _internal.assert(std.mem.startsWith(u8, args.version, "v"), response, .bad_request, "error: bad version string format", .{});
 
