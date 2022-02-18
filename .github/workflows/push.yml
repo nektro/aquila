@@ -38,7 +38,7 @@ jobs:
       - run: echo ${{ env.RELEASE_NUM }}
       - uses: docker/build-push-action@v1
         with:
-          username: ${{ secrets.DOCKER_HUB_USER }}
+          username: nektro
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           repository: ${{ env.GITHUB_REPOSITORY }}
           tags: latest,r${{ env.RELEASE_NUM }}
