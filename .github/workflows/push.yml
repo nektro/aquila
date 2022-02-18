@@ -11,14 +11,14 @@ jobs:
     steps:
       # debug info about this machine
       - run: uname -a
-      -run: free
-      -run: env
-      -run: mount
-      -run: lscpu
-      -run: lsmem
-      -run: lsblk
-      -run: lspci
-      -run: lsipc
+      - run: free
+      - run: env
+      - run: mount
+      - run: lscpu
+      - run: lsmem
+      - run: lsblk
+      - run: lspci
+      - run: lsipc
 
       # Get the code
       - uses: actions/checkout@v2
