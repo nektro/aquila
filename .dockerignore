@@ -1,0 +1,7 @@
+.zigmod
+zig-*
+iso
+images
+src
+tools
+docs
