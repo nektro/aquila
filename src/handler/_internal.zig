@@ -8,6 +8,7 @@ const extras = @import("extras");
 const ulid = @import("ulid");
 const root = @import("root");
 const options = @import("build_options");
+const koino = @import("koino");
 
 const cookies = @import("../cookies.zig");
 const db = @import("../db/_db.zig");
@@ -270,4 +271,14 @@ pub fn hashUp(h: *std.hash.Wyhash, item: anytype) void {
 
         else => |t| @compileError(@typeName(t)),
     }
+}
+
+pub fn renderREADME(alloc: std.mem.Allocator, v: db.Version) !string {
+    var p = try koino.parser.Parser.init(alloc, .{});
+    try p.feed(v.readme);
+    var doc = try p.finish();
+    var list = std.ArrayList(u8).init(alloc);
+    errdefer list.deinit();
+    try koino.html.print(list.writer(), alloc, .{}, doc);
+    return list.toOwnedSlice();
 }

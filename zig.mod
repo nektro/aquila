@@ -23,3 +23,4 @@ root_dependencies:
   - src: git https://github.com/truemedian/zfetch
   - src: git https://github.com/nektro/zigmod
   - src: git https://github.com/nektro/zig-git
+  - src: git https://github.com/kivikakk/koino

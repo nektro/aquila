@@ -26,7 +26,7 @@
                     label[for="t-history"]("History")
 
                     div[class="page" id="readme"](
-                        h2("Readme Viewer coming soon!")
+                        {{readme}}
                     )
 
                     div[class="page" id="contents"](

@@ -30,6 +30,9 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
         return;
     }
 
+    // calling inline yields 'error: cannot store runtime value in compile time variable'
+    const readme = try _internal.renderREADME(alloc, v[0]);
+
     try _internal.writePageResponse(alloc, response, request, "/version.pek", .{
         .aquila_version = @import("root").version,
         .page = "version",
@@ -40,6 +43,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
         .package = p,
         .versions = v,
         .version = v[0],
+        .readme = readme,
     });
 }
 
