@@ -27,6 +27,9 @@ jobs:
       - run: git fetch --all --tags
       - run: top -b -n 1 | head -n5
 
+      # system dependencies
+      - run: apt install pkg-config libpcre3-dev
+
       # Zig
       - uses: goto-bus-stop/setup-zig@v1
         with:
