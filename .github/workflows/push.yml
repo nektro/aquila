@@ -28,7 +28,8 @@ jobs:
       - run: top -b -n 1 | head -n5
 
       # system dependencies
-      - run: apt install pkg-config libpcre3-dev
+      - run: export DEBIAN_FRONTEND=noninteractive
+      - run: apt -y install pkg-config libpcre3-dev
 
       # Zig
       - uses: goto-bus-stop/setup-zig@v1
