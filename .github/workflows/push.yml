@@ -46,6 +46,7 @@ jobs:
       - run: ./build_release.sh x86_64-linux-musl
       - run: ./build_release.sh aarch64-linux-musl
       - run: ./build_release.sh riscv64-linux-musl
+      - run: ./build_release.sh powerpc64-linux-musl
 
       # Github Release
       - run: ./changelog.sh
