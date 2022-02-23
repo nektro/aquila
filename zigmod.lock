@@ -29,5 +29,6 @@ git https://github.com/nektro/zig-inquirer commit-14c3492c46f9765c3e77436741794d
 git https://github.com/arqv/ini commit-b93f5b5ff9449f9af68ae3081f6a5e858b6698d9
 git https://github.com/nektro/zig-git commit-f629cd04c9907c1f39e527a30e99393c2cc643f3
 git https://github.com/kivikakk/koino commit-c5dbce2079521490be3ad93c0eb51ea62d24e8d1
-git https://github.com/kivikakk/libpcre.zig commit-28b876a73d2f7ad2f63aa8219156aca926ef2400
+git https://github.com/kivikakk/libpcre.zig commit-5e3b58e151530b59e7761e28fc448f88e5843ee7
+git https://github.com/nektro/pcre-8.45 commit-c21756b988596722572ea473806651c164ee1114
 git https://github.com/kivikakk/zunicode commit-5bf4a3a5f0c6e3d96f6def56957ab7f201851c50
