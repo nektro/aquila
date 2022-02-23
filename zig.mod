@@ -8,8 +8,6 @@ provides: ["aquila"]
 root_files:
   - www
 root_dependencies:
-  - src: git https://github.com/nektro/iguanaTLS
-
   - src: git https://github.com/Luukdegram/apple_pie
   - src: git https://github.com/nektro/zig-pek
   - src: git https://github.com/nektro/zig-zorm
