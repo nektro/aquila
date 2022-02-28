@@ -4,8 +4,9 @@ const builtin = @import("builtin");
 const deps = @import("./deps.zig");
 
 pub fn build(b: *std.build.Builder) void {
-    var target = b.standardTargetOptions(.{});
-    if (target.isGnuLibC()) target.setGnuLibCVersion(2, 28, 0);
+    const target = b.standardTargetOptions(.{
+        .default_target = std.zig.CrossTarget{ .abi = .musl },
+    });
     std.debug.assert(target.getOsTag() == .linux);
 
     b.setPreferredReleaseMode(.ReleaseSafe);
