@@ -47,18 +47,6 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
     try pek.compile(root, alloc, w, tmpl, data);
 }
 
-const wyhash = struct {
-    pub const Writer = std.io.Writer(*std.hash.Wyhash, error{}, write);
-
-    fn write(self: *std.hash.Wyhash, b: []const u8) error{}!usize {
-        self.update(b);
-    }
-
-    pub fn writer(self: *std.hash.Wyhash) Writer {
-        return .{ .context = self };
-    }
-};
-
 pub const JWT = struct {
     const Payload = struct {
         iss: string, // issuer
