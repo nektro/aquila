@@ -23,12 +23,15 @@ type: Type,
 domain: string,
 
 usingnamespace _internal.TableTypeMixin(Remote);
+usingnamespace _internal.JsonStructSkipMixin(@This(), &.{});
 
 pub const Type = enum {
     github,
     gitea,
 
     pub const BaseType = string;
+
+    usingnamespace extras.TagNameJsonStringifyMixin(@This());
 };
 
 pub const Repo = struct {

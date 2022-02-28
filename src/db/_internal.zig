@@ -189,3 +189,57 @@ fn typeToSqliteType(comptime T: type) string {
         else => @compileError("typeToSqliteType: " ++ @typeName(T)),
     };
 }
+
+// pub fn JsonStructSkipMixin(comptime S: type, comptime skips: []const std.meta.FieldEnum(S)) type {
+pub fn JsonStructSkipMixin(comptime S: type, comptime skips: []const string) type {
+    return struct {
+        pub fn jsonStringify(self: S, options: std.json.StringifyOptions, out_stream: anytype) !void {
+            try out_stream.writeByte('{');
+            var field_output = false;
+            var child_options = options;
+            if (child_options.whitespace) |*child_whitespace| {
+                child_whitespace.indent_level += 1;
+            }
+            inline for (std.meta.fields(S)) |Field| {
+                // don't include void fields
+                if (Field.field_type == void) continue;
+
+                var emit_field = true;
+
+                for (skips) |skp| {
+                    // if (std.mem.eql(u8, @tagName(skp), Field.name)) {
+                    if (std.mem.eql(u8, skp, Field.name)) {
+                        emit_field = false;
+                    }
+                }
+
+                if (emit_field) {
+                    if (!field_output) {
+                        field_output = true;
+                    } else {
+                        try out_stream.writeByte(',');
+                    }
+                    if (child_options.whitespace) |child_whitespace| {
+                        try out_stream.writeByte('\n');
+                        try child_whitespace.outputIndent(out_stream);
+                    }
+                    try std.json.stringify(Field.name, options, out_stream);
+                    try out_stream.writeByte(':');
+                    if (child_options.whitespace) |child_whitespace| {
+                        if (child_whitespace.separator) {
+                            try out_stream.writeByte(' ');
+                        }
+                    }
+                    try std.json.stringify(@field(self, Field.name), child_options, out_stream);
+                }
+            }
+            if (field_output) {
+                if (options.whitespace) |whitespace| {
+                    try out_stream.writeByte('\n');
+                    try whitespace.outputIndent(out_stream);
+                }
+            }
+            try out_stream.writeByte('}');
+        }
+    };
+}

@@ -16,20 +16,6 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const p = try _internal.reqPackage(request, response, o, args.package);
     const v = try p.versions(alloc);
 
-    const h = try request.headers(alloc);
-    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
-    if (std.mem.eql(u8, h.get("Accept") orelse h.get("accept") orelse "", "application/json")) {
-        // stub for `zigmod aq add x/y/z`
-        // TODO fill out json api
-        try response.headers.put("Content-Type", "application/json");
-        try std.json.stringify(
-            JsonStub{ .repo = .{ .domain = r.domain }, .pkg = .{ .RemoteName = p.remote_name, .remote_name = p.remote_name } },
-            .{},
-            response.writer(),
-        );
-        return;
-    }
-
     // calling inline yields 'error: cannot store runtime value in compile time variable'
     const readme = try _internal.renderREADME(alloc, v[0]);
 
@@ -46,9 +32,3 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
         .readme = readme,
     });
 }
-
-// Fill in since stage1 messes up on nested anonymous structs
-const JsonStub = struct {
-    repo: struct { domain: string },
-    pkg: struct { RemoteName: string, remote_name: string },
-};

@@ -35,6 +35,7 @@ pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: 
 
 usingnamespace _internal.TableTypeMixin(User);
 usingnamespace _internal.ByKeyGen(User);
+usingnamespace _internal.JsonStructSkipMixin(@This(), &.{"id"});
 
 pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
 

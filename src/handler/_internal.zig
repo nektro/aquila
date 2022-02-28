@@ -33,6 +33,14 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
     try response.headers.put("Etag", try std.fmt.allocPrint(alloc, "\"{x}\"", .{h.final()}));
 
     const w = response.writer();
+
+    const headers = try request.headers(alloc);
+    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
+    if (std.mem.eql(u8, headers.get("Accept") orelse headers.get("accept") orelse "", "application/json")) {
+        try std.json.stringify(data, .{}, w);
+        return;
+    }
+
     const head = files.@"/_header.pek";
     const page = @field(files, name);
     const tmpl = comptime pek.parse(head ++ page);

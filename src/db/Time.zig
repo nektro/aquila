@@ -3,10 +3,13 @@ const Self = @This();
 const std = @import("std");
 const string = []const u8;
 const time = @import("time");
+const extras = @import("extras");
 
 const _internal = @import("./_internal.zig");
 
 ctx: time.DateTime,
+
+usingnamespace extras.StringerJsonStringifyMixin(@This());
 
 pub fn formatAlloc(self: Self, alloc: std.mem.Allocator, comptime fmt: string) !string {
     return self.ctx.formatAlloc(alloc, fmt);

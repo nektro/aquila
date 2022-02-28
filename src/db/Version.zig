@@ -60,6 +60,7 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
 
 usingnamespace _internal.TableTypeMixin(Version);
 usingnamespace _internal.ByKeyGen(Version);
+usingnamespace _internal.JsonStructSkipMixin(@This(), &.{ "id", "readme", "files", "approved_by", "deps" });
 
 pub fn latest(alloc: std.mem.Allocator) ![]const Version {
     return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
@@ -104,6 +105,10 @@ const StringList = struct {
         }
         return res.toOwnedSlice();
     }
+
+    pub fn jsonStringify(self: Self, options: std.json.StringifyOptions, writer: anytype) !void {
+        try std.json.stringify(self.data, options, writer);
+    }
 };
 
 const DepList = struct {
@@ -144,5 +149,44 @@ const DepList = struct {
             try w.print("{s} {s} {s}", .{ @tagName(item.type), item.path, item.version });
         }
         return res.toOwnedSlice();
+    }
+
+    pub fn jsonStringify(self: DepList, options: std.json.StringifyOptions, writer: anytype) !void {
+        try writer.writeByte('[');
+        var child_options = options;
+        if (child_options.whitespace) |*whitespace| {
+            whitespace.indent_level += 1;
+        }
+        for (self.data) |x, i| {
+            if (i != 0) {
+                try writer.writeByte(',');
+            }
+            if (child_options.whitespace) |child_whitespace| {
+                try writer.writeByte('\n');
+                try child_whitespace.outputIndent(writer);
+            }
+
+            var buf: [1024]u8 = undefined;
+            var fba = std.heap.FixedBufferAllocator.init(&buf);
+            const alloc = fba.allocator();
+
+            var list = std.ArrayList(u8).init(alloc);
+            errdefer list.deinit();
+            const w = list.writer();
+
+            try w.writeAll(@tagName(x.type));
+            try w.print(" {s}", .{x.path});
+            if (x.version.len > 0) try w.print(" {s}", .{x.version});
+
+            try std.json.stringify(list.toOwnedSlice(), options, writer);
+        }
+        if (self.data.len != 0) {
+            if (options.whitespace) |whitespace| {
+                try writer.writeByte('\n');
+                try whitespace.outputIndent(writer);
+            }
+        }
+        try writer.writeByte(']');
+        return;
     }
 };

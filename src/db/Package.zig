@@ -51,6 +51,7 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
 
 usingnamespace _internal.TableTypeMixin(Package);
 usingnamespace _internal.ByKeyGen(Package);
+usingnamespace _internal.JsonStructSkipMixin(@This(), &.{ "id", "hook_secret" });
 
 pub const findVersionBy = _internal.FindByGen(Package, Version, .p_for, .uuid).first;
 
