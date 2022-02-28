@@ -1,5 +1,4 @@
 const std = @import("std");
-const string = []const u8;
 const shared = @import("./shared.zig");
 
 pub fn main() !void {

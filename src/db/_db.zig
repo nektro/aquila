@@ -2,7 +2,6 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("extras");
 const root = @import("root");
-const ulid = @import("ulid");
 
 const _internal = @import("./_internal.zig");
 const db = &_internal.db;

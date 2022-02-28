@@ -5,8 +5,6 @@ const string = []const u8;
 const time = @import("time");
 const extras = @import("extras");
 
-const _internal = @import("./_internal.zig");
-
 ctx: time.DateTime,
 
 usingnamespace extras.StringerJsonStringifyMixin(@This());
