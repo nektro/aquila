@@ -10,4 +10,4 @@ target=$1
 # TODO error if $target is empty
 
 echo "$version.$rev $target"
-zig build -Dtarget=$target -Duse-full-name -Dversion=$version --prefix . -Drelease
+$(which time) zig build -Dtarget=$target -Duse-full-name -Dversion=$version --prefix . -Drelease
