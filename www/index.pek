@@ -40,7 +40,7 @@
                     div[class="terminal-card"](
                         div(
                             h3[style="margin-bottom: 0;"](
-                                a[class="link-as-text" href=({#version_pkg_path this})]
+                                a[href=({#version_pkg_path this}"/"{this})]({#version_pkg_path this})
                                 span(i[class="star icon"]" "{#version_pkg_stars this})
                             )
                             div(i[class="tag icon"]" "{this})
