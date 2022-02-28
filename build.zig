@@ -6,6 +6,7 @@ const deps = @import("./deps.zig");
 pub fn build(b: *std.build.Builder) void {
     var target = b.standardTargetOptions(.{});
     if (target.isGnuLibC()) target.setGnuLibCVersion(2, 28, 0);
+    std.debug.assert(target.getOsTag() == .linux);
 
     b.setPreferredReleaseMode(.ReleaseSafe);
     const mode = b.standardReleaseOptions();
