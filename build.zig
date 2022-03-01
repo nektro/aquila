@@ -25,7 +25,6 @@ pub fn build(b: *std.build.Builder) void {
     exe.addOptions("build_options", exe_options);
     exe_options.addOption(string, "version", b.option(string, "version", "") orelse "dev");
 
-    exe.linkLibC();
     deps.addAllTo(exe);
     exe.install();
 
