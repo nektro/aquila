@@ -12,6 +12,6 @@ PROJECT_REPONAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
     -t ${GITHUB_TOKEN} \
     -u ${PROJECT_USERNAME} \
     -r ${PROJECT_REPONAME} \
-    -b "$(./changelog.sh)" \
+    -b "$(./changelog.sh | tac)" \
     "$tag" \
     "./bin/"
