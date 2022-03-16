@@ -109,17 +109,21 @@ pub fn main() !void {
 
     {
         const current = try db.Remote.all(alloc, .asc);
-        std.debug.assert(oa2.clients.len >= current.len);
-        var i: usize = 0;
-        while (i < current.len) : (i += 1) {
-            const p = oa2.clients[i].provider;
-            std.log.info("Remote #{d} is now live with {s}", .{ i + 1, p.id });
-            std.debug.assert(std.mem.eql(u8, p.domain(), current[i].domain));
+        var map = std.StringHashMap(db.Remote).init(alloc);
+        defer map.deinit();
+
+        for (current) |item| {
+            try map.put(item.domain, item);
         }
-        while (i < oa2.clients.len) : (i += 1) {
+        for (oa2.clients) |_, i| {
             const idp = oa2.clients[i].provider;
-            std.log.info("Remote +{d} is now live with {s}", .{ i + 1, idp.id });
-            _ = try db.Remote.create(alloc, oa2IdToRemoTy(idp.id), idp.domain());
+            const entry = try map.getOrPut(idp.domain());
+            if (entry.found_existing) {
+                std.log.info("Remote #{d} is now live with {s}", .{ entry.value_ptr.id, idp.id });
+                continue;
+            }
+            std.log.info("Remote +{d} is now live with {s}", .{ current.len + i + 1, idp.id });
+            entry.value_ptr.* = try db.Remote.create(alloc, oa2IdToRemoTy(idp.id), idp.domain());
         }
     }
 
