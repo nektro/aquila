@@ -9,14 +9,13 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 > Note: for the full list of QEMU supported architectures see https://pkgs.alpinelinux.org/packages?name=qemu-system-*&branch=edge&arch=x86_64
 
 0. The os/arch combo is supported in some official capacity by upstream and a potential candidate.
-1. A script exists in [`generate/`](../generate) that can build a reusable QEMU base image. (Some extra assembly may be required for certain targets.)
 
 |              | Version | x86_64 | arm64 | x86 | arm | riscv64 | ppc64el | mips64el | sparcv9 | s390x |
 |--------------|---------|--------|-------|-----|-----|---------|---------|----------|---------|-------|
-| linux/alpine | 3.15.0  | 1      | 0     | 1   | 0   |         | 0       |          |         | 0     |
-| linux/debian | 10.10.0 | 1      | 0     | 1   | 0   |         | 0       | 0        |         | 0     |
-| freebsd      | 13.0    | 1      | 0     | 1   |     | 0       | 0       |          |         |       |
-| netbsd       | 9.2     | 1      | 0     | 1   | 0   |         |         | 0        | 0       |       |
+| linux/alpine | 3.15.0  | 0      | 0     | 0   | 0   |         | 0       |          |         | 0     |
+| linux/debian | 10.10.0 | 0      | 0     | 0   | 0   |         | 0       | 0        |         | 0     |
+| freebsd      | 13.0    | 0      | 0     | 0   |     | 0       | 0       |          |         |       |
+| netbsd       | 9.2     | 0      | 0     | 0   | 0   |         |         | 0        | 0       |       |
 | openbsd      | 7.0     | 0      | 0     | 0   | 0   | 0       |         |          | 0       |       |
 | dragonflybsd | 6.0.1   | 0      |       |     |     |         |         |          |         |       |
 | linux/nixos  | 21.05   | 0      |       | 0   |     |         |         |          |         |       |
