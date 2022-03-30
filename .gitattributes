@@ -5,6 +5,4 @@
 *.zig text eol=lf
 
 # Zigmod
-zig.mod text eol=lf
 zigmod.* text eol=lf
-zig.mod linguist-language=YAML
