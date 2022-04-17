@@ -36,5 +36,5 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 <!-- https://docs.drone.io/pipeline/exec/syntax/platform/#supported-platforms -->
 <!-- https://man.sr.ht/builds.sr.ht/compatibility.md -->
-<!-- https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#github-hosted-runners -->
+<!-- https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners -->
 <!-- https://docs.gitlab.com/runner/install/ -->
