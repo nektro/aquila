@@ -38,7 +38,7 @@ pub fn main() !void {
                 try w.print(".{s}", .{h[0..9]});
             }
         }
-        if (docker.amInside(alloc) catch false) try w.writeAll(".docker");
+        if (docker.amInside() catch false) try w.writeAll(".docker");
         try w.print(".zig{}", .{builtin.zig_version});
         version = sbuilder.toOwnedSlice();
     }
