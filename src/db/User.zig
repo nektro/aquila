@@ -10,8 +10,8 @@ const Package = _db.Package;
 const Remote = _db.Remote;
 const Time = _db.Time;
 
-const _internal = @import("ox").sql;
-const db = &_internal.db;
+const ox = @import("ox").sql;
+const db = &ox.db;
 
 id: u64 = 0,
 uuid: ulid.ULID,
@@ -24,8 +24,8 @@ pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: 
     db.mutex.lock();
     defer db.mutex.unlock();
 
-    return try _internal.insert(alloc, &User{
-        .uuid = _internal.factory.newULID(),
+    return try ox.insert(alloc, &User{
+        .uuid = ox.factory.newULID(),
         .provider = provider,
         .snowflake = snowflake,
         .name = name,
@@ -33,11 +33,11 @@ pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: 
     });
 }
 
-usingnamespace _internal.TableTypeMixin(User);
-usingnamespace _internal.ByKeyGen(User);
-usingnamespace _internal.JsonStructSkipMixin(@This(), &.{"id"});
+usingnamespace ox.TableTypeMixin(User);
+usingnamespace ox.ByKeyGen(User);
+usingnamespace ox.JsonStructSkipMixin(@This(), &.{"id"});
 
-pub const findPackageBy = _internal.FindByGen(User, Package, .owner, .uuid).first;
+pub const findPackageBy = ox.FindByGen(User, Package, .owner, .uuid).first;
 
 pub fn packages(self: User, alloc: std.mem.Allocator) ![]const Package {
     return try Package.byKeyAll(alloc, .owner, self.uuid, .asc);

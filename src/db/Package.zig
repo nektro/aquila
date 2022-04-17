@@ -12,8 +12,8 @@ const Time = _db.Time;
 const User = _db.User;
 const Remote = _db.Remote;
 
-const _internal = @import("ox").sql;
-const db = &_internal.db;
+const ox = @import("ox").sql;
+const db = &ox.db;
 
 id: u64 = 0,
 uuid: ulid.ULID,
@@ -33,8 +33,8 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
     db.mutex.lock();
     defer db.mutex.unlock();
 
-    return try _internal.insert(alloc, &Package{
-        .uuid = _internal.factory.newULID(),
+    return try ox.insert(alloc, &Package{
+        .uuid = ox.factory.newULID(),
         .owner = owner.uuid,
         .name = name,
         .created_on = Time.now(),
@@ -49,11 +49,11 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
     });
 }
 
-usingnamespace _internal.TableTypeMixin(Package);
-usingnamespace _internal.ByKeyGen(Package);
-usingnamespace _internal.JsonStructSkipMixin(@This(), &.{ "id", "hook_secret" });
+usingnamespace ox.TableTypeMixin(Package);
+usingnamespace ox.ByKeyGen(Package);
+usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "hook_secret" });
 
-pub const findVersionBy = _internal.FindByGen(Package, Version, .p_for, .uuid).first;
+pub const findVersionBy = ox.FindByGen(Package, Version, .p_for, .uuid).first;
 
 pub fn latest(alloc: std.mem.Allocator) ![]const Package {
     return try db.collect(alloc, Package, "select * from packages order by id desc limit 15", .{});

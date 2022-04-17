@@ -11,8 +11,8 @@ const Time = _db.Time;
 const User = _db.User;
 const Package = _db.Package;
 
-const _internal = @import("ox").sql;
-const db = &_internal.db;
+const ox = @import("ox").sql;
+const db = &ox.db;
 
 id: u64 = 0,
 uuid: ulid.ULID,
@@ -37,8 +37,8 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
     db.mutex.lock();
     defer db.mutex.unlock();
 
-    return try _internal.insert(alloc, &Version{
-        .uuid = _internal.factory.newULID(),
+    return try ox.insert(alloc, &Version{
+        .uuid = ox.factory.newULID(),
         .p_for = pkg.uuid,
         .created_on = Time.now(),
         .commit_to = commit,
@@ -58,9 +58,9 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
     });
 }
 
-usingnamespace _internal.TableTypeMixin(Version);
-usingnamespace _internal.ByKeyGen(Version);
-usingnamespace _internal.JsonStructSkipMixin(@This(), &.{ "id", "readme", "files", "approved_by", "deps" });
+usingnamespace ox.TableTypeMixin(Version);
+usingnamespace ox.ByKeyGen(Version);
+usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "readme", "files", "approved_by", "deps" });
 
 pub fn latest(alloc: std.mem.Allocator) ![]const Version {
     return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});

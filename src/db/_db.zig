@@ -1,11 +1,10 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("extras");
-const root = @import("root");
 
-const _internal = @import("ox").sql;
-const db = &_internal.db;
-const Engine = _internal.Engine;
+const ox = @import("ox").sql;
+const db = &ox.db;
+const Engine = ox.Engine;
 
 pub const Remote = @import("./Remote.zig");
 pub const User = @import("./User.zig");
@@ -24,10 +23,10 @@ pub fn connect(alloc: std.mem.Allocator, path: string) !void {
 
     db.* = try Engine.connect(try alloc.dupeZ(u8, abspath));
 
-    try _internal.createTableT(alloc, db, Remote);
-    try _internal.createTableT(alloc, db, User);
-    try _internal.createTableT(alloc, db, Package);
-    try _internal.createTableT(alloc, db, Version);
+    try ox.createTableT(alloc, db, Remote);
+    try ox.createTableT(alloc, db, User);
+    try ox.createTableT(alloc, db, Package);
+    try ox.createTableT(alloc, db, Version);
 }
 
 pub fn close() void {

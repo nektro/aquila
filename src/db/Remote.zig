@@ -14,16 +14,16 @@ const _db = @import("./_db.zig");
 const User = _db.User;
 const Package = _db.Package;
 
-const _internal = @import("ox").sql;
-const db = &_internal.db;
+const ox = @import("ox").sql;
+const db = &ox.db;
 
 id: u64 = 0,
 uuid: ulid.ULID,
 type: Type,
 domain: string,
 
-usingnamespace _internal.TableTypeMixin(Remote);
-usingnamespace _internal.JsonStructSkipMixin(@This(), &.{});
+usingnamespace ox.TableTypeMixin(Remote);
+usingnamespace ox.JsonStructSkipMixin(@This(), &.{});
 
 pub const Type = enum {
     github,
@@ -50,7 +50,7 @@ pub const RepoDetails = struct {
     owner: string,
 };
 
-pub const findUserBy = _internal.FindByGen(Remote, User, .provider, .id).first;
+pub const findUserBy = ox.FindByGen(Remote, User, .provider, .id).first;
 
 pub fn byKey(alloc: std.mem.Allocator, comptime key: std.meta.FieldEnum(Remote), value: extras.FieldType(Remote, key)) !?Remote {
     for (try Remote.all(alloc, .asc)) |item| {
@@ -69,8 +69,8 @@ pub fn create(alloc: std.mem.Allocator, ty: Type, domain: string) !Remote {
     db.mutex.lock();
     defer db.mutex.unlock();
 
-    return _internal.insert(alloc, &Remote{
-        .uuid = _internal.factory.newULID(),
+    return ox.insert(alloc, &Remote{
+        .uuid = ox.factory.newULID(),
         .type = ty,
         .domain = domain,
     });
