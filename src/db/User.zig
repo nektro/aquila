@@ -10,7 +10,7 @@ const Package = _db.Package;
 const Remote = _db.Remote;
 const Time = _db.Time;
 
-const _internal = @import("./_internal.zig");
+const _internal = @import("ox").sql;
 const db = &_internal.db;
 
 id: u64 = 0,

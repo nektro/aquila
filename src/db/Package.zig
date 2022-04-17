@@ -12,7 +12,7 @@ const Time = _db.Time;
 const User = _db.User;
 const Remote = _db.Remote;
 
-const _internal = @import("./_internal.zig");
+const _internal = @import("ox").sql;
 const db = &_internal.db;
 
 id: u64 = 0,

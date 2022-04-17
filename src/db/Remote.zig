@@ -14,7 +14,7 @@ const _db = @import("./_db.zig");
 const User = _db.User;
 const Package = _db.Package;
 
-const _internal = @import("./_internal.zig");
+const _internal = @import("ox").sql;
 const db = &_internal.db;
 
 id: u64 = 0,

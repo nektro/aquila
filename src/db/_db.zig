@@ -3,7 +3,7 @@ const string = []const u8;
 const extras = @import("extras");
 const root = @import("root");
 
-const _internal = @import("./_internal.zig");
+const _internal = @import("ox").sql;
 const db = &_internal.db;
 const Engine = _internal.Engine;
 

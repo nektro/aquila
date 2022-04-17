@@ -3,6 +3,7 @@ AGPL-3.0:
 - This
 - git https://github.com/nektro/zig-pek
 - git https://github.com/nektro/zig-zorm
+- git https://github.com/nektro/ox
 
 MIT:
 = https://spdx.org/licenses/MIT
