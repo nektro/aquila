@@ -1,7 +1,6 @@
 const std = @import("std");
 const string = []const u8;
 const builtin = @import("builtin");
-const options = @import("build_options");
 const http = @import("apple_pie");
 const extras = @import("extras");
 const oauth2 = @import("oauth2");
@@ -16,6 +15,7 @@ const signal = @import("./signal.zig");
 const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 
+pub const build_options = @import("build_options");
 pub const name = "Aquila";
 pub const log_level: std.log.Level = .debug;
 
@@ -31,9 +31,9 @@ pub fn main() !void {
     {
         var sbuilder = std.ArrayList(u8).init(alloc);
         const w = sbuilder.writer();
-        try w.writeAll(options.version);
+        try w.writeAll(build_options.version);
 
-        if (std.mem.eql(u8, options.version, "dev")) {
+        if (std.mem.eql(u8, build_options.version, "dev")) {
             if (git.getHEAD(alloc, std.fs.cwd()) catch null) |h| {
                 try w.print(".{s}", .{h[0..9]});
             }

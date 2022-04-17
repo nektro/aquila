@@ -6,10 +6,11 @@ const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const json = @import("json");
 const builtin = @import("builtin");
+const ox = @import("ox").www;
 
 const mime = @import("../mime.zig");
 const db = @import("../db/_db.zig");
-const cookies = @import("../cookies.zig");
+const cookies = @import("cookies");
 
 const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
@@ -24,7 +25,7 @@ const _all = @import("./all.zig");
 const _stats = @import("./stats.zig");
 
 pub fn init(alloc: std.mem.Allocator) !void {
-    _internal.jwt_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 64);
+    ox.jwt_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 64);
     _internal.access_tokens = std.StringHashMap(string).init(alloc);
     _internal.token_liveness = std.StringHashMap(i64).init(alloc);
     _internal.token_expires = std.StringHashMap(i64).init(alloc);
@@ -116,7 +117,7 @@ fn StaticPek(comptime path: string, comptime title: string) type {
 }
 
 pub fn isLoggedIn(request: http.Request) !bool {
-    const x = _internal.JWT.veryifyRequest(request) catch |err| switch (err) {
+    const x = ox.token.veryifyRequest(request) catch |err| switch (err) {
         error.NoTokenFound, error.InvalidSignature => return false,
         else => return err,
     };
@@ -136,7 +137,7 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     const ulid = try _internal.access_tokens.allocator.dupe(u8, try u.uuid.toString(alloc));
 
     try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
-        try _internal.JWT.encodeMessage(alloc, ulid),
+        try ox.token.encodeMessage(alloc, ulid),
     }));
     try _internal.cleanMaps();
     try _internal.access_tokens.put(ulid, try _internal.access_tokens.allocator.dupe(u8, val.get("access_token").?.String));

@@ -37,6 +37,7 @@ MIT:
 - git https://github.com/kivikakk/koino
 - git https://github.com/kivikakk/libpcre.zig
 - git https://github.com/kivikakk/zunicode
+- git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd
 
 BSD-3-Clause:
 = https://spdx.org/licenses/BSD-3-Clause

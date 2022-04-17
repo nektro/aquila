@@ -23,3 +23,4 @@ root_dependencies:
   - src: git https://github.com/nektro/zig-git
   - src: git https://github.com/kivikakk/koino
   - src: git https://github.com/nektro/ox
+  - src: git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd # cookies

@@ -3,19 +3,18 @@ const string = []const u8;
 const http = @import("apple_pie");
 const files = @import("self/files");
 const pek = @import("pek");
-const jwt = @import("jwt");
 const extras = @import("extras");
 const ulid = @import("ulid");
 const root = @import("root");
 const options = @import("build_options");
 const koino = @import("koino");
+const ox = @import("ox").www;
 
-const cookies = @import("../cookies.zig");
+const cookies = @import("cookies");
 const db = @import("../db/_db.zig");
 
 const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 
-pub var jwt_secret: string = "";
 pub var access_tokens: std.StringHashMap(string) = undefined;
 pub var token_liveness: std.StringHashMap(i64) = undefined;
 pub var token_expires: std.StringHashMap(i64) = undefined;
@@ -47,66 +46,8 @@ pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, req
     try pek.compile(root, alloc, w, tmpl, data);
 }
 
-pub const JWT = struct {
-    const Payload = struct {
-        iss: string, // issuer
-        sub: string, // subject
-        iat: i64, // issued-at
-        exp: i64, // expiration
-        nbf: u64, // not-before
-    };
-
-    pub fn veryifyRequest(request: http.Request) !string {
-        const text = (try tokenFromRequest(request)) orelse return error.NoTokenFound;
-        const payload = try jwt.validate(Payload, request.arena, .HS256, text, .{ .key = jwt_secret });
-        return payload.sub;
-    }
-
-    fn tokenFromRequest(request: http.Request) !?string {
-        const T = fn (http.Request) anyerror!?string;
-        for (&[_]T{ tokenFromCookie, tokenFromHeader, tokenFromQuery }) |item| {
-            if (try item(request)) |token| {
-                return token;
-            }
-        }
-        return null;
-    }
-
-    fn tokenFromHeader(request: http.Request) !?string {
-        const headers = try request.headers(request.arena);
-        // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
-        const auth = headers.get("Authorization") orelse headers.get("authorization");
-        if (auth == null) return null;
-        const ret = extras.trimPrefix(auth.?, "Bearer ");
-        if (ret.len == auth.?.len) return null;
-        return ret;
-    }
-
-    fn tokenFromCookie(request: http.Request) !?string {
-        const headers = try request.headers(request.arena);
-        const yum = try cookies.parse(request.arena, headers);
-        return yum.get("jwt");
-    }
-
-    fn tokenFromQuery(request: http.Request) !?string {
-        const q = try request.context.uri.queryParameters(request.arena);
-        return q.get("jwt");
-    }
-
-    pub fn encodeMessage(alloc: std.mem.Allocator, msg: string) !string {
-        const p = Payload{
-            .iss = root.name ++ ".r" ++ options.version,
-            .sub = msg,
-            .iat = std.time.timestamp(),
-            .exp = std.time.timestamp() + (std.time.s_per_hour * 24 * 30),
-            .nbf = epoch / std.time.ms_per_s,
-        };
-        return try jwt.encode(alloc, .HS256, p, .{ .key = jwt_secret });
-    }
-};
-
 pub fn getUser(response: *http.Response, request: http.Request) !db.User {
-    const x = JWT.veryifyRequest(request) catch |err| switch (err) {
+    const x = ox.token.veryifyRequest(request) catch |err| switch (err) {
         error.NoTokenFound, error.InvalidSignature => |e| {
             try response.headers.put("X-Jwt-Fail", @errorName(e));
             try redirectTo(response, "./login");
@@ -122,7 +63,7 @@ pub fn getUser(response: *http.Response, request: http.Request) !db.User {
 pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
     _ = response;
 
-    const x = JWT.veryifyRequest(request) catch |err| switch (err) {
+    const x = ox.token.veryifyRequest(request) catch |err| switch (err) {
         error.NoTokenFound, error.InvalidSignature => return null,
         else => return err,
     };
