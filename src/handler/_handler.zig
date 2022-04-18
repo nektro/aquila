@@ -10,7 +10,6 @@ const ox = @import("ox").www;
 
 const mime = @import("../mime.zig");
 const db = @import("../db/_db.zig");
-const cookies = @import("cookies");
 
 const _internal = @import("./_internal.zig");
 const _index = @import("./index.zig");
@@ -41,7 +40,7 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
         Route2(.get, "/about", StaticPek("/about.pek", "About")),
         Route3(.get, "/login", oa2.login),
         Route3(.get, "/callback", oa2.callback),
-        Route3(.get, "/logout", logout),
+        Route3(.get, "/logout", ox.logout),
         Route2(.get, "/dashboard", _dashboard),
         Route2(.get, "/import", _import),
         Route2(.get, "/do_import", _do_import),
@@ -55,7 +54,7 @@ pub fn getHandler(comptime oa2: type) http.RequestHandler(void) {
 }
 
 fn Route1(comptime method: http.Request.Method, comptime endpoint: string, comptime C: ?type, comptime f: anytype) http.router.Route(void) {
-    return @field(http.router.Builder(void), @tagName(method))(endpoint, C, Middleware(f).next);
+    return @field(http.router.Builder(void), @tagName(method))(endpoint, C, ox.Route(f));
 }
 
 fn Route2(comptime method: http.Request.Method, comptime endpoint: string, comptime T: type) http.router.Route(void) {
@@ -64,17 +63,6 @@ fn Route2(comptime method: http.Request.Method, comptime endpoint: string, compt
 
 fn Route3(comptime method: http.Request.Method, comptime endpoint: string, comptime f: anytype) http.router.Route(void) {
     return Route1(method, endpoint, null, f);
-}
-
-fn Middleware(comptime f: anytype) type {
-    return struct {
-        pub fn next(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
-            f({}, response, request, captures) catch |err| {
-                if (@as(anyerror, err) == error.HttpNoOp) return;
-                return err;
-            };
-        }
-    };
 }
 
 fn file_route(comptime path: string) http.router.Route(void) {
@@ -106,7 +94,7 @@ fn StaticPek(comptime path: string, comptime title: string) type {
         pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
             _ = captures;
 
-            try _internal.writePageResponse(request.arena, response, request, path, .{
+            try ox.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,
                 .page = "static",
                 .title = title,
@@ -114,17 +102,6 @@ fn StaticPek(comptime path: string, comptime title: string) type {
             });
         }
     };
-}
-
-pub fn isLoggedIn(request: http.Request) !bool {
-    const x = ox.token.veryifyRequest(request) catch |err| switch (err) {
-        error.NoTokenFound, error.InvalidSignature => return false,
-        else => return err,
-    };
-    // don't need to waste hops to the db to check if its a value user ID because
-    // if the signature is valid we know it came from us
-    _ = x;
-    return true;
 }
 
 pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Provider, id: string, name: string, val: json.Value, val2: json.Value) !void {
@@ -147,15 +124,6 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
 
 pub fn getAccessToken(ulid: string) ?string {
     return _internal.access_tokens.get(ulid);
-}
-
-pub fn logout(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
-    std.debug.assert(captures == null);
-    _ = response;
-    _ = request;
-
-    try cookies.delete(response, "jwt");
-    try _internal.redirectTo(response, "./");
 }
 
 pub fn openFile(dir: std.fs.Dir, path: string) !?std.fs.File {

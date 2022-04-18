@@ -32,5 +32,5 @@ git https://github.com/kivikakk/koino commit-c5dbce2079521490be3ad93c0eb51ea62d2
 git https://github.com/kivikakk/libpcre.zig commit-5e3b58e151530b59e7761e28fc448f88e5843ee7
 git https://github.com/nektro/pcre-8.45 commit-c21756b988596722572ea473806651c164ee1114
 git https://github.com/kivikakk/zunicode commit-5bf4a3a5f0c6e3d96f6def56957ab7f201851c50
-git https://github.com/nektro/ox commit-e8633e6cc2e437a097971a93d107dc56b514356d
+git https://github.com/nektro/ox commit-b5fa9267d08c6e76dbe624bfc515a51bd99940ce
 git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd commit-3fdb9fddeefa8ebb2c60a3b349fff4e635993cea

@@ -1,4 +1,6 @@
 const http = @import("apple_pie");
+const ox = @import("ox").www;
+const root = @import("root");
 
 const db = @import("./../db/_db.zig");
 
@@ -10,8 +12,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     _ = captures;
     const alloc = request.arena;
 
-    try _internal.writePageResponse(alloc, response, request, "/stats.pek", .{
-        .aquila_version = @import("root").version,
+    try ox.writePageResponse(alloc, response, request, "/stats.pek", .{
+        .aquila_version = root.version,
         .page = "index",
         .title = "Statistics",
         .user = try _internal.getUserOp(response, request),

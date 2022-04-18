@@ -1,5 +1,6 @@
 const http = @import("apple_pie");
 const root = @import("root");
+const ox = @import("ox").www;
 
 const db = @import("./../db/_db.zig");
 
@@ -15,7 +16,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const r = try u.remote(alloc);
     const l = try r.listUserRepos(alloc, u);
 
-    try _internal.writePageResponse(alloc, response, request, "/import.pek", .{
+    try ox.writePageResponse(alloc, response, request, "/import.pek", .{
         .aquila_version = root.version,
         .page = "import",
         .title = "Import a Repository",

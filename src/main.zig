@@ -9,6 +9,7 @@ const ulid = @import("ulid");
 const zfetch = @import("zfetch");
 const zigmod = @import("zigmod");
 const git = @import("git");
+const ox = @import("ox");
 
 const docker = @import("./docker.zig");
 const signal = @import("./signal.zig");
@@ -16,8 +17,11 @@ const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 
 pub const build_options = @import("build_options");
+pub const files = @import("self/files");
+
 pub const name = "Aquila";
 pub const log_level: std.log.Level = .debug;
+pub const oxwww_allowjson = true;
 
 pub var version: string = "";
 pub var datadirpath: string = "";
@@ -100,7 +104,7 @@ pub fn main() !void {
 
     const oa2 = oauth2.Handlers(struct {
         pub const Ctx = void;
-        pub const isLoggedIn = handler.isLoggedIn;
+        pub const isLoggedIn = ox.www.isLoggedIn;
         pub const doneUrl = "/dashboard";
         pub const saveInfo = handler.saveInfo;
     });

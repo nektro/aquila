@@ -1,6 +1,8 @@
 const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
+const ox = @import("ox").www;
+const root = @import("root");
 
 const _internal = @import("./_internal.zig");
 
@@ -19,8 +21,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     // calling inline yields 'error: cannot store runtime value in compile time variable'
     const readme = try _internal.renderREADME(alloc, v[0]);
 
-    try _internal.writePageResponse(alloc, response, request, "/version.pek", .{
-        .aquila_version = @import("root").version,
+    try ox.writePageResponse(alloc, response, request, "/version.pek", .{
+        .aquila_version = root.version,
         .page = "version",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}/{s}", .{ r.id, o.name, p.name }),
         .user = u,

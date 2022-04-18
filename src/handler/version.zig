@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
+const ox = @import("ox").www;
 
 const _internal = @import("./_internal.zig");
 
@@ -9,8 +10,8 @@ pub const Args = struct { remote: u64, user: string, package: string, version: s
 pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
     const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
 
-    try _internal.assert(args.version.len > 0, response, .bad_request, "error: empty version string", .{});
-    try _internal.assert(std.mem.startsWith(u8, args.version, "v"), response, .bad_request, "error: bad version string format", .{});
+    try ox.assert(args.version.len > 0, response, .bad_request, "error: empty version string", .{});
+    try ox.assert(std.mem.startsWith(u8, args.version, "v"), response, .bad_request, "error: bad version string format", .{});
 
     var viter = std.mem.split(u8, args.version[1..], ".");
     const major = try _internal.parseInt(u32, viter.next(), response, "error: invalid major version", .{});
@@ -27,18 +28,18 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
         if (viter.next()) |item3| {
             if (viter.next()) |_| {
                 // fail
-                return _internal.fail(response, .not_found, "Resource not found", .{});
+                return ox.fail(response, .not_found, "Resource not found", .{});
             }
-            try _internal.assert(std.mem.eql(u8, item2, "tar"), response, .not_found, "Resource not found", .{});
-            try _internal.assert(std.mem.eql(u8, item3, "gz"), response, .not_found, "Resource not found", .{});
+            try ox.assert(std.mem.eql(u8, item2, "tar"), response, .not_found, "Resource not found", .{});
+            try ox.assert(std.mem.eql(u8, item3, "gz"), response, .not_found, "Resource not found", .{});
 
             // must be 'tar' and 'gz'
             // TODO do archive download
-            return _internal.fail(response, .ok, "TODO .tar.gz download", .{});
+            return ox.fail(response, .ok, "TODO .tar.gz download", .{});
         }
         // fail
         // TODO migrate to using .zip
-        return _internal.fail(response, .not_found, "Resource not found", .{});
+        return ox.fail(response, .not_found, "Resource not found", .{});
     }
 
     // load version page
@@ -46,7 +47,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     // calling inline yields 'error: cannot store runtime value in compile time variable'
     const readme = _internal.renderREADME(alloc, v) catch "";
 
-    try _internal.writePageResponse(alloc, response, request, "/version.pek", .{
+    try ox.writePageResponse(alloc, response, request, "/version.pek", .{
         .aquila_version = @import("root").version,
         .page = "version",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}/{s} @ v{d}.{d}", .{ r.id, o.name, p.name, v.real_major, v.real_minor }),

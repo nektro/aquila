@@ -1,4 +1,6 @@
 const http = @import("apple_pie");
+const ox = @import("ox").www;
+const root = @import("root");
 
 const db = @import("./../db/_db.zig");
 
@@ -14,8 +16,8 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const r = try u.remote(alloc);
     const p = try u.packages(alloc);
 
-    try _internal.writePageResponse(alloc, response, request, "/dashboard.pek", .{
-        .aquila_version = @import("root").version,
+    try ox.writePageResponse(alloc, response, request, "/dashboard.pek", .{
+        .aquila_version = root.version,
         .page = "dashboard",
         .title = "Dashboard",
         .user = @as(?db.User, u),

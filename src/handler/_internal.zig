@@ -1,56 +1,22 @@
 const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
-const files = @import("self/files");
-const pek = @import("pek");
-const extras = @import("extras");
 const ulid = @import("ulid");
-const root = @import("root");
-const options = @import("build_options");
 const koino = @import("koino");
 const ox = @import("ox").www;
 
-const cookies = @import("cookies");
 const db = @import("../db/_db.zig");
-
-const epoch: i64 = 1577836800000; // 'Jan 1 2020' -> unix milli
 
 pub var access_tokens: std.StringHashMap(string) = undefined;
 pub var token_liveness: std.StringHashMap(i64) = undefined;
 pub var token_expires: std.StringHashMap(i64) = undefined;
 pub var last_check: i64 = 0;
 
-pub fn writePageResponse(alloc: std.mem.Allocator, response: *http.Response, request: http.Request, comptime name: string, data: anytype) !void {
-    _ = request;
-    try response.headers.put("Content-Type", "text/html");
-
-    var h = std.hash.Wyhash.init(0);
-    h.update(@field(files, name));
-    inline for (std.meta.fields(@TypeOf(data))) |field| {
-        hashUp(&h, @field(data, field.name));
-    }
-    try response.headers.put("Etag", try std.fmt.allocPrint(alloc, "\"{x}\"", .{h.final()}));
-
-    const w = response.writer();
-
-    const headers = try request.headers(alloc);
-    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
-    if (std.mem.eql(u8, headers.get("Accept") orelse headers.get("accept") orelse "", "application/json")) {
-        try std.json.stringify(data, .{}, w);
-        return;
-    }
-
-    const head = files.@"/_header.pek";
-    const page = @field(files, name);
-    const tmpl = comptime pek.parse(head ++ page);
-    try pek.compile(root, alloc, w, tmpl, data);
-}
-
 pub fn getUser(response: *http.Response, request: http.Request) !db.User {
     const x = ox.token.veryifyRequest(request) catch |err| switch (err) {
         error.NoTokenFound, error.InvalidSignature => |e| {
             try response.headers.put("X-Jwt-Fail", @errorName(e));
-            try redirectTo(response, "./login");
+            try ox.redirectTo(response, "./login");
             return error.HttpNoOp;
         },
         else => return err,
@@ -101,45 +67,33 @@ pub fn mergeSlices(alloc: std.mem.Allocator, comptime T: type, side_a: []const T
     return list.toOwnedSlice();
 }
 
-pub fn assert(cond: bool, response: *http.Response, status: http.Response.Status, comptime fmt: string, args: anytype) !void {
-    if (!cond) {
-        return fail(response, status, fmt, args);
-    }
-}
-
-pub fn fail(response: *http.Response, status: http.Response.Status, comptime fmt: string, args: anytype) (http.Response.Writer.Error || error{HttpNoOp}) {
-    response.status_code = status;
-    try response.writer().print(fmt ++ "\n", args);
-    return error.HttpNoOp;
-}
-
 pub fn reqRemote(request: http.Request, response: *http.Response, id: u64) !db.Remote {
     const alloc = request.arena;
     const r = try db.Remote.byKey(alloc, .id, id);
-    return r orelse fail(response, .not_found, "error: remote by id '{d}' not found", .{id});
+    return r orelse ox.fail(response, .not_found, "error: remote by id '{d}' not found", .{id});
 }
 
 pub fn reqUser(request: http.Request, response: *http.Response, r: db.Remote, name: string) !db.User {
     const alloc = request.arena;
     const u = try r.findUserBy(alloc, .name, name);
-    return u orelse fail(response, .not_found, "error: user by name '{s}' not found", .{name});
+    return u orelse ox.fail(response, .not_found, "error: user by name '{s}' not found", .{name});
 }
 
 pub fn reqPackage(request: http.Request, response: *http.Response, u: db.User, name: string) !db.Package {
     const alloc = request.arena;
     const p = try u.findPackageBy(alloc, .name, name);
-    return p orelse fail(response, .not_found, "error: package by name '{s}' not found", .{name});
+    return p orelse ox.fail(response, .not_found, "error: package by name '{s}' not found", .{name});
 }
 
 pub fn reqVersion(request: http.Request, response: *http.Response, p: db.Package, major: u32, minor: u32) !db.Version {
     const alloc = request.arena;
     const v = try p.findVersionAt(alloc, major, minor);
-    return v orelse fail(response, .not_found, "error: version by id 'v{d}.{d}' not found", .{ major, minor });
+    return v orelse ox.fail(response, .not_found, "error: version by id 'v{d}.{d}' not found", .{ major, minor });
 }
 
 pub fn parseInt(comptime T: type, input: ?string, response: *http.Response, comptime fmt: string, args: anytype) !T {
-    const str = input orelse return fail(response, .bad_request, fmt, args);
-    return std.fmt.parseUnsigned(T, str, 10) catch fail(response, .bad_request, fmt, args);
+    const str = input orelse return ox.fail(response, .bad_request, fmt, args);
+    return std.fmt.parseUnsigned(T, str, 10) catch ox.fail(response, .bad_request, fmt, args);
 }
 
 pub fn rename(old_path: string, new_path: string) !void {
@@ -152,11 +106,6 @@ pub fn rename(old_path: string, new_path: string) !void {
     };
 }
 
-pub fn redirectTo(response: *http.Response, dest: string) !void {
-    try response.headers.put("Location", dest);
-    try response.writeHeader(.found);
-}
-
 pub fn readFileContents(dir: std.fs.Dir, alloc: std.mem.Allocator, path: string) !?string {
     const file = dir.openFile(path, .{}) catch |err| switch (err) {
         error.FileNotFound => return null,
@@ -165,49 +114,6 @@ pub fn readFileContents(dir: std.fs.Dir, alloc: std.mem.Allocator, path: string)
     };
     defer file.close();
     return try file.reader().readAllAlloc(alloc, 1024 * 1024 * 2); // 2mb
-}
-
-pub fn hashUp(h: *std.hash.Wyhash, item: anytype) void {
-    if (comptime std.meta.trait.isZigString(@TypeOf(item))) {
-        h.update(item);
-        return;
-    }
-    switch (@TypeOf(item)) {
-        db.Remote => h.update(item.domain),
-        db.Remote.Repo, db.User, db.Package, db.Version => hashUp(h, item.id),
-        u64 => h.update(&std.mem.toBytes(item)),
-        bool => h.update(if (item) "true" else "false"),
-
-        []const db.User,
-        []const db.Package,
-        []const db.Version,
-        []const db.Remote.Repo,
-        []const db.CountStat,
-        []const db.TimeStat,
-        => {
-            h.update("[");
-            defer h.update("]");
-            for (item) |inner| {
-                hashUp(h, inner);
-            }
-        },
-
-        ?db.User => {
-            h.update(if (item) |_| "1" else "0");
-        },
-
-        db.CountStat => {
-            h.update(item.ulid);
-            hashUp(h, item.count);
-        },
-
-        db.TimeStat => {
-            h.update(item.ulid);
-            h.update(item.time);
-        },
-
-        else => |t| @compileError(@typeName(t)),
-    }
 }
 
 pub fn renderREADME(alloc: std.mem.Allocator, v: db.Version) !string {

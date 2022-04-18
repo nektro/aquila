@@ -1,6 +1,7 @@
 const std = @import("std");
 const http = @import("apple_pie");
 const root = @import("root");
+const ox = @import("ox").www;
 
 const db = @import("./../db/_db.zig");
 
@@ -11,7 +12,7 @@ pub fn users(_: void, response: *http.Response, request: http.Request, captures:
 
     const alloc = request.arena;
 
-    try _internal.writePageResponse(alloc, response, request, "/all_users.pek", .{
+    try ox.writePageResponse(alloc, response, request, "/all_users.pek", .{
         .aquila_version = root.version,
         .page = "all_users",
         .title = "All Users",
@@ -25,7 +26,7 @@ pub fn packages(_: void, response: *http.Response, request: http.Request, captur
 
     const alloc = request.arena;
 
-    try _internal.writePageResponse(alloc, response, request, "/all_packages.pek", .{
+    try ox.writePageResponse(alloc, response, request, "/all_packages.pek", .{
         .aquila_version = root.version,
         .page = "all_packages",
         .title = "All Packages",

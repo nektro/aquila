@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
+const ox = @import("ox").www;
 
 const _internal = @import("./_internal.zig");
 
@@ -15,7 +16,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const o = try _internal.reqUser(request, response, r, args.user);
     const p = try o.packages(alloc);
 
-    try _internal.writePageResponse(alloc, response, request, "/user.pek", .{
+    try ox.writePageResponse(alloc, response, request, "/user.pek", .{
         .aquila_version = @import("root").version,
         .page = "user",
         .title = try std.fmt.allocPrint(alloc, "{d}/{s}", .{ r.id, o.name }),
