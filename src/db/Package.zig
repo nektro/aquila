@@ -3,7 +3,6 @@ pub const table_name = "packages";
 
 const std = @import("std");
 const string = []const u8;
-const ulid = @import("ulid");
 const extras = @import("extras");
 
 const _db = @import("./_db.zig");
@@ -16,8 +15,8 @@ const ox = @import("ox").sql;
 const db = &ox.db;
 
 id: u64 = 0,
-uuid: ulid.ULID,
-owner: ulid.ULID,
+uuid: ox.ULID,
+owner: ox.ULID,
 name: string,
 created_on: Time,
 remote: u64,

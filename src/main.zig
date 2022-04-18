@@ -5,7 +5,6 @@ const http = @import("apple_pie");
 const extras = @import("extras");
 const oauth2 = @import("oauth2");
 const flag = @import("flag");
-const ulid = @import("ulid");
 const zfetch = @import("zfetch");
 const zigmod = @import("zigmod");
 const git = @import("git");
@@ -166,7 +165,7 @@ fn oa2IdToRemoTy(id: string) db.Remote.Type {
     std.debug.panic("unsupported client provider: {s}", .{id});
 }
 
-pub fn pek_get_user_path(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, uid: ulid.ULID) !void {
+pub fn pek_get_user_path(alloc: std.mem.Allocator, writer: std.ArrayList(u8).Writer, uid: ox.sql.ULID) !void {
     const user = try db.User.byKey(alloc, .uuid, uid);
     try writer.print("{d}/{s}", .{ user.?.provider, user.?.name });
 }

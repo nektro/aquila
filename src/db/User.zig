@@ -3,7 +3,6 @@ pub const table_name = "users";
 
 const std = @import("std");
 const string = []const u8;
-const ulid = @import("ulid");
 
 const _db = @import("./_db.zig");
 const Package = _db.Package;
@@ -14,7 +13,7 @@ const ox = @import("ox").sql;
 const db = &ox.db;
 
 id: u64 = 0,
-uuid: ulid.ULID,
+uuid: ox.ULID,
 provider: u64,
 snowflake: string,
 name: string,

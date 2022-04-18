@@ -1,7 +1,6 @@
 const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
-const ulid = @import("ulid");
 const koino = @import("koino");
 const ox = @import("ox").www;
 
@@ -22,7 +21,7 @@ pub fn getUser(response: *http.Response, request: http.Request) !db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.parse(alloc, x));
+    const y = try db.User.byKey(alloc, .uuid, try ox.up.sql.ULID.parse(alloc, x));
     return y.?;
 }
 
@@ -34,7 +33,7 @@ pub fn getUserOp(response: *http.Response, request: http.Request) !?db.User {
         else => return err,
     };
     const alloc = request.arena;
-    const y = try db.User.byKey(alloc, .uuid, try ulid.ULID.parse(alloc, x));
+    const y = try db.User.byKey(alloc, .uuid, try ox.up.sql.ULID.parse(alloc, x));
     return y.?;
 }
 

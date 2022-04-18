@@ -3,7 +3,6 @@ pub const table_name = "versions";
 
 const std = @import("std");
 const string = []const u8;
-const ulid = @import("ulid");
 const zigmod = @import("zigmod");
 
 const _db = @import("./_db.zig");
@@ -15,8 +14,8 @@ const ox = @import("ox").sql;
 const db = &ox.db;
 
 id: u64 = 0,
-uuid: ulid.ULID,
-p_for: ulid.ULID,
+uuid: ox.ULID,
+p_for: ox.ULID,
 created_on: Time,
 commit_to: string,
 unpacked_size: u64,

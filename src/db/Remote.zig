@@ -3,7 +3,6 @@ pub const table_name = "remotes";
 
 const std = @import("std");
 const string = []const u8;
-const ulid = @import("ulid");
 const extras = @import("extras");
 const zfetch = @import("zfetch");
 const json = @import("json");
@@ -18,7 +17,7 @@ const ox = @import("ox").sql;
 const db = &ox.db;
 
 id: u64 = 0,
-uuid: ulid.ULID,
+uuid: ox.ULID,
 type: Type,
 domain: string,
 
