@@ -12,6 +12,7 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 |              | Version | x86_64 | arm64 | x86 | arm | riscv64 | ppc64el | mips64el | sparcv9 | s390x |
 |--------------|---------|--------|-------|-----|-----|---------|---------|----------|---------|-------|
+<!--
 | linux/alpine | 3.15.0  | 0      | 0     | 0   | 0   |         | 0       |          |         | 0     |
 | linux/debian | 10.10.0 | 0      | 0     | 0   | 0   |         | 0       | 0        |         | 0     |
 | freebsd      | 13.0    | 0      | 0     | 0   |     | 0       | 0       |          |         |       |
@@ -20,8 +21,6 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 | dragonflybsd | 6.0.1   | 0      |       |     |     |         |         |          |         |       |
 | linux/nixos  | 21.05   | 0      |       | 0   |     |         |         |          |         |       |
 | plan9/9front | 8593    | 0      |       | 0   |     |         |         |          |         |       |
-
-<!--
 | windows      |         | 0      | 0     | 0   | 0   |
 | macos        |         | 0      | 0     |
 | solaris   `^`|         |
