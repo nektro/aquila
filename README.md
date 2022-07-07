@@ -22,7 +22,7 @@ $ zig build
 
 ## Built With
 - Zig master (at least `0.10.0-dev.2802+54454fd01`)
-- See [`zig.mod`](./zig.mod) and [`zigmod.lock`](./zigmod.lock)
+- See [`zigmod.yml`](./zigmod.yml) and [`zigmod.lock`](./zigmod.lock)
 
 ## License
 GNU Affero General Public License v3.0
