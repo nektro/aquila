@@ -7,8 +7,8 @@ const oauth2 = @import("oauth2");
 const json = @import("json");
 const builtin = @import("builtin");
 const ox = @import("ox").www;
+const mime = @import("mime");
 
-const mime = @import("../mime.zig");
 const db = @import("../db/_db.zig");
 
 const _internal = @import("./_internal.zig");
