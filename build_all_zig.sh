@@ -6,10 +6,10 @@ version="r$(./release_num.sh)"
 rev=$(git log --format=%h -1)
 
 targets="
-x86_64-linux-musl
-aarch64-linux-musl
-riscv64-linux-musl
-powerpc64-linux-musl
+x86_64-linux
+aarch64-linux
+riscv64-linux
+powerpc64-linux
 "
 
 for item in $targets
