@@ -1,20 +1,16 @@
 2
 git https://github.com/Luukdegram/apple_pie commit-55b25cf50018fe314606765ca984a0a841743eb5
-git https://github.com/nektro/zig-pek commit-5c080a34d2e6b6d3d00de1e85d9f32f5ea2c2653
-git https://github.com/nektro/zig-range commit-4b2f12808aa09be4b27a163efc424dd4e0415992
-git https://github.com/kivikakk/htmlentities.zig commit-311c844c1d1d1cb968eedfeb76ce911038b1043a
-git https://github.com/nektro/zig-zorm commit-e5176e73203424da95a9d660648016d6f3776281
-git https://github.com/vrischmann/zig-sqlite commit-13b8e4e6a036f43d28a5f6691587ca1d8baa7eae
 git https://github.com/nektro/zig-extras commit-ca8682fcc342b4ee9b2673b3d298d8d88ff8664f
-git https://github.com/leroycep/zig-jwt commit-137598749184c830ad07d9e5762b9db5e9a326c6
+git https://github.com/nektro/zig-range commit-4b2f12808aa09be4b27a163efc424dd4e0415992
 git https://github.com/nektro/zig-oauth2 commit-5278a31e9a4437cfad3fe451051eda736f47b584
+git https://github.com/nektro/zig-pek commit-5c080a34d2e6b6d3d00de1e85d9f32f5ea2c2653
+git https://github.com/kivikakk/htmlentities.zig commit-311c844c1d1d1cb968eedfeb76ce911038b1043a
 git https://github.com/MasterQ32/zig-uri commit-e879df3a236869f92298fbe2db3c25e6e84cfd4c
 git https://github.com/truemedian/zfetch commit-5a7ce5811ee19fb959b41c718018f461f45611d4
 git https://github.com/truemedian/hzzp commit-bf5aaf224e94561e035a631c3c40fbf02faa27d2
 git https://github.com/nektro/iguanaTLS commit-09d9fe92f329484536dfb2b07cfa8b406151cde4
 git https://github.com/nektro/zig-json commit-a091eaa9f9ae91c3875630ba1983b33ea04971a3
 git https://github.com/nektro/zig-flag commit-74acd41e8ef878a2dea1cab47400f8b9d23b0c2a
-git https://github.com/nektro/zig-ulid commit-27dd9c8d9e35e88225ac91052b94cba43d185aba
 git https://github.com/nektro/zig-time commit-a22054de725ef19b3f91b9ad960d4093f852b7e0
 git https://github.com/nektro/zigmod commit-df8e6780670678429cf2f535fd882a771a2aac9d
 git https://github.com/yaml/libyaml tag-0.2.5
@@ -32,6 +28,10 @@ git https://github.com/kivikakk/libpcre.zig commit-5e3b58e151530b59e7761e28fc448
 git https://github.com/nektro/pcre-8.45 commit-10bc0a2fd91f3a40be9825738661f8748eb60e14
 git https://github.com/kivikakk/zunicode commit-5bf4a3a5f0c6e3d96f6def56957ab7f201851c50
 git https://github.com/nektro/ox commit-ee7d31a66d82ed86b4610eea66cb0b8c7c420995
+git https://github.com/nektro/zig-zorm commit-e5176e73203424da95a9d660648016d6f3776281
+git https://github.com/vrischmann/zig-sqlite commit-13b8e4e6a036f43d28a5f6691587ca1d8baa7eae
+git https://github.com/nektro/zig-ulid commit-27dd9c8d9e35e88225ac91052b94cba43d185aba
+git https://github.com/leroycep/zig-jwt commit-137598749184c830ad07d9e5762b9db5e9a326c6
 git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd commit-3fdb9fddeefa8ebb2c60a3b349fff4e635993cea
 git https://gist.github.com/nektro/64c7da67a00d8b94091d754dd2cf1aa9 commit-4d6ac0b23bd3e55c1907eeced651fca04721a88d
 git https://gist.github.com/nektro/5e20de7db63af25d72ecee35e9f8d16a commit-5841714041a5c6fe15c9b0ef6c65f826aeab6854
