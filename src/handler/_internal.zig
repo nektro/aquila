@@ -116,7 +116,14 @@ pub fn readFileContents(dir: std.fs.Dir, alloc: std.mem.Allocator, path: string)
 }
 
 pub fn renderREADME(alloc: std.mem.Allocator, v: db.Version) !string {
-    var p = try koino.parser.Parser.init(alloc, .{});
+    var p = try koino.parser.Parser.init(alloc, .{
+        .extensions = .{
+            .table = true,
+            .strikethrough = true,
+            .autolink = true,
+            .tagfilter = true,
+        },
+    });
     try p.feed(v.readme);
     var doc = try p.finish();
     var list = std.ArrayList(u8).init(alloc);
