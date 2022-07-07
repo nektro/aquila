@@ -18,7 +18,6 @@ MIT:
 - git https://github.com/truemedian/zfetch
 - git https://github.com/truemedian/hzzp
 - git https://github.com/nektro/iguanaTLS
-- git https://github.com/MasterQ32/zig-network
 - git https://github.com/nektro/zig-json
 - git https://github.com/nektro/zig-flag
 - git https://github.com/nektro/zig-ulid
@@ -38,6 +37,9 @@ MIT:
 - git https://github.com/kivikakk/libpcre.zig
 - git https://github.com/kivikakk/zunicode
 - git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd
+- git https://gist.github.com/nektro/64c7da67a00d8b94091d754dd2cf1aa9
+- git https://gist.github.com/nektro/5e20de7db63af25d72ecee35e9f8d16a
+- git https://gist.github.com/nektro/6621bee406a94139cee26f7643af6183
 
 BSD-3-Clause:
 = https://spdx.org/licenses/BSD-3-Clause
