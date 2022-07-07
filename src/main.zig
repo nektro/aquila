@@ -10,8 +10,8 @@ const zigmod = @import("zigmod");
 const git = @import("git");
 const ox = @import("ox");
 const docker = @import("docker");
+const signal = @import("signal");
 
-const signal = @import("./signal.zig");
 const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 
