@@ -34,9 +34,9 @@ wget -P iso --no-clobber --quiet --show-progress $url
 if [ ! -f $hdd ]
 then
     #
-    # create qemu 32 GB disk
+    # create qemu disk
     mkdir -p images
-    qemu-img create -f qcow2 $hdd 32G
+    qemu-img create -f qcow2 $hdd 4G
 
     #
     # run qemu disk with iso installer
