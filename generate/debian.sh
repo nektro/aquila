@@ -3,7 +3,6 @@
 set -e
 
 # https://www.debian.org/
-# https://wiki.debian.org/DebianInstaller/Preseed/EditIso
 
 
 os="debian"
