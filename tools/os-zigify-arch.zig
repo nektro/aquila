@@ -34,6 +34,8 @@ fn print(kvs: anytype, arch: string) !void {
         if (item.value == null) continue;
         if (!std.mem.eql(u8, item.key, arch)) continue;
         try out.print("{s}", .{@tagName(item.value.?)});
-        break;
+        return;
     }
+    std.debug.print("Architecture not supported\n", .{});
+    std.os.exit(1);
 }
