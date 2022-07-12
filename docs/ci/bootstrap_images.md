@@ -1,7 +1,7 @@
 # Generating the bootstrap QEMU images
 
 ## All
-- leave `root` password empty
+- set `root` password to `"root"`, some OSes don't like empty passwords
 - set timezone as UTC
 - most guided installers are really nice these days
 - make the partitioner use the entire disk
@@ -12,7 +12,7 @@
 - `./generate/_all.sh debian`
 - Select "Install" option in GRUB when KVM boots up
 - Most questions are prefilled but you do have to hit enter on the disk selection question
-- During "Tasksel", uncheck "desktop environment" and "print server"
+- During "Tasksel", uncheck "desktop environment" and "print server", check "openssh server"
 
 ## Alpine
 - `./generate/_all.sh alpine`
