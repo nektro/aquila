@@ -141,7 +141,10 @@ pub fn main() !void {
 }
 
 fn handle_sig() void {
+    std.log.info("closing database connection...", .{});
     db.close();
+
+    std.log.info("exiting safely...", .{});
     std.os.exit(0);
 }
 
