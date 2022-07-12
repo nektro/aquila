@@ -2,25 +2,22 @@ AGPL-3.0:
 = https://spdx.org/licenses/AGPL-3.0
 - This
 - git https://github.com/nektro/zig-pek
-- git https://github.com/nektro/zig-zorm
 - git https://github.com/nektro/ox
+- git https://github.com/nektro/zig-zorm
 
 MIT:
 = https://spdx.org/licenses/MIT
 - git https://github.com/Luukdegram/apple_pie
-- git https://github.com/nektro/zig-range
-- git https://github.com/kivikakk/htmlentities.zig
-- git https://github.com/vrischmann/zig-sqlite
 - git https://github.com/nektro/zig-extras
-- git https://github.com/leroycep/zig-jwt
+- git https://github.com/nektro/zig-range
 - git https://github.com/nektro/zig-oauth2
+- git https://github.com/kivikakk/htmlentities.zig
 - git https://github.com/MasterQ32/zig-uri
 - git https://github.com/truemedian/zfetch
 - git https://github.com/truemedian/hzzp
 - git https://github.com/nektro/iguanaTLS
 - git https://github.com/nektro/zig-json
 - git https://github.com/nektro/zig-flag
-- git https://github.com/nektro/zig-ulid
 - git https://github.com/nektro/zig-time
 - git https://github.com/nektro/zigmod
 - git https://github.com/yaml/libyaml
@@ -36,10 +33,14 @@ MIT:
 - git https://github.com/kivikakk/koino
 - git https://github.com/kivikakk/libpcre.zig
 - git https://github.com/kivikakk/zunicode
+- git https://github.com/vrischmann/zig-sqlite
+- git https://github.com/nektro/zig-ulid
+- git https://github.com/leroycep/zig-jwt
 - git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd
 - git https://gist.github.com/nektro/64c7da67a00d8b94091d754dd2cf1aa9
 - git https://gist.github.com/nektro/5e20de7db63af25d72ecee35e9f8d16a
 - git https://gist.github.com/nektro/6621bee406a94139cee26f7643af6183
+- git https://gist.github.com/nektro/917368c242e9be1a832816bc66d10d63
 
 BSD-3-Clause:
 = https://spdx.org/licenses/BSD-3-Clause
