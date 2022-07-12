@@ -23,7 +23,7 @@ shortv=$(echo $version | cut -d . -f -2)
 url="https://dl-cdn.alpinelinux.org/alpine/v$shortv/releases/$arch/$iso"
 
 zigarch=$(zig run tools/os-zigify-arch.zig --main-pkg-path . -- $os $arch)
-hdd="images/$os.$zigarch.qcow2"
+hdd="images/$zigarch/$os/stage1.qcow2"
 
 
 #
@@ -36,7 +36,7 @@ if [ ! -f $hdd ]
 then
     #
     # create qemu disk
-    mkdir -p images
+    mkdir -p $(dirname $hdd)
     qemu-img create -f qcow2 $hdd 4G
 
     #
