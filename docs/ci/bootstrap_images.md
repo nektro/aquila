@@ -9,19 +9,19 @@
 - always install/enable OpenSSH
 
 ## Debian
-- `./generate/_all.sh debian`
+- `./generate/debian.sh <arch>`
 - Select "Install" option in GRUB when KVM boots up
 - Most questions are prefilled but you do have to hit enter on the disk selection question
 - During "Tasksel", uncheck "desktop environment" and "print server", check "openssh server"
 
 ## Alpine
-- `./generate/_all.sh alpine`
+- `./generate/alpine.sh <arch>`
 - Login as "root"
 - Run `setup-alpine` command and answer the installer prompts
 - Run `poweroff` to shutdown the system
 
 ## FreeBSD
-- `./generate/_all.sh freebsd`
+- `./generate/freebsd.sh <arch>`
 - Select 'Multi user boot' in the bootloader (it's the first option)
 - Select 'Install' at welcome screen
 - Prefer UFS over ZFS for filesystem since jobs are run with low ram
@@ -32,7 +32,7 @@
 - Run `poweroff` to shutdown the system
 
 ## NetBSD
-- `./generate/_all.sh netbsd`
+- `./generate/netbsd.sh <arch>`
 - Let it 'boot normally'
 - Install netbsd to hard disk
 - Guid partition table
