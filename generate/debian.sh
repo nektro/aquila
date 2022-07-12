@@ -36,7 +36,7 @@ then
     #
     # create qemu disk
     mkdir -p $(dirname $hdd)
-    qemu-img create -f qcow2 $hdd 4G
+    qemu-img create -f qcow2 $hdd 64G
 
     #
     # run qemu disk with iso installer
