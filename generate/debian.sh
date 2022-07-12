@@ -7,8 +7,8 @@ set -e
 
 
 os="debian"
-version="10.10.0"
 arch="$1"
+version="10.10.0"
 
 if [ -z "$arch" ]
 then
