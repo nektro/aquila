@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -e
+
+os="$1"
+arch="$2"
+zigarch=$(zig run tools/os-zigify-arch.zig --main-pkg-path . -- $os $arch)
+dir="$(pwd)/images/$zigarch/$os"
+before="$dir/stage1.qcow2"
+after="$dir/stage2.qcow2"
+
+
+if [ ! -f $before ]
+then
+    echo "please run './generate/$os.sh $arch' first"
+    exit 1
+fi
+
+if [ -f $after ]
+then
+    echo "stage2 image for this os/arch already exists"
+    exit 0
+fi
+
+set -x
+
+#
+# create qemu disk
+qemu-img create -f qcow2 -F qcow2 -b $before $after
+
+#
+# run qemu disk with iso installer
+qemu-system-$zigarch \
+    -m 2048 \
+    -hda $after \
+    -net nic \
+    -net user \
+    -nographic \
+
+# TODO automate installer
+
+case "$os" in
+    alpine)
+        # apk add curl
+        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # /etc/init.d/sshd restart
+        # apk add git
+        # git clone https://github.com/llvm/llvm-project
+        # git clone https://github.com/ziglang/zig
+        # mkdir out
+        # poweroff
+    ;;
+esac

@@ -12,11 +12,12 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 0. The os/arch combo is supported in some official capacity by upstream and a potential candidate.
 1. A script exists in [`generate/`](../../generate) that can run the `.iso` installer and the process is documented in [bootstrap_images.md](bootstrap_images.md).
+2. [`tools/gen_stage2.sh`]() can run the generated stage1 `.qcow2` image; contains instructions on enabling ssh, and dowloading LLVM + Zig.
 
 |              | Version | x86_64 | aarch64 |
 |--------------|---------|--------|---------|
 | linux/debian | 10.10.0 | 1      | 0       |
-| linux/alpine | 3.15.0  | 1      | 0       |
+| linux/alpine | 3.15.0  | 2      | 0       |
 | freebsd      | 13.0    | 1      | 0       |
 | netbsd       | 9.2     | 1      | 0       |
 <!--
