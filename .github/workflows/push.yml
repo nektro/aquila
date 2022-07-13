@@ -31,7 +31,7 @@ jobs:
       # Zig
       - uses: goto-bus-stop/setup-zig@v1
         with:
-          version: "0.10.0-dev.2802+54454fd01"
+          version: "0.10.0-dev.2981+7090f0471"
       - run: zig version
       - run: zig env
       - uses: nektro/actions-setup-zigmod@v1
