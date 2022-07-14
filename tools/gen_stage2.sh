@@ -30,7 +30,7 @@ qemu-img create -f qcow2 -F qcow2 -b $before $after
 
 #
 # run qemu disk with iso installer
-qemu-system-$zigarch \
+qemu-kvm \
     -m 2048 \
     -hda $after \
     -net nic \

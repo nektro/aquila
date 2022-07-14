@@ -39,7 +39,7 @@ then
 
     #
     # run qemu disk with iso installer
-    qemu-system-$zigarch \
+    qemu-kvm \
         -m 2048 \
         -hda $hdd \
         -boot d \
