@@ -26,7 +26,7 @@ set -x
 
 #
 # create qemu disk
-qemu-img create -f qcow2 -F qcow2 -b $before $after
+qemu-img create -f qcow2 -F qcow2 -b $(basename $before) $after
 
 #
 # run qemu disk with iso installer
