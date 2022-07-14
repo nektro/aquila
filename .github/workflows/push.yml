@@ -38,7 +38,7 @@ jobs:
       - run: zigmod version
       - run: zigmod ci
       - run: cat ./deps.zig
-      - run: zig build
+      - run: zig build --prominent-compile-errors
       - run: ./build_release.sh x86_64-linux-musl
       - run: ./build_release.sh aarch64-linux-musl
       - run: ./build_release.sh riscv64-linux-musl

@@ -21,4 +21,4 @@ jobs:
       - uses: nektro/actions-setup-zigmod@v1
       - run: zigmod version
       - run: zigmod ci
-      - run: zig build
+      - run: zig build --prominent-compile-errors
