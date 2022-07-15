@@ -127,7 +127,6 @@ const DepList = struct {
                 .path = seq.next().?,
                 .version = seq.next().?,
                 //
-                .alloc = alloc,
                 .id = "",
                 .name = "",
                 .main = "",
