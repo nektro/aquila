@@ -43,7 +43,6 @@ case "$os" in
     alpine)
         # apk add curl
         # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
-        # /etc/init.d/sshd restart
         # apk add git
         # git clone https://github.com/llvm/llvm-project
         # git clone https://github.com/ziglang/zig
