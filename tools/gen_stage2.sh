@@ -35,7 +35,6 @@ qemu-kvm \
     -hda $after \
     -net nic \
     -net user \
-    -nographic \
 
 # TODO automate installer
 
@@ -48,5 +47,14 @@ case "$os" in
         # git clone https://github.com/ziglang/zig
         # mkdir out
         # poweroff
+    ;;
+    debian)
+        # apt install curl
+        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # apt install git
+        # git clone https://github.com/llvm/llvm-project
+        # git clone https://github.com/ziglang/zig
+        # mkdir out
+        # shutdown -h now
     ;;
 esac
