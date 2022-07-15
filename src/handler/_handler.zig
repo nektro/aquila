@@ -92,7 +92,7 @@ fn StaticPek(comptime path: string, comptime title: string) type {
     return struct {
         pub const Args: ?type = null;
         pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
-            _ = captures;
+            std.debug.assert(captures == null);
 
             try ox.writePageResponse(request.arena, response, request, path, .{
                 .aquila_version = @import("root").version,

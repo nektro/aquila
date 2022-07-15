@@ -16,7 +16,7 @@ const _internal = @import("./_internal.zig");
 pub const Args = struct { remote: u64, user: string, package: string };
 
 pub fn post(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
-    const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
+    const args = extras.ptrCastConst(Args, captures.?);
 
     const alloc = request.arena;
     const r = try _internal.reqRemote(request, response, args.remote);

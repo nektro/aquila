@@ -2,13 +2,14 @@ const std = @import("std");
 const string = []const u8;
 const http = @import("apple_pie");
 const ox = @import("ox").www;
+const extras = @import("extras");
 
 const _internal = @import("./_internal.zig");
 
 pub const Args = struct { remote: u64, user: string, package: string, version: string };
 
 pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?*const anyopaque) !void {
-    const args = @ptrCast(*const Args, @alignCast(@alignOf(Args), captures));
+    const args = extras.ptrCastConst(Args, captures.?);
 
     try ox.assert(args.version.len > 0, response, .bad_request, "error: empty version string", .{});
     try ox.assert(std.mem.startsWith(u8, args.version, "v"), response, .bad_request, "error: bad version string format", .{});
