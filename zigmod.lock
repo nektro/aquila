@@ -30,7 +30,7 @@ git https://github.com/kivikakk/zunicode commit-5bf4a3a5f0c6e3d96f6def56957ab7f2
 git https://github.com/nektro/ox commit-ee7d31a66d82ed86b4610eea66cb0b8c7c420995
 git https://github.com/nektro/zig-zorm commit-e5176e73203424da95a9d660648016d6f3776281
 git https://github.com/vrischmann/zig-sqlite commit-13b8e4e6a036f43d28a5f6691587ca1d8baa7eae
-git https://github.com/nektro/zig-ulid commit-27dd9c8d9e35e88225ac91052b94cba43d185aba
+git https://github.com/nektro/zig-ulid commit-d2834174ee6a0011ee42fe43be2886c539a146ce
 git https://github.com/leroycep/zig-jwt commit-137598749184c830ad07d9e5762b9db5e9a326c6
 git https://gist.github.com/nektro/a0045048d8e7458e42520e9ffb90becd commit-3fdb9fddeefa8ebb2c60a3b349fff4e635993cea
 git https://gist.github.com/nektro/64c7da67a00d8b94091d754dd2cf1aa9 commit-4d6ac0b23bd3e55c1907eeced651fca04721a88d
