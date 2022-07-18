@@ -12,13 +12,11 @@ after="$dir/stage2.qcow2"
 
 if [ ! -f $before ]
 then
-    echo "please run './generate/$os.sh $arch' first"
     exit 1
 fi
 
 if [ -f $after ]
 then
-    echo "stage2 image for this os/arch already exists"
     exit 0
 fi
 
