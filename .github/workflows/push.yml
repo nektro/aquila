@@ -33,6 +33,7 @@ jobs:
         with:
           version: "0.10.0-dev.2981+7090f0471"
       - run: zig version
+      - run: zig cc --version
       - run: zig env
       - uses: nektro/actions-setup-zigmod@v1
       - run: zigmod version
