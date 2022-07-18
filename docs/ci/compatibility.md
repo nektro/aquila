@@ -14,10 +14,11 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 1. A script exists in [`generate/`](../../generate) that can download and run the OS' installer; the process is documented in [bootstrap_images.md](bootstrap_images.md).
 2. [`tools/gen_stage2.sh`](../../tools/gen_stage2.sh) can run the generated stage 1 `.qcow2` image; contains instructions on enabling ssh, and dowloading LLVM + Zig.
 3. [`tools/gen_stage3.sh`](../../tools/gen_stage3.sh) can run the generated stage 2 `.qcow2` image; headlessly boots it and builds LLVM from source then exits.
+4. [`tools/gen_stage4.sh`](../../tools/gen_stage4.sh) can run the generated stage 3 `.qcow2` image; headlessly boots it and builds Zig from source then exits.
 
 |              | Version | x86_64 | aarch64 |
 |--------------|---------|--------|---------|
-| linux/debian | 10.10.0 | 3      | 0       |
+| linux/debian | 10.10.0 | 4      | 0       |
 | linux/alpine | 3.15.0  | 2      | 0       |
 | freebsd      | 13.0    | 1      | 0       |
 | netbsd       | 9.2     | 1      | 0       |
