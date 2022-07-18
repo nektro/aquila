@@ -15,16 +15,14 @@ then
     exit 1
 fi
 
-if [ -f $after ]
+if [ ! -f $after ]
 then
-    exit 0
+    #
+    # create qemu disk
+    qemu-img create -f qcow2 -F qcow2 -b $(basename $before) $after
 fi
 
 set -x
-
-#
-# create qemu disk
-qemu-img create -f qcow2 -F qcow2 -b $(basename $before) $after
 
 #
 # run qemu disk with iso installer
