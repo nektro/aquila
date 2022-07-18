@@ -26,13 +26,11 @@ set -x
 
 #
 # run qemu disk with iso installer
-qemu-kvm \
-    -m 2048 \
-    -hda $after \
-    -net nic \
-    -net user \
+qemu-kvm -m 2048 -hda $after -net nic -net user
 
 # TODO automate installer
+# TODO code/cli add sshd_config
+# TODO code ssh run rest of commands
 
 case "$os" in
     alpine)
