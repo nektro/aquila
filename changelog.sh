@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 PROJECT_USERNAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
 PROJECT_REPONAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)

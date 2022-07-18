@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eu
 set -x
 
 # Meta script for building all architectures of an OS

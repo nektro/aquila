@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 tagcount=$(git tag | wc -l)
 tagcount=$((tagcount+1))

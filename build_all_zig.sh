@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 version="r$(./release_num.sh)"
 rev=$(git log --format=%h -1)
