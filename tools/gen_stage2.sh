@@ -33,15 +33,6 @@ qemu-kvm -m 2048 -hda $after -net nic -net user
 # TODO code ssh run rest of commands
 
 case "$os" in
-    alpine)
-        # apk add curl
-        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
-        # apk add git
-        # git clone https://github.com/llvm/llvm-project
-        # git clone https://github.com/ziglang/zig
-        # mkdir out
-        # poweroff
-    ;;
     debian)
         # apt install curl
         # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
@@ -50,5 +41,14 @@ case "$os" in
         # git clone https://github.com/ziglang/zig
         # mkdir out
         # shutdown -h now
+    ;;
+    alpine)
+        # apk add curl
+        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # apk add git
+        # git clone https://github.com/llvm/llvm-project
+        # git clone https://github.com/ziglang/zig
+        # mkdir out
+        # poweroff
     ;;
 esac
