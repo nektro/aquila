@@ -51,4 +51,13 @@ case "$os" in
         # mkdir out
         # poweroff
     ;;
+    freebsd)
+        # pkg install curl
+        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # pkg install git
+        # git clone https://github.com/llvm/llvm-project
+        # git clone https://github.com/ziglang/zig
+        # mkdir out
+        # shutdown -p now
+    ;;
 esac
