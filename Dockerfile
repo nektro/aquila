@@ -1,4 +1,4 @@
-FROM alpine as builder
+FROM alpine
 WORKDIR /app
 COPY ./bin/aquila-linux-x86_64 /app/aquila
 RUN apk add git
