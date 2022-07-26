@@ -9,6 +9,7 @@ pub fn build(b: *std.build.Builder) void {
     });
     std.debug.assert(target.getOsTag() == .linux);
 
+    b.prominent_compile_errors = true;
     b.setPreferredReleaseMode(.ReleaseSafe);
     const mode = b.standardReleaseOptions();
 
