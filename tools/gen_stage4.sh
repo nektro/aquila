@@ -32,7 +32,7 @@ sleep 15
 #
 # util command
 dossh() {
-    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeychecking=no -p 2222 root@localhost $@
+    sshpass -p root ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeychecking=no -p 2222 root@localhost $@
 }
 
 #
