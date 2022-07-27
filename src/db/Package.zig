@@ -27,8 +27,9 @@ license: string,
 latest_version: string,
 hook_secret: string,
 star_count: u64,
+clone_url: string,
 
-pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64) !Package {
+pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remote, rm_id: string, rm_name: string, desc: string, license: string, star_count: u64, clone_url: string) !Package {
     db.mutex.lock();
     defer db.mutex.unlock();
 
@@ -45,6 +46,7 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
         .latest_version = "",
         .hook_secret = try extras.randomSlice(alloc, std.crypto.random, u8, 16),
         .star_count = star_count,
+        .clone_url = clone_url,
     });
 }
 
@@ -76,4 +78,12 @@ pub fn getLatestValid(self: Package, alloc: std.mem.Allocator) !Version {
 
 pub fn findVersionAt(self: Package, alloc: std.mem.Allocator, major: u32, minor: u32) !?Version {
     return try db.first(alloc, Version, "select * from versions where p_for = ? and real_major = ? and real_minor = ?", .{ self.uuid, major, minor });
+}
+
+pub fn cloneUrl(self: Package, alloc: std.mem.Allocator) !string {
+    if (self.clone_url.len > 0) {
+        return self.clone_url;
+    }
+    const repo = try _db.Remote.byKey(alloc, .id, self.remote);
+    return try std.fmt.allocPrint(alloc, "https://{s}/{s}", .{ repo.?.domain, self.remote_name });
 }

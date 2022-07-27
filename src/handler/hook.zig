@@ -123,6 +123,7 @@ pub fn post(_: void, response: *http.Response, request: http.Request, captures: 
     try p.update(alloc, .license, modfile.yaml.get_string("license"));
     try p.update(alloc, .description, modfile.yaml.get_string("description"));
     try p.update(alloc, .star_count, details.star_count);
+    try p.update(alloc, .clone_url, details.clone_url);
 
     const old_v = try p.getLatestValid(alloc);
     try v.setVersion(alloc, u, old_v.real_major, old_v.real_minor + 1);
