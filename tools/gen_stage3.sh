@@ -26,7 +26,7 @@ set -x
 
 #
 # start system
-qemu-kvm -m 4096 -hda $after -net nic -net user,hostfwd=tcp::2222-:22 &
+qemu-kvm -m 20480 -hda $after -net nic -net user,hostfwd=tcp::2222-:22 &
 sleep 15
 
 #

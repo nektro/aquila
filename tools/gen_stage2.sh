@@ -26,7 +26,7 @@ set -x
 
 #
 # run qemu disk with iso installer
-qemu-kvm -m 2048 -hda $after -net nic -net user
+qemu-kvm -m 20480 -hda $after -net nic -net user
 
 # TODO automate installer
 # TODO code/cli add sshd_config
