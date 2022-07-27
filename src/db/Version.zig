@@ -31,8 +31,9 @@ dev_deps: DepList,
 root_deps: DepList,
 build_deps: DepList,
 readme: string,
+jobs: StringList,
 
-pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep, readme: string) !Version {
+pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsize: u64, totalsize: u64, files: []const string, tarsize: u64, tarhash: string, deps: []const zigmod.Dep, rootdeps: []const zigmod.Dep, builddeps: []const zigmod.Dep, readme: string, jobs: []const string) !Version {
     db.mutex.lock();
     defer db.mutex.unlock();
 
@@ -54,6 +55,7 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
         .root_deps = DepList{ .data = rootdeps },
         .build_deps = DepList{ .data = builddeps },
         .readme = readme,
+        .jobs = StringList{ .data = jobs },
     });
 }
 

@@ -119,7 +119,12 @@ pub fn post(_: void, response: *http.Response, request: http.Request, captures: 
 
     try std.fs.cwd().deleteTree(path);
 
-    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
+    // TODO remove toString usages
+    const jobs = [_]string{
+        try (try db.Job.create(alloc, p, commit, .x86_64, .debian)).uuid.toString(alloc),
+    };
+
+    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme, &jobs);
     try p.update(alloc, .license, modfile.yaml.get_string("license"));
     try p.update(alloc, .description, modfile.yaml.get_string("description"));
     try p.update(alloc, .star_count, details.star_count);

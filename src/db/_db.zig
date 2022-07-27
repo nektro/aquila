@@ -11,6 +11,7 @@ pub const User = @import("./User.zig");
 pub const Package = @import("./Package.zig");
 pub const Version = @import("./Version.zig");
 pub const Time = @import("./Time.zig");
+pub const Job = @import("./Job.zig");
 
 pub fn connect(alloc: std.mem.Allocator, path: string) !void {
     const abspath = try std.fs.path.resolve(alloc, &.{path});
@@ -27,6 +28,7 @@ pub fn connect(alloc: std.mem.Allocator, path: string) !void {
     try ox.createTableT(alloc, db, User);
     try ox.createTableT(alloc, db, Package);
     try ox.createTableT(alloc, db, Version);
+    try ox.createTableT(alloc, db, Job);
 }
 
 pub fn close() void {
@@ -71,4 +73,25 @@ pub fn chart5(alloc: std.mem.Allocator) ![]const TimeStat {
 // time since latest release
 pub fn chart6(alloc: std.mem.Allocator) ![]const TimeStat {
     return try db.collect(alloc, TimeStat, "select p_for, created_on from (select * from versions order by id desc) group by p_for", .{});
+}
+
+// TODO use std.meta.DeclEnum https://github.com/ziglang/zig/issues/10731
+pub fn OnlyPubDeclEnum(comptime T: type) type {
+    const decls = std.meta.declarations(T);
+    var fields: [decls.len]std.builtin.Type.EnumField = undefined;
+    var i: usize = 0;
+    var l: usize = 0;
+    while (i < fields.len) : (i += 1) {
+        if (!decls[i].is_pub) continue;
+        fields[l] = .{ .name = decls[i].name, .value = l };
+        l += 1;
+    }
+    var newdecls = [_]std.builtin.Type.Declaration{};
+    return @Type(@unionInit(std.builtin.Type, "Enum", .{
+        .layout = .Auto,
+        .tag_type = std.math.IntFittingRange(0, l - 1),
+        .fields = fields[0..l],
+        .decls = &newdecls,
+        .is_exhaustive = true,
+    }));
 }

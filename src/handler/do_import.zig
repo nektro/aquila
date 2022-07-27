@@ -98,7 +98,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const readme = (_internal.readFileContents(dir, alloc, "README.md") catch null) orelse "";
 
     var p = try db.Package.create(alloc, u, name, r, details.id, repo, desc, license, details.star_count, details.clone_url);
-    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme);
+    var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme, &.{});
 
     try std.fs.cwd().deleteTree(path);
 
