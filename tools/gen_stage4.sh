@@ -46,6 +46,8 @@ case "$os" in
         dossh cd ${PROJDIR} '&&' mkdir -pv build
         dossh cd ${PROJDIR}/build '&&' cmake .. -DCMAKE_INSTALL_PREFIX='/root/out'
         dossh cd ${PROJDIR}/build '&&' make
+        dossh curl -L -o zigmod https://github.com/nektro/zigmod/releases/download/r80/zigmod-${zigarch}-linux
+        dossh chmod +x zigmod
         dossh shutdown -h now
     ;;
 esac
