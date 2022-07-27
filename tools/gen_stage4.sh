@@ -42,6 +42,7 @@ case "$os" in
         PROJDIR="/root/zig"
         dossh cd ${PROJDIR} '&&' git fetch
         dossh cd ${PROJDIR} '&&' git pull
+        dossh cd ${PROJDIR} '&&' git describe --tags
         dossh cd ${PROJDIR} '&&' mkdir -pv build
         dossh cd ${PROJDIR}/build '&&' cmake .. -DCMAKE_INSTALL_PREFIX='/root/out'
         dossh cd ${PROJDIR}/build '&&' make

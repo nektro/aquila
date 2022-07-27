@@ -44,6 +44,7 @@ case "$os" in
         dossh cd ${PROJDIR} '&&' git checkout release/14.x
         dossh cd ${PROJDIR} '&&' git fetch
         dossh cd ${PROJDIR} '&&' git pull
+        dossh cd ${PROJDIR} '&&' git describe --tags
         dossh cd ${PROJDIR} '&&' mkdir -pv build
         dossh cd ${PROJDIR}/build '&&' cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="/root/out" -DCMAKE_INSTALL_PREFIX="/root/out" "'-DLLVM_ENABLE_PROJECTS=lld;clang'" -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_LTO=OFF -DLLVM_ENABLE_BINDINGS=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_OCAMLDOC=OFF -DLLVM_ENABLE_Z3_SOLVER=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_INCLUDE_GO_TESTS=OFF -DCLANG_BUILD_TOOLS=OFF -DCLANG_INCLUDE_DOCS=OFF
         dossh cd ${PROJDIR}/build '&&' make install
