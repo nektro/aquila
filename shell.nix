@@ -5,6 +5,7 @@ pkgs.mkShell {
     wget      # wget
     qemu      # qemu-img, qemu-system-*
     qemu_kvm
+    sshpass
   ];
 
   hardeningDisable = [ "all" ];
