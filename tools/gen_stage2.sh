@@ -35,7 +35,7 @@ qemu-kvm -m 2048 -hda $after -net nic -net user
 case "$os" in
     debian)
         # apt install curl
-        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # curl -s https://clbin.com/sSR2s > /etc/ssh/sshd_config
         # apt install git
         # git clone https://github.com/llvm/llvm-project
         # git clone https://github.com/ziglang/zig
@@ -44,7 +44,7 @@ case "$os" in
     ;;
     alpine)
         # apk add curl
-        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # curl -s https://clbin.com/sSR2s > /etc/ssh/sshd_config
         # apk add git
         # git clone https://github.com/llvm/llvm-project
         # git clone https://github.com/ziglang/zig
@@ -53,7 +53,7 @@ case "$os" in
     ;;
     freebsd)
         # pkg install curl
-        # curl -s https://clbin.com/piHwV > /etc/ssh/sshd_config
+        # curl -s https://clbin.com/sSR2s > /etc/ssh/sshd_config
         # pkg install git
         # git clone https://github.com/llvm/llvm-project
         # git clone https://github.com/ziglang/zig
