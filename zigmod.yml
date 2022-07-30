@@ -22,3 +22,4 @@ root_dependencies:
   - src: git https://gist.github.com/nektro/64c7da67a00d8b94091d754dd2cf1aa9 # docker
   - src: git https://gist.github.com/nektro/5e20de7db63af25d72ecee35e9f8d16a # signal
   - src: git https://gist.github.com/nektro/6621bee406a94139cee26f7643af6183 # mime
+  - src: git https://gist.github.com/nektro/917368c242e9be1a832816bc66d10d63 # UrlValues

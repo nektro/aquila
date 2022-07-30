@@ -14,6 +14,7 @@ const signal = @import("signal");
 
 const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
+const runner = @import("./runner.zig");
 
 pub const build_options = @import("build_options");
 pub const files = @import("self/files");
@@ -28,7 +29,7 @@ pub var domain: string = "";
 pub var disable_import_repo = false;
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    var gpa = std.heap.GeneralPurposeAllocator(.{ .thread_safe = true }){};
     const alloc = gpa.allocator();
 
     {
@@ -61,6 +62,7 @@ pub fn main() !void {
     try flag.addSingle("port");
     try flag.addMulti("oauth2-client");
     try flag.addSingle("disable-import-repo");
+    try flag.addSingle("ci");
 
     _ = try flag.parse(.double);
     try flag.parseEnv();
@@ -130,8 +132,16 @@ pub fn main() !void {
         }
     }
 
+    //
+
+    if (std.fmt.parseInt(u1, flag.getSingle("ci") orelse "0", 2)) {
+        std.debug.assert(try docker.amInside());
+        (try std.Thread.spawn(.{}, runner.start, .{alloc})).detach();
+    }
+
     const port = try std.fmt.parseUnsigned(u16, flag.getSingle("port") orelse "8000", 10);
     std.log.info("starting server on port {d}", .{port});
+    // TODO make this a Server instance and implement proper stop
     try http.listenAndServe(
         alloc,
         try std.net.Address.parseIp("0.0.0.0", port),
@@ -141,6 +151,10 @@ pub fn main() !void {
 }
 
 fn handle_sig() void {
+    std.log.info("ensuring all CI jobs are in stopped state...", .{});
+    runner.should_run = false;
+    runner.control.wait();
+
     std.log.info("closing database connection...", .{});
     db.close();
 

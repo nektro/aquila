@@ -120,6 +120,8 @@ pub fn create(alloc: std.mem.Allocator, package: Package, commit: string, arch: 
         .arch = Arch{ .tag = arch },
         .os = Os{ .tag = os },
     });
+    std.log.info("queued job {s} @ {s} for {s} {s}", .{ package.name, commit, arch, os });
+    runner.pickup_tracker.start();
     return j;
 }
 
