@@ -70,6 +70,9 @@ pub fn main() !void {
     //
 
     const dbpath = flag.getSingle("db") orelse "aquila.db";
+    if (!(try extras.doesFileExist(std.fs.cwd(), dbpath))) {
+        (try std.fs.cwd().createFile(dbpath, .{})).close();
+    }
     datadirpath = try std.fs.cwd().realpathAlloc(alloc, dbpath);
     datadirpath = std.fs.path.dirname(datadirpath).?;
     try db.connect(alloc, dbpath);
