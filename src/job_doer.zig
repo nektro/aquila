@@ -13,7 +13,7 @@ const WaitGroup = @import("./WaitGroup.zig");
 // https://github.com/nektro/docker-qemu-system/blob/master/Dockerfile
 fn getImageName(arch: db.Job.Arch.Tag) string {
     return switch (arch) {
-        .x86_64 => "nektro/qemu-system:x86_64@sha256:1f3d8a4058b35f0f6d40c7a11862be312b377ceb6b138a40db2c2dad90005da1",
+        .x86_64 => "nektro/qemu-system:x86_64@sha256:0b1ca00607c57d3c8d515a8af9abbbf7ae504c733d75cdb768dcfef1ac491f3d",
     };
 }
 
@@ -24,6 +24,12 @@ pub const Mount = struct {
     Mode: string = "ro",
     RW: bool = false,
     Propagation: string = "rprivate",
+};
+
+pub const DeviceMapping = struct {
+    PathOnHost: string,
+    PathInContainer: string,
+    CgroupPermissions: string = "rwm",
 };
 
 // pub fn start(allocator: std.mem.Allocator, job: *const db.Job) Error!void {
@@ -52,7 +58,6 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
     };
 
     // start qemu-system docker container, get id
-    // TODO use qemu-kvm or cpu=host
     const image = getImageName(job.arch.tag);
     const env = try std.fmt.allocPrint(alloc, "image=/images/{s}/{s}/stage4.qcow2", .{ @tagName(job.arch.tag), @tagName(job.os.tag) });
     const bind = try std.fmt.allocPrint(alloc, "{s}:/images:ro", .{host_images_path});
@@ -65,6 +70,7 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
             },
             .HostConfig = .{
                 .Binds = &[_]string{bind},
+                .Devices = &[_]DeviceMapping{.{ .PathOnHost = "/dev/kvm", .PathInContainer = "/dev/kvm" }},
             },
             .Mounts = &[_]Mount{.{ .Source = host_images_path, .Destination = "/images" }},
         });

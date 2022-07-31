@@ -15,6 +15,7 @@ const ContainerCreate = struct {
     Volumes: struct { @"/images": struct {} },
     HostConfig: struct {
         Binds: []const string,
+        Devices: []const job_doer.DeviceMapping,
     },
     Mounts: []const job_doer.Mount,
 };
