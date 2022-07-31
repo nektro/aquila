@@ -125,6 +125,7 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
         try doJobLine(allocator, w, host_name, &.{ "cd", "llvm-project", "&&", "git", "describe", "--tags" });
         try doJobLine(allocator, w, host_name, &.{ "cd", "zig", "&&", "git", "describe", "--tags" });
         try doJobLine(allocator, w, host_name, &.{ "cd", "workspace", "&&", "git", "clone", clone_url });
+        try doJobLine(allocator, w, host_name, &.{ "cd", "workspace", "&&", "git", "checkout", job.commit });
         try doJobLine(allocator, w, host_name, &.{ "cd", work_name, "&&", "~/zigmod", "ci" });
         try doJobLine(allocator, w, host_name, &.{ "cd", work_name, "&&", "~/zig/build/zig", "build" });
         try doJobLine(allocator, w, host_name, &.{ "cd", work_name, "&&", "~/zig/build/zig", "build", "test" });
