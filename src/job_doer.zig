@@ -17,7 +17,7 @@ fn getImageName(arch: db.Job.Arch.Tag) string {
     };
 }
 
-const Mount = struct {
+pub const Mount = struct {
     Type: string = "bind",
     Source: string,
     Destination: string,
@@ -38,28 +38,35 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *WaitGroup
 
     try job.update(alloc, .state, .pending);
 
+    // get host path of /images mount
+    const host_images_path: string = blk: {
+        const own_id = try ownDockerId(alloc);
+        const json = try docker.containerInspect(alloc, own_id);
+        const mounts = json.root.Object.get("Mounts").?.Array;
+        for (mounts.items) |item| {
+            if (std.mem.eql(u8, item.Object.get("Destination").?.String, "/images")) {
+                break :blk item.Object.get("Source").?.String;
+            }
+        }
+        @panic("/images mount not found");
+    };
+
     // start qemu-system docker container, get id
     // TODO use qemu-kvm or cpu=host
-    // TODO remove absolute path in image bind
+    const image = getImageName(job.arch.tag);
+    const env = try std.fmt.allocPrint(alloc, "image=/images/{s}/{s}/stage4.qcow2", .{ @tagName(job.arch.tag), @tagName(job.os.tag) });
+    const bind = try std.fmt.allocPrint(alloc, "{s}:/images:ro", .{host_images_path});
     const id = blk: {
         const tree = try docker.containerCreate(alloc, .{
-            .Image = getImageName(job.arch.tag),
-            .Env = &[_]string{
-                try std.fmt.allocPrint(alloc, "arch={s}", .{@tagName(job.arch.tag)}),
-                try std.fmt.allocPrint(alloc, "os={s}", .{@tagName(job.os.tag)}),
-                try std.fmt.allocPrint(alloc, "image=/images/{s}/{s}/stage4.qcow2", .{ @tagName(job.arch.tag), @tagName(job.os.tag) }),
-            },
+            .Image = image,
+            .Env = &[_]string{env},
             .Volumes = .{
                 .@"/images" = .{},
             },
             .HostConfig = .{
-                .Binds = &[_]string{
-                    "/home/meg/other/dev/aquila/images:/images:ro",
-                },
+                .Binds = &[_]string{bind},
             },
-            .Mounts = &[_]Mount{
-                .{ .Source = "/home/meg/other/dev/aquila/images", .Destination = "/images" },
-            },
+            .Mounts = &[_]Mount{.{ .Source = host_images_path, .Destination = "/images" }},
         });
         break :blk tree.root.Object.get("Id").?.String;
     };

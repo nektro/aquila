@@ -4,11 +4,22 @@ const std = @import("std");
 const string = []const u8;
 const UrlValues = @import("UrlValues");
 const zfetch = @import("zfetch");
+const job_doer = @import("./job_doer.zig");
 
 const max_len = 1024 * 1024 * 5;
 
+// temp workaround for stage1 bug
+const ContainerCreate = struct {
+    Image: string,
+    Env: []const string,
+    Volumes: struct { @"/images": struct {} },
+    HostConfig: struct {
+        Binds: []const string,
+    },
+    Mounts: []const job_doer.Mount,
+};
 /// https://docs.docker.com/engine/api/v1.41/#tag/Container/operation/ContainerCreate
-pub fn containerCreate(alloc: std.mem.Allocator, payload: anytype) !std.json.ValueTree {
+pub fn containerCreate(alloc: std.mem.Allocator, payload: ContainerCreate) !std.json.ValueTree {
     const url = "http://localhost/v1.41/containers/create";
     var docker_conn = try zfetch.Connection.connect(alloc, .{ .protocol = .unix, .hostname = "/var/run/docker.sock" });
     defer docker_conn.close();
