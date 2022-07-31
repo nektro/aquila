@@ -8,6 +8,7 @@ const zfetch = @import("zfetch");
 const root = @import("root");
 const docker = @import("./docker.zig");
 const WaitGroup = @import("./WaitGroup.zig");
+const builtin = @import("builtin");
 
 // https://hub.docker.com/r/nektro/qemu-system/tags
 // https://github.com/nektro/docker-qemu-system/blob/master/Dockerfile
@@ -131,7 +132,7 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
     }
 
     // remove container
-    try docker.containerDelete(alloc, id);
+    if (builtin.mode != .Debug) try docker.containerDelete(alloc, id);
 
     // we're done!
     try job.update(alloc, .state, .success);
