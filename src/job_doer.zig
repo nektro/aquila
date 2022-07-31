@@ -27,9 +27,9 @@ pub const Mount = struct {
 };
 
 // pub fn start(allocator: std.mem.Allocator, job: *const db.Job) Error!void {
-pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *WaitGroup) !void {
-    defer allocator.destroy(job);
-    defer run_tracker.finish();
+pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Thread.Semaphore) !void {
+    defer job.destroy(allocator);
+    defer run_tracker.post();
     std.log.info("started job {} for {d} - {s} - {s}", .{ job.uuid, job.package, job.arch, job.os });
 
     var arena = std.heap.ArenaAllocator.init(allocator);

@@ -121,9 +121,21 @@ pub fn create(alloc: std.mem.Allocator, package: Package, commit: string, arch: 
         .os = Os{ .tag = os },
     });
     std.log.info("queued job {s} @ {s} for {s} {s}", .{ package.name, commit, @tagName(arch), @tagName(os) });
-    runner.pickup_tracker.start();
+    runner.sem_pickup.post();
     return j;
 }
 
 usingnamespace ox.TableTypeMixin(Self);
 usingnamespace ox.ByKeyGen(Self);
+
+pub fn dupe(self: Self, alloc: std.mem.Allocator) !*Self {
+    var the = try alloc.create(Self);
+    the.* = self;
+    the.commit = try alloc.dupe(u8, self.commit);
+    return the;
+}
+
+pub fn destroy(self: *Self, alloc: std.mem.Allocator) void {
+    alloc.free(self.commit);
+    alloc.destroy(self);
+}

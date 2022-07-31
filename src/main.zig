@@ -137,8 +137,9 @@ pub fn main() !void {
 
     //
 
-    if (std.fmt.parseInt(u1, flag.getSingle("ci") orelse "0", 2)) {
+    if ((try std.fmt.parseInt(u1, flag.getSingle("ci") orelse "0", 2)) == 1) {
         std.debug.assert(try docker.amInside());
+        std.debug.assert(!builtin.single_threaded);
         (try std.Thread.spawn(.{}, runner.start, .{alloc})).detach();
     }
 
@@ -156,7 +157,7 @@ pub fn main() !void {
 fn handle_sig() void {
     std.log.info("ensuring all CI jobs are in stopped state...", .{});
     runner.should_run = false;
-    runner.control.wait();
+    runner.wait();
 
     std.log.info("closing database connection...", .{});
     db.close();
