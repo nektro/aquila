@@ -99,15 +99,16 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
     {
         var data_dir = try std.fs.cwd().openDir(root.datadirpath, .{});
         defer data_dir.close();
+        var log_dir = try data_dir.openDir("job_logs", .{});
+        defer log_dir.close();
 
-        // TODO put this file in a better place
-        var job_file = try data_dir.createFile("job.jsonl", .{});
+        var job_file = try log_dir.createFile(try std.fmt.allocPrint(alloc, "{}.jsonl", .{job.uuid}), .{});
         defer job_file.close();
         const w = job_file.writer();
 
         const pkg = try db.Package.byKey(alloc, .id, job.package);
         const clone_url = try pkg.?.cloneUrl(alloc);
-        const folder_name = std.mem.splitBackwards(u8, clone_url, "/").next();
+        const folder_name = std.mem.splitBackwards(u8, clone_url, "/").next().?;
         const work_name = try std.fmt.allocPrint(alloc, "workspace/{s}", .{folder_name});
         const host_name = id[0..12];
 
