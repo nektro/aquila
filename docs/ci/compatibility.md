@@ -12,7 +12,7 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 0. The os/arch combo is supported in some official capacity by upstream and a potential candidate.
 1. A script exists in [`generate/`](../../generate) that can download and run the OS' installer; the process is documented in [bootstrap_images.md](bootstrap_images.md).
-2. [`tools/gen_stage2.sh`](../../tools/gen_stage2.sh) can run the generated stage 1 `.qcow2` image; contains instructions on enabling ssh, and dowloading LLVM + Zig.
+2. [`tools/gen_stage2.sh`](../../tools/gen_stage2.sh) can run the generated stage 1 `.qcow2` image; enables ssh, and dowloads LLVM + Zig.
 3. [`tools/gen_stage3.sh`](../../tools/gen_stage3.sh) can run the generated stage 2 `.qcow2` image; headlessly boots it and builds LLVM from source then exits.
 4. [`tools/gen_stage4.sh`](../../tools/gen_stage4.sh) can run the generated stage 3 `.qcow2` image; headlessly boots it and builds Zig from source then exits.
 
