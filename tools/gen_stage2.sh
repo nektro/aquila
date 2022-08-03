@@ -30,7 +30,15 @@ mkdir -p mnt
 sudo modprobe nbd max_part=8
 sudo qemu-nbd --connect=/dev/nbd0 $after
 sudo fdisk /dev/nbd0 -l
-sudo mount /dev/nbd0p1 $(pwd)/mnt/
+
+case "$os" in
+    debian)
+        sudo mount /dev/nbd0p1 $(pwd)/mnt/
+    ;;
+    alpine)
+        sudo mount /dev/nbd0p3 $(pwd)/mnt/
+    ;;
+esac
 
 #
 # install files
@@ -47,7 +55,6 @@ esac
 # unmount and disconnect
 sudo umount $(pwd)/mnt/
 sudo qemu-nbd --disconnect /dev/nbd0
-sudo rmmod nbd
 rm -r mnt
 
 #
