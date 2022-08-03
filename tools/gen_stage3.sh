@@ -41,8 +41,8 @@ case "$os" in
     debian)
         PROJDIR="/root/llvm-project"
         dossh apt install g++ cmake make python3
-        dossh cd ${PROJDIR} '&&' git checkout release/14.x
         dossh cd ${PROJDIR} '&&' git fetch
+        dossh cd ${PROJDIR} '&&' git checkout release/14.x
         dossh cd ${PROJDIR} '&&' git pull
         dossh cd ${PROJDIR} '&&' git describe --tags
         dossh cd ${PROJDIR} '&&' mkdir -pv build
