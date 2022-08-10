@@ -40,12 +40,7 @@ then
 
     #
     # run qemu disk with iso installer
-    qemu-kvm \
-        -m 2048 \
-        -hda $hdd \
-        -boot d \
-        -cdrom iso/$iso \
-        -net nic -net user \
+    qemu-kvm -m 2048 -hda $hdd -boot d -cdrom iso/$iso -net nic -net user
 
     # TODO automate installer
 fi
