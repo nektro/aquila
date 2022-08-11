@@ -13,7 +13,7 @@ const builtin = @import("builtin");
 // https://github.com/nektro/docker-qemu-system/blob/master/Dockerfile
 fn getImageName(arch: db.Job.Arch.Tag) string {
     return switch (arch) {
-        .x86_64 => "nektro/qemu-system:x86_64@sha256:0b1ca00607c57d3c8d515a8af9abbbf7ae504c733d75cdb768dcfef1ac491f3d",
+        .x86_64 => "nektro/qemu-system:x86_64@sha256:ffb367f7d900775bc83c97575dfdda464b52d709e6d992bfdb7cb42d1829b82e",
     };
 }
 
