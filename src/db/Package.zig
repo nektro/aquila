@@ -50,9 +50,9 @@ pub fn create(alloc: std.mem.Allocator, owner: User, name: string, remote: Remot
     });
 }
 
-usingnamespace ox.TableTypeMixin(Package);
-usingnamespace ox.ByKeyGen(Package);
-usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "hook_secret" });
+pub usingnamespace ox.TableTypeMixin(Package);
+pub usingnamespace ox.ByKeyGen(Package);
+pub usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "hook_secret" });
 
 pub const findVersionBy = ox.FindByGen(Package, Version, .p_for, .uuid).first;
 

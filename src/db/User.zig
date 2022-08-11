@@ -32,9 +32,9 @@ pub fn create(alloc: std.mem.Allocator, provider: u64, snowflake: string, name: 
     });
 }
 
-usingnamespace ox.TableTypeMixin(User);
-usingnamespace ox.ByKeyGen(User);
-usingnamespace ox.JsonStructSkipMixin(@This(), &.{"id"});
+pub usingnamespace ox.TableTypeMixin(User);
+pub usingnamespace ox.ByKeyGen(User);
+pub usingnamespace ox.JsonStructSkipMixin(@This(), &.{"id"});
 
 pub const findPackageBy = ox.FindByGen(User, Package, .owner, .uuid).first;
 

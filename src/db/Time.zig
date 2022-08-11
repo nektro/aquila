@@ -7,7 +7,7 @@ const extras = @import("extras");
 
 ctx: time.DateTime,
 
-usingnamespace extras.StringerJsonStringifyMixin(@This());
+pub usingnamespace extras.StringerJsonStringifyMixin(@This());
 
 pub fn formatAlloc(self: Self, alloc: std.mem.Allocator, comptime fmt: string) !string {
     return self.ctx.formatAlloc(alloc, fmt);

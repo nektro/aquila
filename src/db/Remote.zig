@@ -21,8 +21,8 @@ uuid: ox.ULID,
 type: Type,
 domain: string,
 
-usingnamespace ox.TableTypeMixin(Remote);
-usingnamespace ox.JsonStructSkipMixin(@This(), &.{});
+pub usingnamespace ox.TableTypeMixin(Remote);
+pub usingnamespace ox.JsonStructSkipMixin(@This(), &.{});
 
 pub const Type = enum {
     github,
@@ -30,7 +30,7 @@ pub const Type = enum {
 
     pub const BaseType = string;
 
-    usingnamespace extras.TagNameJsonStringifyMixin(@This());
+    pub usingnamespace extras.TagNameJsonStringifyMixin(@This());
 };
 
 pub const Repo = struct {

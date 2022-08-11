@@ -29,7 +29,7 @@ pub const State = enum {
 
     pub const BaseType = string;
 
-    usingnamespace extras.TagNameJsonStringifyMixin(@This());
+    pub usingnamespace extras.TagNameJsonStringifyMixin(@This());
 };
 
 pub const Arch = struct {
@@ -125,8 +125,8 @@ pub fn create(alloc: std.mem.Allocator, package: Package, commit: string, arch: 
     return j;
 }
 
-usingnamespace ox.TableTypeMixin(Self);
-usingnamespace ox.ByKeyGen(Self);
+pub usingnamespace ox.TableTypeMixin(Self);
+pub usingnamespace ox.ByKeyGen(Self);
 
 pub fn dupe(self: Self, alloc: std.mem.Allocator) !*Self {
     var the = try alloc.create(Self);

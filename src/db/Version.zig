@@ -59,9 +59,9 @@ pub fn create(alloc: std.mem.Allocator, pkg: Package, commit: string, unpackedsi
     });
 }
 
-usingnamespace ox.TableTypeMixin(Version);
-usingnamespace ox.ByKeyGen(Version);
-usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "readme", "files", "approved_by", "deps" });
+pub usingnamespace ox.TableTypeMixin(Version);
+pub usingnamespace ox.ByKeyGen(Version);
+pub usingnamespace ox.JsonStructSkipMixin(@This(), &.{ "id", "readme", "files", "approved_by", "deps" });
 
 pub fn latest(alloc: std.mem.Allocator) ![]const Version {
     return try db.collect(alloc, Version, "select * from versions order by id desc limit 15", .{});
