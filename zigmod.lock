@@ -1,8 +1,8 @@
 2
 git https://github.com/Luukdegram/apple_pie commit-55b25cf50018fe314606765ca984a0a841743eb5
-git https://github.com/nektro/zig-extras commit-d1b32fbed72c5f00aee812447664948c3eec7006
+git https://github.com/nektro/zig-extras commit-01fae956e2f17aa992e717e041a3dd457d440b31
 git https://github.com/nektro/zig-range commit-4b2f12808aa09be4b27a163efc424dd4e0415992
-git https://github.com/nektro/zig-oauth2 commit-5278a31e9a4437cfad3fe451051eda736f47b584
+git https://github.com/nektro/zig-oauth2 commit-d7a0dc452719bd7a79bd1c5fe0bbc05f9a8a8ecc
 git https://github.com/nektro/zig-pek commit-5c080a34d2e6b6d3d00de1e85d9f32f5ea2c2653
 git https://github.com/kivikakk/htmlentities.zig commit-311c844c1d1d1cb968eedfeb76ce911038b1043a
 git https://github.com/MasterQ32/zig-uri commit-e879df3a236869f92298fbe2db3c25e6e84cfd4c
@@ -12,7 +12,7 @@ git https://github.com/nektro/iguanaTLS commit-09d9fe92f329484536dfb2b07cfa8b406
 git https://github.com/nektro/zig-json commit-a091eaa9f9ae91c3875630ba1983b33ea04971a3
 git https://github.com/nektro/zig-flag commit-74acd41e8ef878a2dea1cab47400f8b9d23b0c2a
 git https://github.com/nektro/zig-time commit-a22054de725ef19b3f91b9ad960d4093f852b7e0
-git https://github.com/nektro/zigmod commit-df8e6780670678429cf2f535fd882a771a2aac9d
+git https://github.com/nektro/zigmod commit-6a2d664e1236c62f55f02f74b51c067e57a81b63
 git https://github.com/yaml/libyaml tag-0.2.5
 git https://github.com/nektro/zig-ansi commit-d4a53bcac5b87abecc65491109ec22aaf5f3dc2f
 git https://github.com/ziglibs/known-folders commit-9db1b99219c767d5e24994b1525273fe4031e464

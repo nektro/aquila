@@ -31,7 +31,7 @@ jobs:
       # Zig
       - uses: goto-bus-stop/setup-zig@v1
         with:
-          version: "0.10.0-dev.2981+7090f0471"
+          version: "0.10.0-dev.3316+a0d3a87ce"
       - run: zig version
       - run: zig cc --version
       - run: zig env
@@ -44,6 +44,9 @@ jobs:
       - run: ./build_release.sh aarch64-linux-musl
       - run: ./build_release.sh riscv64-linux-musl
       - run: ./build_release.sh powerpc64-linux-musl
+      # - run: ./build_release.sh s390x-linux-musl # https://github.com/ziglang/zig/issues/9442
+      # - run: ./build_release.sh mips64-linux-musl # error: container 'std.os.linux.arch_bits' has no member called 'syscall3'
+      # - run: ./build_release.sh sparc64-linux-musl # error: unable to find or provide libc for target 'sparc64-linux.3.16...5.10.81-musl'
 
       # Github Release
       - run: ./changelog.sh

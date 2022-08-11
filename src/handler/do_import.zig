@@ -46,10 +46,10 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     try ox.assert(result1.term == .Exited, response, .bad_request, "error: executing git clone failed: {}", .{result1.term});
     try ox.assert(result1.term.Exited == 0, response, .bad_request, "error: executing tar failed with exit code: {d}\n{s}", .{ result1.term.Exited, result1.stderr });
 
-    var dir = try std.fs.cwd().openDir(path, .{ .iterate = true });
+    var dir = try std.fs.cwd().openIterableDir(path, .{});
     defer dir.close();
 
-    const modfile = zigmod.ModFile.from_dir(alloc, dir) catch |err| return ox.fail(response, .bad_request, "error: parsing zig.mod failed: {s}", .{@errorName(err)});
+    const modfile = zigmod.ModFile.from_dir(alloc, dir.dir) catch |err| return ox.fail(response, .bad_request, "error: parsing zig.mod failed: {s}", .{@errorName(err)});
     const name = modfile.name;
     const license = modfile.yaml.get_string("license");
     const mdesc = modfile.yaml.get("description");
@@ -58,15 +58,15 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const rootdeps = modfile.rootdeps;
     const builddeps = modfile.builddeps;
 
-    const commit = try git.getHEAD(alloc, dir);
-    try dir.deleteTree(".git");
+    const commit = try git.getHEAD(alloc, dir.dir);
+    try dir.dir.deleteTree(".git");
     const unpackedsize = try extras.dirSize(alloc, dir);
 
     const cachepath = try std.fs.path.join(alloc, &.{ path, ".zigmod", "deps" });
-    zigmod.commands.ci.do(alloc, cachepath, dir) catch |err| return ox.fail(response, .internal_server_error, "error: zigmod ci failed: {s}", .{@errorName(err)});
-    try dir.deleteFile("deps.zig");
+    zigmod.commands.ci.do(alloc, cachepath, dir.dir) catch |err| return ox.fail(response, .internal_server_error, "error: zigmod ci failed: {s}", .{@errorName(err)});
+    try dir.dir.deleteFile("deps.zig");
     const totalsize = try extras.dirSize(alloc, dir);
-    try dir.deleteTree(".zigmod");
+    try dir.dir.deleteTree(".zigmod");
 
     const filelist = try extras.fileList(alloc, dir);
     try ox.assert(filelist.len > 0, response, .internal_server_error, "error: found no files in repo", .{});
@@ -95,7 +95,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     try _internal.rename(tarpath, destpath);
     const tarsize = try extras.fileSize(std.fs.cwd(), destpath);
     const tarhash = try extras.hashFile(alloc, std.fs.cwd(), destpath, .sha256);
-    const readme = (_internal.readFileContents(dir, alloc, "README.md") catch null) orelse "";
+    const readme = (_internal.readFileContents(dir.dir, alloc, "README.md") catch null) orelse "";
 
     var p = try db.Package.create(alloc, u, name, r, details.id, repo, desc, license, details.star_count, details.clone_url);
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme, &.{});
