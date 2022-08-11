@@ -7,7 +7,6 @@ const UrlValues = @import("UrlValues");
 const zfetch = @import("zfetch");
 const root = @import("root");
 const docker = @import("./docker.zig");
-const WaitGroup = @import("./WaitGroup.zig");
 const builtin = @import("builtin");
 
 // https://hub.docker.com/r/nektro/qemu-system/tags

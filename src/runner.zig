@@ -1,7 +1,6 @@
 const std = @import("std");
 const string = []const u8;
 const builtin = @import("builtin");
-const WaitGroup = @import("./WaitGroup.zig");
 const db = @import("./db/_db.zig");
 const job_doer = @import("./job_doer.zig");
 
