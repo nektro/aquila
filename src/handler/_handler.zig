@@ -111,7 +111,7 @@ pub fn saveInfo(response: *http.Response, request: http.Request, idp: oauth2.Pro
     const alloc = request.arena;
     const r = (try db.Remote.byKey(alloc, .domain, idp.domain())) orelse unreachable;
     const u = (try r.findUserBy(alloc, .snowflake, id)) orelse try db.User.create(alloc, r.id, id, name);
-    const ulid = try _internal.access_tokens.allocator.dupe(u8, try u.uuid.toString(alloc));
+    const ulid = try _internal.access_tokens.allocator.dupe(u8, &u.uuid.bytes());
 
     try response.headers.put("Set-Cookie", try std.fmt.allocPrint(alloc, "jwt={s}", .{
         try ox.token.encodeMessage(alloc, ulid),

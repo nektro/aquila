@@ -88,7 +88,7 @@ pub fn get(_: void, response: *http.Response, request: http.Request, captures: ?
     const tarfile = try std.fs.cwd().openFile(tarpath, .{});
     defer tarfile.close();
 
-    const destdirpath = try std.fs.path.join(alloc, &.{ root.datadirpath, "packages", try u.uuid.toString(alloc), details.id });
+    const destdirpath = try std.fs.path.join(alloc, &.{ root.datadirpath, "packages", &u.uuid.bytes(), details.id });
     try std.fs.cwd().makePath(destdirpath);
 
     const destpath = try std.fs.path.join(alloc, &.{ destdirpath, try std.mem.concat(alloc, u8, &.{ "latest", ".tar.gz" }) });

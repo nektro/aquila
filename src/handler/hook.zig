@@ -119,9 +119,8 @@ pub fn post(_: void, response: *http.Response, request: http.Request, captures: 
 
     try std.fs.cwd().deleteTree(path);
 
-    // TODO remove toString usages
     const jobs = [_]string{
-        try (try db.Job.create(alloc, p, commit, .x86_64, .debian)).uuid.toString(alloc),
+        &(try db.Job.create(alloc, p, commit, .x86_64, .debian)).uuid.bytes(),
     };
 
     var v = try db.Version.create(alloc, p, commit, unpackedsize, totalsize, filelist, tarsize, tarhash, deps, rootdeps, builddeps, readme, &jobs);

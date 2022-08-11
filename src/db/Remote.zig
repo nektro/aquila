@@ -119,7 +119,7 @@ fn apiRequest(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: str
     defer headers.deinit();
 
     if (user) |_| {
-        if (_handler.getAccessToken(try user.?.uuid.toString(alloc))) |token| {
+        if (_handler.getAccessToken(&user.?.uuid.bytes())) |token| {
             switch (self.type) {
                 .github => try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token })),
                 .gitea => try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "token", token })),
@@ -206,7 +206,7 @@ fn apiPost(self: Remote, alloc: std.mem.Allocator, user: ?User, endpoint: string
     defer headers.deinit();
 
     if (user) |_| {
-        if (_handler.getAccessToken(try user.?.uuid.toString(alloc))) |token| {
+        if (_handler.getAccessToken(&user.?.uuid.bytes())) |token| {
             try headers.appendValue("Authorization", try std.mem.join(alloc, " ", &.{ "Bearer", token }));
         }
     }

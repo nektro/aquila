@@ -74,7 +74,7 @@ pub fn format(self: Version, comptime fmt: string, options: std.fmt.FormatOption
 }
 
 pub fn setVersion(self: *Version, alloc: std.mem.Allocator, approver: User, major: u32, minor: u32) !void {
-    try self.update(alloc, .approved_by, try approver.uuid.toString(alloc));
+    try self.update(alloc, .approved_by, &approver.uuid.bytes());
     try self.update(alloc, .real_major, major);
     try self.update(alloc, .real_minor, minor);
 }
