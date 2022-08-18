@@ -27,7 +27,6 @@ set -x
 #
 # mount qcow2 to local file system
 mkdir -p mnt
-sudo modprobe nbd max_part=8
 sudo qemu-nbd --connect=/dev/nbd0 $after
 sudo fdisk /dev/nbd0 -l
 

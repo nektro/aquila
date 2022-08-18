@@ -10,6 +10,8 @@ Support of a given platform is indicated by a tier system. The tiers are as foll
 
 > Note: while some functionality listed below might work, then number is only updated once verified.
 
+> Note: if your kernel does not have support for [network block devices](https://www.kernel.org/doc/Documentation/blockdev/nbd.txt) you may need to run `# modprobe nbd max_part=8`.
+
 0. The os/arch combo is supported in some official capacity by upstream and a potential candidate.
 1. A script exists in [`generate/`](../../generate) that can download and run the OS' installer; the process is documented in [bootstrap_images.md](bootstrap_images.md).
 2. [`tools/gen_stage2.sh`](../../tools/gen_stage2.sh) can run the generated stage 1 `.qcow2` image; enables ssh, and dowloads LLVM + Zig.
