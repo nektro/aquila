@@ -42,7 +42,7 @@ esac
 #
 # install files
 case "$os" in
-    debian|alpine|freebsd)
+    debian|alpine)
         sudo mkdir -p mnt/root/.ssh
         cat docs/etc/sshd_config | sudo tee mnt/etc/ssh/sshd_config > /dev/null
         cat docs/etc/id_rsa.pub | sudo tee mnt/root/.ssh/authorized_keys > /dev/null
@@ -83,12 +83,5 @@ case "$os" in
         dossh git clone --progress https://github.com/llvm/llvm-project
         dossh git clone --progress https://github.com/ziglang/zig
         dossh poweroff
-    ;;
-    freebsd)
-        dossh pkg install curl
-        dossh pkg install git
-        dossh git clone --progress https://github.com/llvm/llvm-project
-        dossh git clone --progress https://github.com/ziglang/zig
-        dossh shutdown -p now
     ;;
 esac
