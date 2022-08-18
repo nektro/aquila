@@ -32,10 +32,10 @@ sudo fdisk /dev/nbd0 -l
 
 case "$os" in
     debian)
-        sudo mount /dev/nbd0p1 $(pwd)/mnt/
+        sudo mount --rw /dev/nbd0p1 $(pwd)/mnt/
     ;;
     alpine)
-        sudo mount /dev/nbd0p3 $(pwd)/mnt/
+        sudo mount --rw /dev/nbd0p3 $(pwd)/mnt/
     ;;
 esac
 
