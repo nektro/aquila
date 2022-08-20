@@ -168,7 +168,6 @@ pub fn main() !void {
 
         var arena = std.heap.ArenaAllocator.init(alloc);
         defer arena.deinit();
-        try runner.pullImages(arena.allocator());
         // TODO ensure these semaphores are being used properly
         // TODO ensure the nektro/docker-qemu-system docker images are pulled
         // TODO implement the /jobs/:job web endpoint
