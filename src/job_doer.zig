@@ -59,6 +59,7 @@ pub fn start(allocator: std.mem.Allocator, job: *db.Job, run_tracker: *std.Threa
 
     // start qemu-system docker container, get id
     const image = getImageName(job.arch.tag);
+    // TODO make zig version part of image name, dont hardcode this path
     const env = try std.fmt.allocPrint(alloc, "image=/images/{s}/{s}/stage4.qcow2", .{ @tagName(job.arch.tag), @tagName(job.os.tag) });
     const bind = try std.fmt.allocPrint(alloc, "{s}:/images:ro", .{host_images_path});
     const id = blk: {

@@ -169,6 +169,10 @@ pub fn main() !void {
         var arena = std.heap.ArenaAllocator.init(alloc);
         defer arena.deinit();
         try runner.pullImages(arena.allocator());
+        // TODO ensure these semaphores are being used properly
+        // TODO ensure the nektro/docker-qemu-system docker images are pulled
+        // TODO implement the /jobs/:job web endpoint
+        // TODO only publish version when all jobs have passed
         for (try db.Job.byKeyAll(arena.allocator(), .state, .queued, .asc)) |_| runner.sem_pickup.post();
         for (range(try std.fmt.parseInt(u32, flag.getSingle("ci-max-jobs") orelse "10", 10))) |_| runner.sem_runner.post();
 

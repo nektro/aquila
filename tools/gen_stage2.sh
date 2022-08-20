@@ -31,10 +31,19 @@ sudo qemu-nbd --connect=/dev/nbd0 $after
 sudo fdisk /dev/nbd0 -l
 
 case "$os" in
+    # TODO auto pick the the biggest drive for target device
     debian)
+        # Device      Boot     Start       End   Sectors  Size Id Type
+        # /dev/nbd0p1 *         2048 132216831 132214784   63G 83 Linux
+        # /dev/nbd0p2      132218878 134215679   1996802  975M  5 Extended
+        # /dev/nbd0p5      132218880 134215679   1996800  975M 82 Linux swap / Solaris
         sudo mount --rw /dev/nbd0p1 $(pwd)/mnt/
     ;;
     alpine)
+        # Device      Boot   Start       End   Sectors  Size Id Type
+        # /dev/nbd0p1 *       2048    206847    204800  100M 83 Linux
+        # /dev/nbd0p2       206848   8357887   8151040  3.9G 82 Linux swap / Solaris
+        # /dev/nbd0p3      8357888 134217727 125859840   60G 83 Linux
         sudo mount --rw /dev/nbd0p3 $(pwd)/mnt/
     ;;
 esac
