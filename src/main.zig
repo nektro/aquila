@@ -80,6 +80,27 @@ pub fn main() !void {
     domain = flag.getSingle("domain") orelse @panic("missing required --domain flag");
     disable_import_repo = parseBoolFlag("disable-import-repo", false);
 
+    {
+        var data_dir = try std.fs.cwd().openDir(datadirpath, .{});
+        defer data_dir.close();
+        try data_dir.makePath("job_logs");
+
+        var dbversion_file = try data_dir.createFile("migration_version.txt", .{ .read = true, .truncate = false });
+        defer dbversion_file.close();
+
+        var buf: [5]u8 = undefined;
+        const dbversion_len = try dbversion_file.reader().readAll(&buf);
+        var dbversion = std.fmt.parseInt(u8, buf[0..dbversion_len], 10) catch 1;
+        std.log.info("db: schema revision: {d}", .{dbversion});
+
+        if (dbversion == 1) dbversion += 1;
+        if (dbversion == 2) dbversion += 1;
+
+        std.log.info("db: schema revision: {d}", .{dbversion});
+        try dbversion_file.seekTo(0);
+        try dbversion_file.writer().print("{d}", .{dbversion});
+    }
+
     //
 
     signal.listenFor(std.os.linux.SIG.INT, handle_sig);
