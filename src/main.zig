@@ -11,10 +11,12 @@ const git = @import("git");
 const ox = @import("ox");
 const docker = @import("docker");
 const signal = @import("signal");
+const range = extras.range;
 
 const handler = @import("./handler/_handler.zig");
 const db = @import("./db/_db.zig");
 const runner = @import("./runner.zig");
+const job_doer = @import("./job_doer.zig");
 
 pub const build_options = @import("build_options");
 pub const files = @import("self/files");
@@ -34,6 +36,7 @@ pub fn main() !void {
 
     {
         var sbuilder = std.ArrayList(u8).init(alloc);
+        errdefer sbuilder.deinit();
         const w = sbuilder.writer();
         try w.writeAll(build_options.version);
 
@@ -63,6 +66,7 @@ pub fn main() !void {
     try flag.addMulti("oauth2-client");
     try flag.addSingle("disable-import-repo");
     try flag.addSingle("ci");
+    try flag.addSingle("ci-max-jobs");
 
     _ = try flag.parse(.double);
     try flag.parseEnv();
@@ -161,6 +165,13 @@ pub fn main() !void {
     if ((try std.fmt.parseInt(u1, flag.getSingle("ci") orelse "0", 2)) == 1) {
         std.debug.assert(try docker.amInside());
         std.debug.assert(!builtin.single_threaded);
+
+        var arena = std.heap.ArenaAllocator.init(alloc);
+        defer arena.deinit();
+        try runner.pullImages(arena.allocator());
+        for (try db.Job.byKeyAll(arena.allocator(), .state, .queued, .asc)) |_| runner.sem_pickup.post();
+        for (range(try std.fmt.parseInt(u32, flag.getSingle("ci-max-jobs") orelse "10", 10))) |_| runner.sem_runner.post();
+
         (try std.Thread.spawn(.{}, runner.start, .{alloc})).detach();
     }
 
