@@ -6,7 +6,7 @@ git https://github.com/nektro/zig-oauth2 commit-d7a0dc452719bd7a79bd1c5fe0bbc05f
 git https://github.com/nektro/zig-pek commit-5c080a34d2e6b6d3d00de1e85d9f32f5ea2c2653
 git https://github.com/kivikakk/htmlentities.zig commit-311c844c1d1d1cb968eedfeb76ce911038b1043a
 git https://github.com/MasterQ32/zig-uri commit-e879df3a236869f92298fbe2db3c25e6e84cfd4c
-git https://github.com/truemedian/zfetch commit-5a7ce5811ee19fb959b41c718018f461f45611d4
+git https://github.com/truemedian/zfetch commit-12b1374aae32e8ebf719a096a22cdf4c49433458
 git https://github.com/truemedian/hzzp commit-bf5aaf224e94561e035a631c3c40fbf02faa27d2
 git https://github.com/nektro/iguanaTLS commit-09d9fe92f329484536dfb2b07cfa8b406151cde4
 git https://github.com/nektro/zig-json commit-a091eaa9f9ae91c3875630ba1983b33ea04971a3
