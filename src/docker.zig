@@ -30,7 +30,7 @@ pub fn containerCreate(alloc: std.mem.Allocator, payload: ContainerCreate) !std.
     try req.do(.POST, headers, try std.json.stringifyAlloc(alloc, payload, .{}));
     const r = req.reader();
     const body_content = try r.readAllAlloc(alloc, max_len);
-    std.log.debug("{d}: {s}", .{ req.status.code, url });
+    if (@intToEnum(std.http.Status, req.status.code).class().? != .success) std.log.debug("{d}: {s}", .{ req.status.code, url });
     if (req.status.code != 201) std.log.debug("{s}", .{body_content});
     return try std.json.Parser.init(alloc, false).parse(body_content);
 }
@@ -44,7 +44,7 @@ pub fn containerStart(alloc: std.mem.Allocator, id: string) !void {
     var headers = zfetch.Headers.init(alloc);
     try headers.appendValue("Content-Type", "application/json");
     try req.do(.POST, headers, "{}");
-    std.log.debug("{d}: {s}", .{ req.status.code, url });
+    if (@intToEnum(std.http.Status, req.status.code).class().? != .success) std.log.debug("{d}: {s}", .{ req.status.code, url });
 }
 
 /// https://docs.docker.com/engine/api/v1.41/#tag/Container/operation/ContainerInspect
@@ -56,7 +56,7 @@ pub fn containerInspect(alloc: std.mem.Allocator, id: string) !std.json.ValueTre
     try req.do(.GET, null, null);
     const r = req.reader();
     const body_content = try r.readAllAlloc(alloc, max_len);
-    std.log.debug("{d}: {s}", .{ req.status.code, url });
+    if (@intToEnum(std.http.Status, req.status.code).class().? != .success) std.log.debug("{d}: {s}", .{ req.status.code, url });
     return try std.json.Parser.init(alloc, false).parse(body_content);
 }
 
@@ -69,10 +69,7 @@ pub fn networkConnect(alloc: std.mem.Allocator, network_id: string, container_id
     var headers = zfetch.Headers.init(alloc);
     try headers.appendValue("Content-Type", "application/json");
     try req.do(.POST, headers, try std.json.stringifyAlloc(alloc, .{ .Container = container_id }, .{}));
-    const r = req.reader();
-    const body_content = try r.readAllAlloc(alloc, max_len);
-    std.log.debug("{d}: {s}", .{ req.status.code, url });
-    std.log.debug("{s}", .{body_content});
+    if (@intToEnum(std.http.Status, req.status.code).class().? != .success) std.log.debug("{d}: {s}", .{ req.status.code, url });
 }
 
 /// https://docs.docker.com/engine/api/v1.41/#tag/Container/operation/ContainerDelete
@@ -82,5 +79,5 @@ pub fn containerDelete(alloc: std.mem.Allocator, id: string) !void {
     defer docker_conn.close();
     var req = try zfetch.Request.fromConnection(alloc, docker_conn, url);
     try req.do(.DELETE, null, null);
-    std.log.debug("{d}: {s}", .{ req.status.code, url });
+    if (@intToEnum(std.http.Status, req.status.code).class().? != .success) std.log.debug("{d}: {s}", .{ req.status.code, url });
 }
